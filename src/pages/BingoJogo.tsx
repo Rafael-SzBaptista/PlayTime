@@ -1,18 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -102,14 +91,6 @@ const BingoJogo = () => {
     if (hours > 0) return `${hours}h ${remainingMinutes}min`;
     return `${remainingMinutes}min`;
   }, [runtimeState.startedAt, runtimeState.finishedAt]);
-
-  const giftBarData = useMemo(() => {
-    const map = new Map<string, number>();
-    runtimeState.bingoWinners.forEach((w) => {
-      map.set(w.gift, (map.get(w.gift) ?? 0) + 1);
-    });
-    return Array.from(map.entries()).map(([name, total]) => ({ name, total }));
-  }, [runtimeState.bingoWinners]);
 
   const participantPieData = useMemo(() => {
     const map = new Map<string, number>();
@@ -261,6 +242,29 @@ const BingoJogo = () => {
       finishedAt: new Date().toISOString(),
     }));
     toast.success("Bingo finalizado");
+  };
+
+  const handleRestartBingo = () => {
+    if (!game) return;
+    if (
+      !window.confirm(
+        "Reiniciar o jogo? Os números sorteados e os bingos registrados serão apagados; a lista de presentes do bingo permanece."
+      )
+    ) {
+      return;
+    }
+    setRuntimeState((prev) => ({
+      ...prev,
+      bingoFinished: false,
+      finishedAt: null,
+      bingoNumbersDrawn: [],
+      bingoAvailableNumbers: Array.from({ length: 75 }, (_, i) => i + 1),
+      bingoWinners: [],
+      startedAt: new Date().toISOString(),
+    }));
+    setLastDrawn(null);
+    setWheelRotation(0);
+    toast.success("Jogo reiniciado — você pode sortear novamente.");
   };
 
   if (loading || !game) {
@@ -446,61 +450,37 @@ const BingoJogo = () => {
                 </Table>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-                  <h3 className="font-display font-semibold text-lg mb-4">Presentes mais “bingados”</h3>
-                  {giftBarData.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-8 text-center">Sem dados para exibir.</p>
-                  ) : (
-                    <div className="h-[260px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={giftBarData} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-                          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                          <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-25} textAnchor="end" height={70} />
-                          <YAxis allowDecimals={false} />
-                          <Tooltip />
-                          <Bar dataKey="total" radius={[6, 6, 0, 0]}>
-                            {giftBarData.map((_, i) => (
-                              <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                </div>
-                <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-                  <h3 className="font-display font-semibold text-lg mb-4">Bingos por participante</h3>
-                  {participantPieData.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-8 text-center">Sem dados para exibir.</p>
-                  ) : (
-                    <div className="h-[260px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={participantPieData}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={90}
-                            label={({ name, value }) => `${name}: ${value}`}
-                          >
-                            {participantPieData.map((_, i) => (
-                              <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                </div>
+              <div className="bg-card rounded-2xl p-6 shadow-card border border-border max-w-2xl mx-auto w-full">
+                <h3 className="font-display font-semibold text-lg mb-4">Bingos por participante</h3>
+                {participantPieData.length === 0 ? (
+                  <p className="text-sm text-muted-foreground py-8 text-center">Sem dados para exibir.</p>
+                ) : (
+                  <div className="h-[260px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={participantPieData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={90}
+                          label={({ name, value }) => `${name}: ${value}`}
+                        >
+                          {participantPieData.map((_, i) => (
+                            <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
               </div>
 
-              <div className="flex justify-center">
-                <Button variant="outline" asChild>
-                  <Link to={`/evento/${slug}`}>Voltar ao evento</Link>
+              <div className="flex flex-col sm:flex-row justify-center gap-3">
+                <Button type="button" variant="hero" size="lg" onClick={handleRestartBingo}>
+                  Reiniciar o jogo
                 </Button>
               </div>
             </div>

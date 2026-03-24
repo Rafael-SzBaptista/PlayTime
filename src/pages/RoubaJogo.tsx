@@ -2,9 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { ArrowLeft, Dices } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -26,6 +29,8 @@ interface Participant {
   id: string;
   name: string;
   status: string;
+  user_id: string | null;
+  email: string | null;
 }
 
 function isRoubaGameType(t: string | null | undefined) {
@@ -37,6 +42,7 @@ const RoubaJogo = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const hydratedRef = useRef(false);
   const [game, setGame] = useState<GameData | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -50,6 +56,20 @@ const RoubaJogo = () => {
     () => new Map(participants.map((p) => [p.id, p])),
     [participants]
   );
+  const normalizedUserEmail = user?.email?.trim().toLowerCase() ?? null;
+  const participantIsMe = (p: Participant) =>
+    Boolean(
+      user &&
+        (p.user_id === user.id ||
+          (!!normalizedUserEmail &&
+            !!p.email &&
+            p.email.trim().toLowerCase() === normalizedUserEmail)),
+    );
+  const currentParticipant = participants.find((p) => participantIsMe(p)) ?? null;
+  const isOwner = Boolean(user && game && user.id === game.owner_id);
+
+  const canEditRoubaGiftName = (gift: { holderId: string }) =>
+    isOwner || Boolean(currentParticipant && gift.holderId === currentParticipant.id);
 
   const gameDurationText = useMemo(() => {
     if (!runtimeState.startedAt || !runtimeState.finishedAt) return null;
@@ -64,6 +84,22 @@ const RoubaJogo = () => {
   }, [runtimeState.startedAt, runtimeState.finishedAt]);
 
   const numbersAssigned = Object.keys(runtimeState.roubaNumbers).length > 0;
+
+  useEffect(() => {
+    if (!game || loading || !hydratedRef.current) return;
+    if (runtimeState.roubaGifts.length > 0) return;
+    if (confirmedParticipants.length === 0) return;
+    setRuntimeState((prev) => ({
+      ...prev,
+      roubaGifts: confirmedParticipants.map((p, i) => ({
+        id: `${p.id}-gift-${i}`,
+        name: `Presente de ${p.name}`,
+        holderId: p.id,
+        steals: 0,
+        locked: false,
+      })),
+    }));
+  }, [game, loading, confirmedParticipants, runtimeState.roubaGifts.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,7 +128,7 @@ const RoubaJogo = () => {
 
       const { data: parts } = await supabase
         .from("game_participants")
-        .select("id, name, status")
+        .select("id, name, status, user_id, email")
         .eq("game_id", data.id);
 
       if (cancelled) return;
@@ -239,14 +275,81 @@ const RoubaJogo = () => {
           {!runtimeState.roubaFinished && (
             <div className="space-y-8">
               <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
+                <h2 className="font-display font-semibold text-lg mb-1">Cadastro de presentes</h2>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Ajuste como cada presente aparece no jogo (nome na mesa). O organizador edita todos; cada participante
+                  pode editar só o próprio. Em seguida use o card <strong>Sorteio de números</strong> abaixo.
+                </p>
+                {numbersAssigned && (
+                  <p className="mb-4 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
+                    Os números já foram sorteados — os nomes dos presentes ficam só leitura.
+                  </p>
+                )}
+                {runtimeState.roubaGifts.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Carregando presentes do jogo…</p>
+                ) : (
+                  <div className="space-y-4">
+                    {runtimeState.roubaGifts.map((gift) => {
+                      const holder = participantsById.get(gift.holderId);
+                      const editable = canEditRoubaGiftName(gift) && !numbersAssigned;
+                      return (
+                        <div key={gift.id} className="space-y-2">
+                          <Label htmlFor={`gift-${gift.id}`} className="text-xs text-muted-foreground">
+                            Quem leva · {holder?.name ?? "Participante"}
+                          </Label>
+                          <Input
+                            id={`gift-${gift.id}`}
+                            value={gift.name}
+                            disabled={!editable}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setRuntimeState((prev) => ({
+                                ...prev,
+                                roubaGifts: prev.roubaGifts.map((g) =>
+                                  g.id === gift.id ? { ...g, name: value } : g,
+                                ),
+                              }));
+                            }}
+                            onBlur={(e) => {
+                              const trimmed = e.target.value.trim();
+                              const holderName = participantsById.get(gift.holderId)?.name ?? "?";
+                              setRuntimeState((prev) => ({
+                                ...prev,
+                                roubaGifts: prev.roubaGifts.map((g) =>
+                                  g.id === gift.id
+                                    ? { ...g, name: trimmed || `Presente de ${holderName}` }
+                                    : g,
+                                ),
+                              }));
+                            }}
+                            placeholder="Nome ou descrição do presente"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {!user && (
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Entre na sua conta para editar o seu presente. O organizador sempre pode editar todos.
+                  </p>
+                )}
+              </div>
+
+              <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
                 <div className="flex items-center gap-2 mb-2">
                   <Dices className="w-5 h-5 text-primary" />
                   <h2 className="font-display font-semibold text-lg">Sorteio de números</h2>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Sorteia um número único (1 a N) para cada participante confirmado. Faça isso antes das rodadas de roubo.
+                  Sorteia um número único (1 a N) para cada participante confirmado. Faça isso antes das rodadas de
+                  roubo.
                 </p>
-                <Button variant="hero" onClick={handleAssignRoubaNumbers}>
+                <Button
+                  variant="hero"
+                  onClick={handleAssignRoubaNumbers}
+                  disabled={!numbersAssigned && runtimeState.roubaGifts.length === 0}
+                >
                   Sortear números agora
                 </Button>
                 {numbersAssigned && (
@@ -272,8 +375,8 @@ const RoubaJogo = () => {
                       >
                         <span className="font-medium">{gift.name}</span>
                         <span className="text-muted-foreground">
-                          {participantsById.get(gift.holderId)?.name ?? "Sem portador"} · roubado{" "}
-                          {gift.steals}x {gift.locked ? "(bloqueado)" : ""}
+                          {participantsById.get(gift.holderId)?.name ?? "Sem portador"} · roubado {gift.steals}x{" "}
+                          {gift.locked ? "(bloqueado)" : ""}
                         </span>
                       </div>
                     ))}
@@ -317,7 +420,8 @@ const RoubaJogo = () => {
 
               {!numbersAssigned && (
                 <p className="text-sm text-center text-muted-foreground">
-                  Sorteie os números acima para liberar as rodadas de roubo.
+                  Sorteie os números acima para liberar as rodadas de roubo. Você ainda pode ajustar os presentes no card{" "}
+                  <strong>Cadastro de presentes</strong> antes do sorteio.
                 </p>
               )}
             </div>

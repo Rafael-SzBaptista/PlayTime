@@ -83,7 +83,7 @@ const Hero = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="absolute bottom-0 left-1/2 z-20 w-full max-w-3xl -translate-x-1/2 px-4 pb-2 text-sm text-muted-foreground"
       >
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-10 gap-y-2">
           <span className="inline-flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Sorteio automático
@@ -91,10 +91,6 @@ const Hero = () => {
           <span className="inline-flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Link compartilhável
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Sem cadastro obrigatório
           </span>
         </div>
       </motion.div>

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { Gift, Copy, Check } from "lucide-react";
@@ -30,7 +29,6 @@ const CriarJogo = () => {
   const [drawDate, setDrawDate] = useState("");
   const [exchangeDate, setExchangeDate] = useState("");
   const [rules, setRules] = useState("");
-  const [allowSuggestions, setAllowSuggestions] = useState(true);
   const [created, setCreated] = useState(false);
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -81,7 +79,7 @@ const CriarJogo = () => {
       draw_date: usesSingleEventDate ? (eventDate || null) : (drawDate || null),
       exchange_date: usesSingleEventDate ? (eventDate || null) : (exchangeDate || null),
       rules: rules || null,
-      allow_suggestions: allowSuggestions,
+      allow_suggestions: true,
     });
 
     setSaving(false);
@@ -219,14 +217,6 @@ const CriarJogo = () => {
             <div>
               <Label htmlFor="rules" className="font-display font-semibold">Regras do Jogo</Label>
               <Textarea id="rules" placeholder="Ex: Não vale presente usado." value={rules} onChange={(e) => setRules(e.target.value)} className="mt-2 min-h-[100px]" />
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-muted rounded-xl">
-              <div>
-                <p className="font-display font-semibold text-sm">Sugestões de Presentes</p>
-                <p className="text-muted-foreground text-xs">Participantes podem adicionar sugestões</p>
-              </div>
-              <Switch checked={allowSuggestions} onCheckedChange={setAllowSuggestions} />
             </div>
 
             <Button type="submit" variant="hero" size="xl" className="w-full" disabled={saving}>

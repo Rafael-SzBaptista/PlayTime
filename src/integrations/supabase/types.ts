@@ -23,6 +23,7 @@ export type Database = {
           id: string
           name: string
           phone: string | null
+          rouba_gift_in_hands: boolean
           status: string
           user_id: string | null
         }
@@ -34,6 +35,7 @@ export type Database = {
           id?: string
           name: string
           phone?: string | null
+          rouba_gift_in_hands?: boolean
           status?: string
           user_id?: string | null
         }
@@ -45,6 +47,7 @@ export type Database = {
           id?: string
           name?: string
           phone?: string | null
+          rouba_gift_in_hands?: boolean
           status?: string
           user_id?: string | null
         }
@@ -65,9 +68,83 @@ export type Database = {
           },
         ]
       }
+      rouba_participant_gift: {
+        Row: {
+          game_id: string
+          gift_choice: string | null
+          participant_id: string
+          updated_at: string
+        }
+        Insert: {
+          game_id: string
+          gift_choice?: string | null
+          participant_id: string
+          updated_at?: string
+        }
+        Update: {
+          game_id?: string
+          gift_choice?: string | null
+          participant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rouba_participant_gift_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rouba_participant_gift_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: true
+            referencedRelation: "game_participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rouba_participant_ready: {
+        Row: {
+          game_id: string
+          gift_in_hands: boolean
+          participant_id: string
+          updated_at: string
+        }
+        Insert: {
+          game_id: string
+          gift_in_hands?: boolean
+          participant_id: string
+          updated_at?: string
+        }
+        Update: {
+          game_id?: string
+          gift_in_hands?: boolean
+          participant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rouba_participant_ready_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rouba_participant_ready_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: true
+            referencedRelation: "game_participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       games: {
         Row: {
           allow_suggestions: boolean
+          bingo_gift_mode: string
+          bingo_min_gifts_per_participant: number
           created_at: string
           draw_date: string | null
           emoji: string
@@ -85,6 +162,8 @@ export type Database = {
         }
         Insert: {
           allow_suggestions?: boolean
+          bingo_gift_mode?: string
+          bingo_min_gifts_per_participant?: number
           created_at?: string
           draw_date?: string | null
           emoji?: string
@@ -102,6 +181,8 @@ export type Database = {
         }
         Update: {
           allow_suggestions?: boolean
+          bingo_gift_mode?: string
+          bingo_min_gifts_per_participant?: number
           created_at?: string
           draw_date?: string | null
           emoji?: string

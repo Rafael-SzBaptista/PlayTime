@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import CriarJogo from "./pages/CriarJogo";
 import Presentes from "./pages/Presentes";
 import Evento from "./pages/Evento";
+import ResultadoSorteio from "./pages/ResultadoSorteio";
 import Participar from "./pages/Participar";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/presentes" element={<Presentes />} />
             <Route path="/evento/:slug/bingo" element={<BingoJogo />} />
             <Route path="/evento/:slug/rouba" element={<RoubaJogo />} />
+            <Route path="/evento/:slug/resultado" element={<ResultadoSorteio />} />
             <Route path="/evento/:slug" element={<Evento />} />
             <Route path="/participar" element={<Participar />} />
             <Route path="/login" element={<Login />} />

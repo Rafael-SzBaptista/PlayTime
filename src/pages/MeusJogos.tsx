@@ -23,6 +23,23 @@ interface GameWithRole {
   participantId?: string;
 }
 
+function shouldAutoDeleteGameByDate(game: {
+  draw_date: string | null;
+  exchange_date: string | null;
+}) {
+  const baseDate = game.exchange_date ?? game.draw_date;
+  if (!baseDate) return false;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const eventDate = new Date(`${baseDate}T00:00:00`);
+  const deleteDate = new Date(eventDate);
+  deleteDate.setDate(deleteDate.getDate() + 2);
+
+  return today >= deleteDate;
+}
+
 const MeusJogos = () => {
   const { user, loading: authLoading, displayName } = useAuth();
   const navigate = useNavigate();
@@ -57,7 +74,55 @@ const MeusJogos = () => {
 
         if (participationsError) throw participationsError;
 
-        const owned: GameWithRole[] = (ownedGames ?? []).map((g) => ({
+        const ownedGamesList = ownedGames ?? [];
+        const expiredOwnedGames = ownedGamesList.filter((g) => shouldAutoDeleteGameByDate(g));
+        const activeOwnedGames = ownedGamesList.filter((g) => !shouldAutoDeleteGameByDate(g));
+
+        if (expiredOwnedGames.length > 0) {
+          await Promise.allSettled(
+            expiredOwnedGames.map(async (game) => {
+              await supabase
+                .from("games")
+                .update({ status: "closed" })
+                .eq("id", game.id)
+                .eq("owner_id", user.id);
+
+              await supabase
+                .from("game_participants")
+                .update({ drawn_participant_id: null })
+                .eq("game_id", game.id);
+
+              await (supabase as any)
+                .from("participant_wishlist_entries")
+                .delete()
+                .eq("game_id", game.id);
+
+              await (supabase as any)
+                .from("participant_draw_exclusions")
+                .delete()
+                .eq("game_id", game.id);
+
+              await supabase
+                .from("game_participants")
+                .delete()
+                .eq("game_id", game.id);
+
+              await supabase
+                .from("games")
+                .delete()
+                .eq("id", game.id)
+                .eq("owner_id", user.id);
+
+              try {
+                localStorage.removeItem(getRuntimeStorageKey(game.id));
+              } catch {
+                /* ignore */
+              }
+            })
+          );
+        }
+
+        const owned: GameWithRole[] = activeOwnedGames.map((g) => ({
           id: g.id,
           name: g.name,
           slug: g.slug,
@@ -69,8 +134,31 @@ const MeusJogos = () => {
           isOwner: true,
         }));
 
-        const participated: GameWithRole[] = (participations ?? [])
-          .filter((p) => p.games && !owned.find((o) => o.id === p.game_id))
+        const participationsList = participations ?? [];
+        const expiredParticipationRows = participationsList.filter((p) => {
+          const game = p.games as any;
+          return game && shouldAutoDeleteGameByDate(game);
+        });
+
+        if (expiredParticipationRows.length > 0) {
+          await Promise.allSettled(
+            expiredParticipationRows.map((p) =>
+              supabase
+                .from("game_participants")
+                .delete()
+                .eq("id", p.id)
+                .eq("user_id", user.id)
+            )
+          );
+        }
+
+        const participated: GameWithRole[] = participationsList
+          .filter((p) => {
+            const g = p.games as any;
+            if (!g) return false;
+            if (shouldAutoDeleteGameByDate(g)) return false;
+            return !owned.find((o) => o.id === p.game_id);
+          })
           .map((p) => {
             const g = p.games as any;
             return {
@@ -241,7 +329,7 @@ const MeusJogos = () => {
                     {game.isOwner && (
                       <>
                         <Button variant="outline" size="sm" asChild>
-                          <Link to={`/evento/${game.slug}`}>
+                          <Link to={`/evento/${game.slug}?config=1`}>
                             <Pencil className="w-4 h-4" />
                             Editar
                           </Link>
