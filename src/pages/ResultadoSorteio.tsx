@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
-import { ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { allGifts, getOptimizedImageSrc } from "./Presentes";
@@ -151,9 +151,10 @@ const ResultadoSorteio = () => {
           <div className="mt-4">
             <Link
               to={`/evento/${slug}?config=1`}
-              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
-              {"<-"} Volte para as configurações do jogo
+              <ArrowLeft className="h-4 w-4" />
+              Volte para as configurações do jogo
             </Link>
           </div>
         </div>

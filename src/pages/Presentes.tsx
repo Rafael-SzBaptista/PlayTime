@@ -24,7 +24,7 @@ const categories = [
 
 interface GiftItem {
   name: string;
-  price: number;
+  price: number | null;
   category: string;
   emoji: string;
   link?: string;
@@ -843,12 +843,50 @@ export const allGifts: GiftItem[] = [
   { name: "Vela Aromática", price: 34.9, category: "decoracao", emoji: "🕯️" },
   { name: "Luminária LED", price: 89.9, category: "decoracao", emoji: "💡" },
   { name: "Porta-Retrato Digital", price: 99.9, category: "tecnologia", emoji: "🖼️" },
+
+  // Links Mercado Livre (preço varia; consultar no link)
+  {
+    name: "Kit 2 Poltronas Decorativas Opala (suede) — sala/recepção",
+    price: null,
+    category: "decoracao",
+    emoji: "🪑",
+    link: "https://meli.la/2M8imrD",
+  },
+  {
+    name: "Sofá decorativo (courino) com almofadas — recepção/clínica (preto)",
+    price: null,
+    category: "decoracao",
+    emoji: "🛋️",
+    link: "https://meli.la/1Q2Y4Nu",
+  },
+  {
+    name: "Cadeira de jantar Charles Eames Eiffel — madeira preta",
+    price: null,
+    category: "decoracao",
+    emoji: "🪑",
+    link: "https://meli.la/2YWsAXX",
+  },
+  {
+    name: "Cadeira de escritório diretor Tok Begônia — estofado preto",
+    price: null,
+    category: "decoracao",
+    emoji: "🪑",
+    link: "https://meli.la/12xwHB7",
+  },
+  {
+    name: "Cadeira de escritório preta giratória 3310 com braços (mesh/náilon)",
+    price: null,
+    category: "decoracao",
+    emoji: "🪑",
+    link: "https://meli.la/2qHwjhv",
+  },
 ];
 
 const Presentes = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("todos");
+  const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -866,16 +904,20 @@ const Presentes = () => {
     () =>
       allGifts.filter((g) => {
         if (activeCategory !== "todos" && g.category !== activeCategory) return false;
-        if (maxPrice && g.price > maxPrice) return false;
+        if (minPrice !== null || maxPrice !== null) {
+          if (g.price === null) return false;
+          if (minPrice !== null && g.price < minPrice) return false;
+          if (maxPrice !== null && g.price > maxPrice) return false;
+        }
         if (search && !g.name.toLowerCase().includes(search.toLowerCase())) return false;
         return true;
       }),
-    [activeCategory, maxPrice, search],
+    [activeCategory, minPrice, maxPrice, search],
   );
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory, maxPrice, search]);
+  }, [activeCategory, minPrice, maxPrice, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const safePage = Math.min(currentPage, totalPages);
@@ -1059,6 +1101,13 @@ const Presentes = () => {
     !roubaBrowseOnly &&
     (canManageGameProfile || canManageBingoGameGifts);
 
+  const addToGameLabel =
+    gameContext?.game_type === "Amigo Secreto"
+      ? "Adicionar ao Amigo Secreto"
+      : gameContext?.game_type === "Bingo de Presentes"
+        ? "Adicionar ao Bingo"
+        : "Adicionar ao meu perfil do jogo";
+
   const handleToggleGiftOnProfile = async (gift: GiftItem) => {
     if (!user || !gameContext || !participantContext) {
       toast.error("Entre no jogo para adicionar desejos.");
@@ -1228,29 +1277,61 @@ const Presentes = () => {
             </div>
 
             <div className="rounded-xl border border-border bg-card p-3">
-              <label htmlFor="price-filter" className="mb-1 block text-xs font-medium text-muted-foreground">
-                Preço
-              </label>
-              <select
-                id="price-filter"
-                value={maxPrice === null ? "all" : String(maxPrice)}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setMaxPrice(value === "all" ? null : Number(value));
-                }}
-                className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none transition-colors focus:border-primary"
-              >
-                <option value="all">Todos os preços</option>
-                <option value="30">Até R$30</option>
-                <option value="50">Até R$50</option>
-                <option value="100">Até R$100</option>
-                <option value="200">Até R$200</option>
-                <option value="300">Até R$300</option>
-                <option value="400">Até R$400</option>
-                <option value="500">Até R$500</option>
-                <option value="1000">Até R$1000</option>
-                <option value="1500">Até R$1500</option>
-              </select>
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <label className="block text-xs font-medium text-muted-foreground">Preço</label>
+                {(minPrice !== null || maxPrice !== null) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMinPrice(null);
+                      setMaxPrice(null);
+                    }}
+                    className="text-xs font-medium text-primary hover:underline"
+                  >
+                    Limpar
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                    R$
+                  </span>
+                  <Input
+                    inputMode="decimal"
+                    type="number"
+                    min={0}
+                    step="0.01"
+                    value={minPrice === null ? "" : String(minPrice)}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      setMinPrice(raw === "" ? null : Number(raw));
+                    }}
+                    placeholder="Mín"
+                    className="h-10 pl-9"
+                    aria-label="Preço mínimo"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                    R$
+                  </span>
+                  <Input
+                    inputMode="decimal"
+                    type="number"
+                    min={0}
+                    step="0.01"
+                    value={maxPrice === null ? "" : String(maxPrice)}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      setMaxPrice(raw === "" ? null : Number(raw));
+                    }}
+                    placeholder="Máx"
+                    className="h-10 pl-9"
+                    aria-label="Preço máximo"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1288,9 +1369,13 @@ const Presentes = () => {
                   {categories.find((c) => c.id === gift.category)?.label}
                 </span>
                 <h3 className="font-display font-semibold mt-2 mb-1 text-sm min-h-[2.75rem] line-clamp-2">{gift.name}</h3>
-                <p className="text-lg font-bold text-secondary mb-3">
-                  R$ {gift.price.toFixed(2).replace(".", ",")}
-                </p>
+                {typeof gift.price === "number" ? (
+                  <p className="text-lg font-bold text-secondary mb-3">
+                    R$ {gift.price.toFixed(2).replace(".", ",")}
+                  </p>
+                ) : (
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Ver preço no link</p>
+                )}
                 <div className="mt-auto">
                 {showGameGiftControls && (
                   <Button
@@ -1325,7 +1410,7 @@ const Presentes = () => {
                           : "Desfixar do meu perfil"
                         : savingGiftName === gift.name
                           ? "Adicionando..."
-                          : "Adicionar ao meu perfil do jogo"}
+                          : addToGameLabel}
                   </Button>
                 )}
                 {gift.link ? (

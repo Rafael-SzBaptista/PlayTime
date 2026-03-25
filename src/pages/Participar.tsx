@@ -6,11 +6,13 @@ import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
 const Participar = () => {
   const [code, setCode] = useState("");
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const extractSlug = (value: string) => {
     const trimmed = value.trim();
@@ -28,6 +30,13 @@ const Participar = () => {
     const slug = extractSlug(code);
     if (!slug) {
       toast.error("Cole um link válido do evento");
+      return;
+    }
+
+    if (!user) {
+      toast.error("Para participar, você precisa criar uma conta ou entrar.");
+      const next = encodeURIComponent(`/evento/${slug}`);
+      navigate(`/cadastro?next=${next}`);
       return;
     }
 

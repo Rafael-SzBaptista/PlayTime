@@ -12,6 +12,8 @@ import ResultadoSorteio from "./pages/ResultadoSorteio";
 import Participar from "./pages/Participar";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
+import RecuperarSenha from "./pages/RecuperarSenha";
+import RedefinirSenha from "./pages/RedefinirSenha";
 import MeusJogos from "./pages/MeusJogos";
 import BingoJogo from "./pages/BingoJogo";
 import RoubaJogo from "./pages/RoubaJogo";
@@ -38,6 +40,8 @@ const App = () => (
             <Route path="/participar" element={<Participar />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+            <Route path="/redefinir-senha" element={<RedefinirSenha />} />
             <Route path="/meus-jogos" element={<MeusJogos />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

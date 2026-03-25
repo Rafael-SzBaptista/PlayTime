@@ -1044,6 +1044,25 @@ const Evento = () => {
             )}
           </div>
 
+          {!user && (
+            <div className="mb-6 rounded-2xl border border-border bg-muted/40 px-4 py-4 text-center">
+              <p className="text-sm font-medium text-foreground">
+                Para participar deste jogo, é necessário ter uma conta.
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Crie uma conta (ou entre) e você volta para este evento automaticamente.
+              </p>
+              <div className="mt-4 flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center">
+                <Button asChild variant="hero" size="sm" className="sm:w-auto">
+                  <Link to={`/cadastro?next=${encodeURIComponent(`/evento/${slug}`)}`}>Criar conta</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="sm:w-auto">
+                  <Link to={`/login?next=${encodeURIComponent(`/evento/${slug}`)}`}>Já tenho conta</Link>
+                </Button>
+              </div>
+            </div>
+          )}
+
           {gameConfigLocked && (
             <div className="mb-6 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-center text-sm text-muted-foreground">
               Este jogo já começou (sorteio realizado ou jogo iniciado). Participantes, nomes, presentes e demais
