@@ -27,7 +27,7 @@ const Participar = () => {
   const handleJoin = () => {
     const slug = extractSlug(code);
     if (!slug) {
-      toast.error("Cole um link ou código válido do evento");
+      toast.error("Cole um link válido do evento");
       return;
     }
 
@@ -46,14 +46,14 @@ const Participar = () => {
           <div className="text-5xl mb-4">🎟️</div>
           <h1 className="text-3xl font-bold mb-2">Participar de um Jogo</h1>
           <p className="text-muted-foreground mb-8">
-            Cole o link ou código do evento para participar
+            Cole o link do evento para participar
           </p>
 
           <div className="space-y-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Cole o link ou código do evento"
+                placeholder="Cole o link do evento"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 className="pl-10 h-14 text-base"
@@ -69,8 +69,7 @@ const Participar = () => {
             <h3 className="font-display font-semibold mb-2">Como participar?</h3>
             <ol className="text-sm text-muted-foreground space-y-2 text-left">
               <li>1. Peça o link do evento ao organizador</li>
-              <li>2. Cole o link acima ou acesse diretamente</li>
-              <li>3. Informe seu nome e pronto!</li>
+              <li>2. Cole o link acima</li>
             </ol>
           </div>
         </motion.div>

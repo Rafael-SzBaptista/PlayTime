@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/landing/Navbar";
@@ -1195,41 +1195,6 @@ const Presentes = () => {
               Encontre o presente ideal com links para compra
             </p>
           </div>
-
-          {hasGameContext && !roubaBrowseOnly && (
-            <div className="mx-auto mb-6 max-w-5xl rounded-2xl border border-border bg-card p-4">
-              <p className="text-sm font-medium">
-                {gameContext
-                  ? `Perfil do jogo: ${gameContext.name}`
-                  : "Adicione produtos ao seu perfil do jogo"}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {loadingContext
-                  ? "Carregando vínculo com o jogo..."
-                  : gameContext?.configLocked
-                    ? "Este jogo já começou — perfil, participantes e listas de presentes não podem ser alterados aqui. Você ainda pode usar os links para ver produtos."
-                    : canManageGameProfile
-                      ? gameContext?.game_type === "Amigo Secreto"
-                        ? `Selecionados no seu perfil: ${wishlistByName.size} (mínimo 3)`
-                        : `Selecionados para o bingo: ${wishlistByName.size}${
-                            gameContext && gameContext.bingo_min_gifts_per_participant > 0
-                              ? ` (mínimo ${gameContext.bingo_min_gifts_per_participant})`
-                              : ""
-                          }`
-                      : canManageBingoGameGifts
-                        ? `Presentes selecionados para o bingo: ${bingoGiftNames.size}`
-                        : gameContext?.game_type === "Bingo de Presentes" &&
-                            gameContext?.bingo_gift_mode === "admin_only"
-                          ? "Somente o organizador pode selecionar presentes para o bingo."
-                          : "Para adicionar itens, entre no jogo como participante."}
-              </p>
-              <div className="mt-3">
-                <Button asChild size="sm" variant="outline">
-                  <Link to={`/evento/${gameSlug}`}>Voltar ao jogo</Link>
-                </Button>
-              </div>
-            </div>
-          )}
 
           {/* Search */}
           <div className="max-w-md mx-auto mb-8 relative">

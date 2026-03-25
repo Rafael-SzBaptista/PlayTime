@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import { GameTypeIcon } from "@/components/game/GameTypeIcon";
 import { ArrowLeft, Dices } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -84,6 +86,27 @@ const RoubaJogo = () => {
   }, [runtimeState.startedAt, runtimeState.finishedAt]);
 
   const numbersAssigned = Object.keys(runtimeState.roubaNumbers).length > 0;
+
+  const roubaStealsPerGiftChart = useMemo(
+    () =>
+      runtimeState.roubaGifts.map((g) => ({
+        name: g.name.length > 24 ? `${g.name.slice(0, 22)}…` : g.name,
+        fullName: g.name,
+        roubos: g.steals,
+      })),
+    [runtimeState.roubaGifts],
+  );
+
+  const totalRodadasRoubo = useMemo(
+    () => runtimeState.roubaGifts.reduce((acc, g) => acc + g.steals, 0),
+    [runtimeState.roubaGifts],
+  );
+
+  const cadastroGiftRows = isOwner
+    ? runtimeState.roubaGifts
+    : currentParticipant
+      ? runtimeState.roubaGifts.filter((g) => g.holderId === currentParticipant.id)
+      : [];
 
   useEffect(() => {
     if (!game || loading || !hydratedRef.current) return;
@@ -177,6 +200,10 @@ const RoubaJogo = () => {
   }, [runtimeState, game, loading]);
 
   const handleAssignRoubaNumbers = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode sortear os números.");
+      return;
+    }
     if (confirmedParticipants.length === 0) {
       toast.error("Não há participantes confirmados");
       return;
@@ -197,7 +224,25 @@ const RoubaJogo = () => {
     toast.success("Números sorteados!");
   };
 
+  const handleResetRoubaNumbers = () => {
+    if (!isOwner) return;
+    if (Object.keys(runtimeState.roubaNumbers).length === 0) return;
+    if (
+      !window.confirm(
+        "Refazer o sorteio dos números? A distribuição atual (1…N) será apagada e as rodadas de roubo ficam ocultas até sortear de novo. Os roubos já registrados nos presentes não são desfeitos — confirme se é isso que deseja.",
+      )
+    ) {
+      return;
+    }
+    setRuntimeState((prev) => ({ ...prev, roubaNumbers: {} }));
+    toast.success("Sorteio limpo. Sorteie os números novamente quando quiser.");
+  };
+
   const handleRoubarPresente = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode registrar roubos.");
+      return;
+    }
     if (!selectedRoubaGiftId || !selectedRoubaHolderId) {
       toast.error("Selecione presente e novo portador");
       return;
@@ -232,12 +277,36 @@ const RoubaJogo = () => {
   };
 
   const handleFinishRouba = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode finalizar o jogo.");
+      return;
+    }
     setRuntimeState((prev) => ({
       ...prev,
       roubaFinished: true,
       finishedAt: new Date().toISOString(),
     }));
     toast.success("Rouba Presente finalizado");
+  };
+
+  const handleRestartRouba = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode reiniciar o jogo.");
+      return;
+    }
+    if (
+      !window.confirm(
+        "Reiniciar o Rouba Presente? O jogo deixa de aparecer como finalizado e volta às rodadas de roubo. Presentes, números sorteados e histórico de roubos permanecem como estão.",
+      )
+    ) {
+      return;
+    }
+    setRuntimeState((prev) => ({
+      ...prev,
+      roubaFinished: false,
+      finishedAt: null,
+    }));
+    toast.success("Jogo reaberto — continue ou finalize quando quiser.");
   };
 
   if (loading || !game) {
@@ -264,10 +333,13 @@ const RoubaJogo = () => {
               </Link>
             </Button>
             <div className="flex items-center gap-3">
-              <span className="text-4xl">{game.emoji}</span>
+              <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="lg" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold">{game.name}</h1>
-                <p className="text-sm text-muted-foreground">Rouba Presente — jogo em andamento</p>
+                <p className="text-sm text-muted-foreground">
+                  Rouba Presente —{" "}
+                  {runtimeState.roubaFinished ? "jogo finalizado" : "jogo em andamento"}
+                </p>
               </div>
             </div>
           </div>
@@ -275,27 +347,51 @@ const RoubaJogo = () => {
           {!runtimeState.roubaFinished && (
             <div className="space-y-8">
               <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-                <h2 className="font-display font-semibold text-lg mb-1">Cadastro de presentes</h2>
+                <h2 className="font-display font-semibold text-lg mb-1">
+                  {isOwner ? "Cadastro de presentes" : "Cadastre o seu presente"}
+                </h2>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Ajuste como cada presente aparece no jogo (nome na mesa). O organizador edita todos; cada participante
-                  pode editar só o próprio. Em seguida use o card <strong>Sorteio de números</strong> abaixo.
+                  {isOwner ? (
+                    <>
+                      Ajuste como cada presente aparece no jogo (nome na mesa). Você pode alterar os nomes a qualquer
+                      momento até finalizar o jogo — inclusive depois do sorteio. Use o card <strong>Sorteio de números</strong>{" "}
+                      abaixo para sortear ou refazer o sorteio.
+                    </>
+                  ) : (
+                    <>
+                      Informe como o <strong>seu</strong> presente deve aparecer no jogo. Você pode corrigir o nome depois
+                      do sorteio, se precisar. O organizador sorteia os números no card <strong>Sorteio de números</strong>{" "}
+                      abaixo.
+                    </>
+                  )}
                 </p>
                 {numbersAssigned && (
                   <p className="mb-4 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
-                    Os números já foram sorteados — os nomes dos presentes ficam só leitura.
+                    Números já sorteados — os campos acima continuam editáveis para ajustar o nome do presente.
+                    {isOwner && " Como organizador, você pode refazer o sorteio no card abaixo, se tiver sido por engano."}
                   </p>
                 )}
                 {runtimeState.roubaGifts.length === 0 ? (
                   <p className="text-sm text-muted-foreground">Carregando presentes do jogo…</p>
+                ) : !isOwner && !currentParticipant ? (
+                  <p className="text-sm text-muted-foreground">
+                    {user
+                      ? "Sua conta não está entre os participantes confirmados deste jogo — você não pode cadastrar um presente aqui."
+                      : "Entre na sua conta para cadastrar o seu presente."}
+                  </p>
+                ) : !isOwner && cadastroGiftRows.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    Não encontramos um presente associado a você neste jogo.
+                  </p>
                 ) : (
                   <div className="space-y-4">
-                    {runtimeState.roubaGifts.map((gift) => {
+                    {cadastroGiftRows.map((gift) => {
                       const holder = participantsById.get(gift.holderId);
-                      const editable = canEditRoubaGiftName(gift) && !numbersAssigned;
+                      const editable = canEditRoubaGiftName(gift);
                       return (
                         <div key={gift.id} className="space-y-2">
                           <Label htmlFor={`gift-${gift.id}`} className="text-xs text-muted-foreground">
-                            Quem leva · {holder?.name ?? "Participante"}
+                            {isOwner ? `Quem leva · ${holder?.name ?? "Participante"}` : "Seu presente"}
                           </Label>
                           <Input
                             id={`gift-${gift.id}`}
@@ -329,9 +425,9 @@ const RoubaJogo = () => {
                     })}
                   </div>
                 )}
-                {!user && (
+                {isOwner && !user && (
                   <p className="mt-4 text-xs text-muted-foreground">
-                    Entre na sua conta para editar o seu presente. O organizador sempre pode editar todos.
+                    Entre na sua conta para poder salvar alterações como organizador.
                   </p>
                 )}
               </div>
@@ -341,30 +437,61 @@ const RoubaJogo = () => {
                   <Dices className="w-5 h-5 text-primary" />
                   <h2 className="font-display font-semibold text-lg">Sorteio de números</h2>
                 </div>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Sorteia um número único (1 a N) para cada participante confirmado. Faça isso antes das rodadas de
-                  roubo.
-                </p>
-                <Button
-                  variant="hero"
-                  onClick={handleAssignRoubaNumbers}
-                  disabled={!numbersAssigned && runtimeState.roubaGifts.length === 0}
-                >
-                  Sortear números agora
-                </Button>
-                {numbersAssigned && (
-                  <div className="mt-4 space-y-1 text-sm text-muted-foreground">
-                    {confirmedParticipants.map((p) => (
-                      <p key={p.id}>
-                        <span className="font-medium text-foreground">{p.name}</span>: #
-                        {runtimeState.roubaNumbers[p.id] ?? "—"}
+                {isOwner ? (
+                  <>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      Sorteia um número único (1 a N) para cada participante confirmado. Depois disso liberam as rodadas
+                      de roubo. Se sortear por engano, use <strong>Refazer sorteio</strong>. Os participantes veem só o
+                      próprio número.
+                    </p>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                      {!numbersAssigned ? (
+                        <Button
+                          variant="hero"
+                          onClick={handleAssignRoubaNumbers}
+                          disabled={runtimeState.roubaGifts.length === 0}
+                        >
+                          Sortear números agora
+                        </Button>
+                      ) : (
+                        <Button type="button" variant="outline" onClick={handleResetRoubaNumbers}>
+                          Refazer sorteio (limpar números)
+                        </Button>
+                      )}
+                    </div>
+                    {numbersAssigned && (
+                      <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+                        {confirmedParticipants.map((p) => (
+                          <p key={p.id}>
+                            <span className="font-medium text-foreground">{p.name}</span>: #
+                            {runtimeState.roubaNumbers[p.id] ?? "—"}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      O organizador sorteia os números. Aqui aparece apenas o seu número.
+                    </p>
+                    {!numbersAssigned ? (
+                      <p className="text-sm text-muted-foreground">Aguarde o organizador sortear os números.</p>
+                    ) : currentParticipant ? (
+                      <p className="text-sm">
+                        <span className="font-medium text-foreground">Seu número:</span> #
+                        {runtimeState.roubaNumbers[currentParticipant.id] ?? "—"}
                       </p>
-                    ))}
-                  </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Entre na conta vinculada ao evento como participante confirmado para ver o seu número.
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
 
-              {numbersAssigned && (
+              {numbersAssigned && isOwner && (
                 <div className="bg-card rounded-2xl p-6 shadow-card border border-border space-y-4">
                   <h2 className="font-display font-semibold text-lg">Rodadas de roubo</h2>
                   <div className="space-y-2">
@@ -420,8 +547,9 @@ const RoubaJogo = () => {
 
               {!numbersAssigned && (
                 <p className="text-sm text-center text-muted-foreground">
-                  Sorteie os números acima para liberar as rodadas de roubo. Você ainda pode ajustar os presentes no card{" "}
-                  <strong>Cadastro de presentes</strong> antes do sorteio.
+                  {isOwner
+                    ? "Sorteie os números acima para liberar as rodadas de roubo. Os nomes dos presentes podem ser ajustados no card de cadastro a qualquer momento."
+                    : "Aguarde o organizador sortear os números. As rodadas de roubo são conduzidas por ele."}
                 </p>
               )}
             </div>
@@ -429,24 +557,88 @@ const RoubaJogo = () => {
 
           {runtimeState.roubaFinished && (
             <div className="space-y-6">
-              <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
-                <h2 className="font-display font-semibold text-lg mb-2">Estatísticas do jogo</h2>
-                <p className="text-sm text-muted-foreground mb-4">Duração: {gameDurationText ?? "—"}</p>
-                <div className="space-y-2">
-                  {runtimeState.roubaGifts.map((gift) => (
-                    <div key={`stats-${gift.id}`} className="bg-muted/50 rounded-xl p-3 text-sm">
-                      <p className="font-medium">{gift.name}</p>
-                      <p className="text-muted-foreground">
-                        Ficou com: {participantsById.get(gift.holderId)?.name ?? "Participante removido"} ·
-                        Roubado {gift.steals}x
-                      </p>
+              <div className="bg-card rounded-2xl p-6 shadow-card border border-border space-y-8">
+                <h2 className="font-display font-semibold text-lg">Estatísticas do jogo</h2>
+
+                <section>
+                  <h3 className="font-display font-semibold text-base mb-2">1. Duração do jogo</h3>
+                  <p className="text-sm text-foreground">{gameDurationText ?? "—"}</p>
+                </section>
+
+                <section>
+                  <h3 className="font-display font-semibold text-base mb-2">2. Rodadas</h3>
+                  <p className="text-sm text-foreground">
+                    {totalRodadasRoubo}{" "}
+                    {totalRodadasRoubo === 1 ? "rodada de roubo registrada" : "rodadas de roubo registradas"}
+                  </p>
+                </section>
+
+                <section>
+                  <h3 className="font-display font-semibold text-base mb-3">3. Quem ficou com cada presente</h3>
+                  {runtimeState.roubaGifts.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">Nenhum presente no jogo.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {runtimeState.roubaGifts.map((gift) => (
+                        <li
+                          key={`holder-${gift.id}`}
+                          className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2 rounded-xl bg-muted/50 px-3 py-2 text-sm"
+                        >
+                          <span className="font-medium text-foreground">{gift.name}</span>
+                          <span className="text-muted-foreground sm:before:content-['→'] sm:before:mr-2">
+                            {participantsById.get(gift.holderId)?.name ?? "Participante removido"}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+
+                <section>
+                  <h3 className="font-display font-semibold text-base mb-3">4. Roubos por presente</h3>
+                  {roubaStealsPerGiftChart.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">Sem dados.</p>
+                  ) : (
+                    <div className="h-[280px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={roubaStealsPerGiftChart} margin={{ bottom: 8, left: 0, right: 8 }}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                          <XAxis
+                            dataKey="name"
+                            tick={{ fontSize: 11 }}
+                            interval={0}
+                            angle={-28}
+                            textAnchor="end"
+                            height={72}
+                          />
+                          <YAxis allowDecimals={false} width={32} />
+                          <Tooltip
+                            content={({ active, payload }) => {
+                              if (!active || !payload?.length) return null;
+                              const row = payload[0].payload as (typeof roubaStealsPerGiftChart)[0];
+                              return (
+                                <div className="rounded-lg border border-border bg-background px-3 py-2 text-sm shadow-md">
+                                  <p className="font-medium">{row.fullName}</p>
+                                  <p className="text-muted-foreground">Roubos: {row.roubos}</p>
+                                </div>
+                              );
+                            }}
+                          />
+                          <Bar dataKey="roubos" radius={[4, 4, 0, 0]} fill="hsl(var(--primary))" />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </section>
               </div>
-              <Button variant="outline" asChild>
-                <Link to={`/evento/${slug}`}>Voltar ao evento</Link>
-              </Button>
+
+              {isOwner && (
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button type="button" variant="hero" size="lg" onClick={handleRestartRouba}>
+                    Reabrir jogo (desfazer finalização)
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </motion.div>

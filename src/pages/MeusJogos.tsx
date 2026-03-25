@@ -7,6 +7,7 @@ import Footer from "@/components/landing/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { GameTypeIcon } from "@/components/game/GameTypeIcon";
 import { Gift, Crown, Users, Trash2, Pencil } from "lucide-react";
 import { getRuntimeStorageKey } from "@/lib/gameRuntime";
 
@@ -303,7 +304,7 @@ const MeusJogos = () => {
                   className="bg-card rounded-2xl p-5 shadow-card border border-border flex items-center justify-between hover:shadow-elevated transition-shadow"
                 >
                   <Link to={`/evento/${game.slug}`} className="flex items-center gap-4 flex-1 min-w-0">
-                    <span className="text-3xl">{game.emoji}</span>
+                    <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="sm" />
                     <div className="min-w-0">
                       <h3 className="font-display font-semibold truncate">{game.name}</h3>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">

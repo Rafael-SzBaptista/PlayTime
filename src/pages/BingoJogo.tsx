@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,9 @@ import {
 } from "@/components/ui/table";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
-import { ArrowLeft, PartyPopper } from "lucide-react";
+import { GameTypeIcon } from "@/components/game/GameTypeIcon";
+import { PartyPopper } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -63,6 +65,7 @@ const BingoJogo = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const hydratedRef = useRef(false);
   const [game, setGame] = useState<GameData | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -75,6 +78,7 @@ const BingoJogo = () => {
   const [winnerGift, setWinnerGift] = useState("");
 
   const confirmedParticipants = participants.filter((p) => p.status === "confirmed");
+  const isOwner = Boolean(user && game && user.id === game.owner_id);
   const participantsById = useMemo(
     () => new Map(participants.map((p) => [p.id, p])),
     [participants]
@@ -236,6 +240,10 @@ const BingoJogo = () => {
   };
 
   const handleFinishBingo = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode finalizar o jogo.");
+      return;
+    }
     setRuntimeState((prev) => ({
       ...prev,
       bingoFinished: true,
@@ -245,6 +253,10 @@ const BingoJogo = () => {
   };
 
   const handleRestartBingo = () => {
+    if (!isOwner) {
+      toast.error("Apenas o organizador pode reiniciar o jogo.");
+      return;
+    }
     if (!game) return;
     if (
       !window.confirm(
@@ -285,14 +297,8 @@ const BingoJogo = () => {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
             <div>
-              <Button variant="ghost" size="sm" asChild className="mb-2 -ml-2">
-                <Link to={`/evento/${slug}`}>
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Voltar ao evento
-                </Link>
-              </Button>
               <div className="flex items-center gap-3">
-                <span className="text-4xl">{game.emoji}</span>
+                <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="lg" />
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold">{game.name}</h1>
                   <p className="text-sm text-muted-foreground">Bingo de Presentes — jogo em andamento</p>
@@ -396,9 +402,15 @@ const BingoJogo = () => {
                     <Button variant="outline" onClick={handleRegisterBingoWinner}>
                       Registrar bingo
                     </Button>
-                    <Button variant="destructive" onClick={handleFinishBingo}>
-                      Finalizar bingo
-                    </Button>
+                    {isOwner ? (
+                      <Button variant="destructive" onClick={handleFinishBingo}>
+                        Finalizar bingo
+                      </Button>
+                    ) : (
+                      <p className="text-xs text-muted-foreground pt-1">
+                        Só o organizador pode finalizar o bingo.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -478,11 +490,17 @@ const BingoJogo = () => {
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-center gap-3">
-                <Button type="button" variant="hero" size="lg" onClick={handleRestartBingo}>
-                  Reiniciar o jogo
-                </Button>
-              </div>
+              {isOwner ? (
+                <div className="flex flex-col sm:flex-row justify-center gap-3">
+                  <Button type="button" variant="hero" size="lg" onClick={handleRestartBingo}>
+                    Reiniciar o jogo
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-center text-sm text-muted-foreground">
+                  Só o organizador pode reiniciar o jogo após o encerramento.
+                </p>
+              )}
             </div>
           )}
         </motion.div>

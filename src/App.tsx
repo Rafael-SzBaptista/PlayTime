@@ -29,6 +29,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/criar-jogo" element={<CriarJogo />} />
+            <Route path="/criar-jogo/:tipo" element={<CriarJogo />} />
             <Route path="/presentes" element={<Presentes />} />
             <Route path="/evento/:slug/bingo" element={<BingoJogo />} />
             <Route path="/evento/:slug/rouba" element={<RoubaJogo />} />
