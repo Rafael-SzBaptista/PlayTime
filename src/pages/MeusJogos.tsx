@@ -10,6 +10,12 @@ import { toast } from "sonner";
 import { GameTypeIcon } from "@/components/game/GameTypeIcon";
 import { Gift, Crown, Users, Trash2, Pencil } from "lucide-react";
 import { getRuntimeStorageKey } from "@/lib/gameRuntime";
+import {
+  AUTO_DELETE_AFTER_DAYS,
+  formatDatePtBr,
+  getAutoDeleteDate,
+  shouldAutoDeleteGameByDate,
+} from "@/lib/gameRetention";
 
 interface GameWithRole {
   id: string;
@@ -22,23 +28,7 @@ interface GameWithRole {
   exchange_date: string | null;
   isOwner: boolean;
   participantId?: string;
-}
-
-function shouldAutoDeleteGameByDate(game: {
-  draw_date: string | null;
-  exchange_date: string | null;
-}) {
-  const baseDate = game.exchange_date ?? game.draw_date;
-  if (!baseDate) return false;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const eventDate = new Date(`${baseDate}T00:00:00`);
-  const deleteDate = new Date(eventDate);
-  deleteDate.setDate(deleteDate.getDate() + 2);
-
-  return today >= deleteDate;
+  autoDeleteDateText?: string;
 }
 
 const MeusJogos = () => {
@@ -59,6 +49,14 @@ const MeusJogos = () => {
 
     const fetchGames = async () => {
       try {
+        // Limpeza global no banco (7 dias após a data do evento).
+        const cleanupResult = await (supabase as any).rpc("cleanup_expired_games", {
+          p_retention_days: AUTO_DELETE_AFTER_DAYS,
+        });
+        if (cleanupResult?.error) {
+          console.warn("cleanup_expired_games falhou:", cleanupResult.error);
+        }
+
         // Games I own
         const { data: ownedGames, error: ownedError } = await supabase
           .from("games")
@@ -76,83 +74,25 @@ const MeusJogos = () => {
         if (participationsError) throw participationsError;
 
         const ownedGamesList = ownedGames ?? [];
-        const expiredOwnedGames = ownedGamesList.filter((g) => shouldAutoDeleteGameByDate(g));
         const activeOwnedGames = ownedGamesList.filter((g) => !shouldAutoDeleteGameByDate(g));
 
-        if (expiredOwnedGames.length > 0) {
-          await Promise.allSettled(
-            expiredOwnedGames.map(async (game) => {
-              await supabase
-                .from("games")
-                .update({ status: "closed" })
-                .eq("id", game.id)
-                .eq("owner_id", user.id);
-
-              await supabase
-                .from("game_participants")
-                .update({ drawn_participant_id: null })
-                .eq("game_id", game.id);
-
-              await (supabase as any)
-                .from("participant_wishlist_entries")
-                .delete()
-                .eq("game_id", game.id);
-
-              await (supabase as any)
-                .from("participant_draw_exclusions")
-                .delete()
-                .eq("game_id", game.id);
-
-              await supabase
-                .from("game_participants")
-                .delete()
-                .eq("game_id", game.id);
-
-              await supabase
-                .from("games")
-                .delete()
-                .eq("id", game.id)
-                .eq("owner_id", user.id);
-
-              try {
-                localStorage.removeItem(getRuntimeStorageKey(game.id));
-              } catch {
-                /* ignore */
-              }
-            })
-          );
-        }
-
-        const owned: GameWithRole[] = activeOwnedGames.map((g) => ({
-          id: g.id,
-          name: g.name,
-          slug: g.slug,
-          emoji: g.emoji,
-          game_type: g.game_type,
-          status: g.status,
-          draw_date: g.draw_date,
-          exchange_date: g.exchange_date,
-          isOwner: true,
-        }));
-
-        const participationsList = participations ?? [];
-        const expiredParticipationRows = participationsList.filter((p) => {
-          const game = p.games as any;
-          return game && shouldAutoDeleteGameByDate(game);
+        const owned: GameWithRole[] = activeOwnedGames.map((g) => {
+          const autoDeleteDate = getAutoDeleteDate(g);
+          return {
+            id: g.id,
+            name: g.name,
+            slug: g.slug,
+            emoji: g.emoji,
+            game_type: g.game_type,
+            status: g.status,
+            draw_date: g.draw_date,
+            exchange_date: g.exchange_date,
+            isOwner: true,
+            autoDeleteDateText: autoDeleteDate ? formatDatePtBr(autoDeleteDate) : undefined,
+          };
         });
 
-        if (expiredParticipationRows.length > 0) {
-          await Promise.allSettled(
-            expiredParticipationRows.map((p) =>
-              supabase
-                .from("game_participants")
-                .delete()
-                .eq("id", p.id)
-                .eq("user_id", user.id)
-            )
-          );
-        }
-
+        const participationsList = participations ?? [];
         const participated: GameWithRole[] = participationsList
           .filter((p) => {
             const g = p.games as any;
@@ -162,6 +102,7 @@ const MeusJogos = () => {
           })
           .map((p) => {
             const g = p.games as any;
+            const autoDeleteDate = getAutoDeleteDate(g);
             return {
               id: g.id,
               name: g.name,
@@ -173,6 +114,7 @@ const MeusJogos = () => {
               exchange_date: g.exchange_date,
               isOwner: false,
               participantId: p.id,
+              autoDeleteDateText: autoDeleteDate ? formatDatePtBr(autoDeleteDate) : undefined,
             };
           });
 
@@ -318,6 +260,11 @@ const MeusJogos = () => {
                       <h3 className="font-display font-semibold truncate">{game.name}</h3>
                       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                         <span className="min-w-0">{game.game_type}</span>
+                        {game.autoDeleteDateText && (
+                          <span className="rounded-full border border-border/70 px-2 py-0.5">
+                            Exclusão automática: {game.autoDeleteDateText}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>

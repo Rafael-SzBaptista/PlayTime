@@ -43,7 +43,12 @@ const Hero = () => {
                 Criar Jogo
               </Link>
             </Button>
-            <Button variant="festiveOutline" size="xl" asChild>
+            <Button
+              variant="festiveOutline"
+              size="xl"
+              asChild
+              className="hover:bg-background/50 hover:text-primary hover:border-primary/90 hover:scale-[1.02]"
+            >
               <Link to="/participar">
                 <Users className="h-5 w-5" />
                 Participar de Jogo
@@ -81,16 +86,32 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="absolute bottom-0 left-1/2 z-20 w-full max-w-3xl -translate-x-1/2 px-4 pb-2 text-sm text-muted-foreground"
+        className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2 px-4 pb-2 text-sm text-muted-foreground"
       >
-        <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-10 gap-y-2">
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+        <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-center justify-items-center gap-x-4 gap-y-2 px-2 sm:grid-cols-3 xl:grid-cols-6">
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
             Sorteio automático
           </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
             Link compartilhável
+          </span>
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            Gratuito
+          </span>
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            Gerenciamento
+          </span>
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            Controle
+          </span>
+          <span className="inline-flex w-full items-center justify-center gap-2 text-center whitespace-nowrap">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            Sugestão de Presentes
           </span>
         </div>
       </motion.div>

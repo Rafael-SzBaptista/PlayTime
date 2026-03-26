@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
-import { Users, Clock, Gift, Star, UserPlus, Settings, Save, Trash2, ArrowRight, ExternalLink } from "lucide-react";
+import { Users, Clock, Gift, Star, UserPlus, Settings, Save, Trash2, ArrowRight, ExternalLink, AlertTriangle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -21,6 +21,11 @@ import {
 } from "@/lib/gameRuntime";
 import { allGifts } from "@/pages/Presentes";
 import { GameTypeIcon } from "@/components/game/GameTypeIcon";
+import {
+  AUTO_DELETE_AFTER_DAYS,
+  formatDatePtBr,
+  getAutoDeleteDate,
+} from "@/lib/gameRetention";
 
 interface GameData {
   id: string;
@@ -80,20 +85,6 @@ function getWishlistItemLink(item: WishlistEntry) {
   return `https://lista.mercadolivre.com.br/${encodeURIComponent(item.gift_name)}`;
 }
 
-function shouldAutoDeleteGame(game: GameData) {
-  const baseDate = game.exchange_date ?? game.draw_date;
-  if (!baseDate) return false;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const eventDate = new Date(`${baseDate}T00:00:00`);
-  const deleteDate = new Date(eventDate);
-  deleteDate.setDate(deleteDate.getDate() + 2);
-
-  return today >= deleteDate;
-}
-
 const Evento = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -107,7 +98,6 @@ const Evento = () => {
   const [loading, setLoading] = useState(true);
   const [drawing, setDrawing] = useState(false);
   const [autoDrawing, setAutoDrawing] = useState(false);
-  const [autoDeletingGame, setAutoDeletingGame] = useState(false);
   const [joinPrompted, setJoinPrompted] = useState(false);
   const [joiningByLink, setJoiningByLink] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -198,6 +188,8 @@ const Evento = () => {
     ? wishlistByParticipantId.get(currentDrawTarget.id) ?? []
     : [];
   const allowConfigView = searchParams.get("config") === "1";
+  const autoDeleteDate = useMemo(() => (game ? getAutoDeleteDate(game) : null), [game]);
+  const autoDeleteDateText = autoDeleteDate ? formatDatePtBr(autoDeleteDate) : null;
 
   const gameConfigLocked = useMemo(() => {
     if (!game) return false;
@@ -257,6 +249,13 @@ const Evento = () => {
     setDrawExclusions([]);
 
     const fetchGame = async () => {
+      const cleanupResult = await (supabase as any).rpc("cleanup_expired_games", {
+        p_retention_days: AUTO_DELETE_AFTER_DAYS,
+      });
+      if (cleanupResult?.error) {
+        console.warn("cleanup_expired_games falhou:", cleanupResult.error);
+      }
+
       const { data, error } = await supabase
         .from("games")
         .select("*")
@@ -814,74 +813,6 @@ const Evento = () => {
     void runDraw({ isAutomatic: true });
   }, [isOwner, game, supportsParticipantDraw, drawing, autoDrawing, participants, gameConfigLocked]);
 
-  useEffect(() => {
-    if (!isOwner || !user || !game || autoDeletingGame) return;
-    if (!shouldAutoDeleteGame(game)) return;
-
-    const autoFinalizeAndDeleteGame = async () => {
-      setAutoDeletingGame(true);
-
-      try {
-        const { error: closeError } = await supabase
-          .from("games")
-          .update({ status: "closed" })
-          .eq("id", game.id)
-          .eq("owner_id", user.id);
-        if (closeError) throw closeError;
-
-        const { error: clearDrawError } = await supabase
-          .from("game_participants")
-          .update({ drawn_participant_id: null })
-          .eq("game_id", game.id);
-        if (clearDrawError) throw clearDrawError;
-
-        const { error: wishlistError } = await (supabase as any)
-          .from("participant_wishlist_entries")
-          .delete()
-          .eq("game_id", game.id);
-        if (wishlistError) throw wishlistError;
-
-        const { error: exclusionsError } = await (supabase as any)
-          .from("participant_draw_exclusions")
-          .delete()
-          .eq("game_id", game.id);
-        if (exclusionsError) throw exclusionsError;
-
-        const { error: participantsError } = await supabase
-          .from("game_participants")
-          .delete()
-          .eq("game_id", game.id);
-        if (participantsError) throw participantsError;
-
-        const { error: gameError } = await supabase
-          .from("games")
-          .delete()
-          .eq("id", game.id)
-          .eq("owner_id", user.id);
-        if (gameError) throw gameError;
-
-        try {
-          localStorage.removeItem(getRuntimeStorageKey(game.id));
-        } catch {
-          /* ignore */
-        }
-
-        toast.success("Jogo encerrado e excluído automaticamente após o prazo de 2 dias.");
-        navigate("/meus-jogos", { replace: true });
-      } catch (error: any) {
-        toast.error(
-          error?.message
-            ? `Não foi possível excluir automaticamente: ${error.message}`
-            : "Não foi possível excluir automaticamente o jogo."
-        );
-      } finally {
-        setAutoDeletingGame(false);
-      }
-    };
-
-    void autoFinalizeAndDeleteGame();
-  }, [isOwner, user, game, autoDeletingGame, navigate]);
-
   const canToggleRoubaReadyFor = (participantId: string) =>
     Boolean(isOwner || currentParticipant?.id === participantId);
 
@@ -1076,6 +1007,19 @@ const Evento = () => {
             <div className="mb-6 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-center text-sm text-muted-foreground">
               Este jogo já começou (sorteio realizado ou jogo iniciado). Participantes, nomes, presentes e demais
               configurações estão bloqueados — apenas visualização.
+            </div>
+          )}
+
+          {autoDeleteDateText && (
+            <div className="mb-6 rounded-2xl border border-amber-300/40 bg-amber-100/30 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+              <p className="flex items-center gap-2 font-medium">
+                <AlertTriangle className="h-4 w-4" />
+                Este evento será excluído automaticamente em {autoDeleteDateText}.
+              </p>
+              <p className="mt-1 text-xs text-amber-800/90 dark:text-amber-200/80">
+                A limpeza remove o jogo de Meus Jogos para organizador e participantes, além dos dados no Supabase
+                ({AUTO_DELETE_AFTER_DAYS} dias após a data do evento).
+              </p>
             </div>
           )}
 
