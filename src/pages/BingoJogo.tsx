@@ -279,6 +279,30 @@ const BingoJogo = () => {
     toast.success("Jogo reiniciado — você pode sortear novamente.");
   };
 
+  const handleResetBingoSetup = () => {
+    if (!isOwner || !game) {
+      toast.error("Apenas o organizador pode reiniciar o cadastro/configurações.");
+      return;
+    }
+    if (
+      !window.confirm(
+        "Reiniciar cadastro/configurações do Bingo?\n\nIsso volta o jogo para antes do início, limpa números sorteados, bingos registrados e presentes do pool do bingo nesta execução.",
+      )
+    ) {
+      return;
+    }
+
+    const reset = createInitialRuntimeState();
+    setRuntimeState(reset);
+    saveRuntimeState(game.id, reset);
+    setLastDrawn(null);
+    setWheelRotation(0);
+    setWinnerParticipantId("");
+    setWinnerGift("");
+    toast.success("Cadastro/configurações do Bingo reiniciados. O jogo voltou para pré-início.");
+    navigate(`/evento/${slug}?config=1`, { replace: true });
+  };
+
   if (loading || !game) {
     return (
       <div className="min-h-screen bg-background">
@@ -495,12 +519,23 @@ const BingoJogo = () => {
                   <Button type="button" variant="hero" size="lg" onClick={handleRestartBingo}>
                     Reiniciar o jogo
                   </Button>
+                  <Button type="button" variant="destructive" size="lg" onClick={handleResetBingoSetup}>
+                    Reiniciar cadastro/configurações
+                  </Button>
                 </div>
               ) : (
                 <p className="text-center text-sm text-muted-foreground">
                   Só o organizador pode reiniciar o jogo após o encerramento.
                 </p>
               )}
+            </div>
+          )}
+
+          {isOwner && !runtimeState.bingoFinished && (
+            <div className="mt-6 flex justify-center">
+              <Button type="button" variant="destructive" onClick={handleResetBingoSetup}>
+                Reiniciar cadastro/configurações
+              </Button>
             </div>
           )}
         </motion.div>

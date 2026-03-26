@@ -301,45 +301,46 @@ const MeusJogos = () => {
               {games.map((game) => (
                 <div
                   key={game.id}
-                  className="bg-card rounded-2xl p-5 shadow-card border border-border flex items-center justify-between hover:shadow-elevated transition-shadow"
+                  className="relative bg-card rounded-2xl p-5 shadow-card border border-border flex flex-col gap-3 hover:shadow-elevated transition-shadow sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <Link to={`/evento/${game.slug}`} className="flex items-center gap-4 flex-1 min-w-0">
+                  {game.isOwner && (
+                    <span className="absolute right-5 top-5 inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs text-accent-foreground">
+                      <Crown className="w-3 h-3" />
+                      Organizador
+                    </span>
+                  )}
+                  <Link
+                    to={`/evento/${game.slug}`}
+                    className="flex w-full items-center gap-4 min-w-0 sm:flex-1"
+                  >
                     <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="sm" />
-                    <div className="min-w-0">
+                    <div className="min-w-0 pr-24">
                       <h3 className="font-display font-semibold truncate">{game.name}</h3>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{game.game_type}</span>
-                        {game.isOwner && (
-                          <span className="inline-flex items-center gap-1 bg-accent/20 text-accent-foreground rounded-full px-2 py-0.5">
-                            <Crown className="w-3 h-3" />
-                            Organizador
-                          </span>
-                        )}
-                        <span className={`px-2 py-0.5 rounded-full ${
-                          game.status === "open"
-                            ? "bg-secondary/10 text-secondary"
-                            : "bg-muted text-muted-foreground"
-                        }`}>
-                          {game.status === "open" ? "Aberto" : "Encerrado"}
-                        </span>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <span className="min-w-0">{game.game_type}</span>
                       </div>
                     </div>
                   </Link>
 
-                  <div className="flex gap-2 flex-wrap justify-end">
+                  <div className="flex w-full items-center justify-end gap-2 sm:w-auto sm:shrink-0">
                     {game.isOwner && (
                       <>
-                        <Button variant="outline" size="sm" asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          asChild
+                          className="h-10 w-10 sm:h-9 sm:w-auto sm:px-3"
+                        >
                           <Link to={`/evento/${game.slug}?config=1`}>
                             <Pencil className="w-4 h-4" />
-                            Editar
+                            <span className="sr-only sm:not-sr-only sm:ml-2">Editar</span>
                           </Link>
                         </Button>
                         <Button
                           type="button"
                           variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
+                          size="icon"
+                          className="h-10 w-10 text-destructive hover:text-destructive sm:h-9 sm:w-auto sm:px-3"
                           disabled={deletingId === game.id}
                           onClick={(e) => {
                             e.preventDefault();
@@ -348,7 +349,9 @@ const MeusJogos = () => {
                           }}
                         >
                           <Trash2 className="w-4 h-4" />
-                          {deletingId === game.id ? "Excluindo..." : "Excluir"}
+                          <span className="sr-only sm:not-sr-only sm:ml-2">
+                            {deletingId === game.id ? "Excluindo..." : "Excluir"}
+                          </span>
                         </Button>
                       </>
                     )}
@@ -356,12 +359,12 @@ const MeusJogos = () => {
                     {!game.isOwner && game.participantId && (
                       <Button
                         variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:text-destructive"
+                        size="icon"
+                        className="h-10 w-10 text-destructive hover:text-destructive sm:h-9 sm:w-auto sm:px-3"
                         onClick={() => handleLeaveGame(game.participantId!, game.name)}
                       >
                         <Trash2 className="w-4 h-4" />
-                        Sair
+                        <span className="sr-only sm:not-sr-only sm:ml-2">Sair</span>
                       </Button>
                     )}
                   </div>

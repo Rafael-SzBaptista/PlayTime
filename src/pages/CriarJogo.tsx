@@ -233,7 +233,7 @@ const CriarJogo = () => {
             </>
           ) : (
             <>
-              <div className="mb-8 pl-40 sm:pl-44 md:pl-48">
+              <div className="mb-8 pl-0 sm:pl-44 md:pl-48">
                 <Button variant="ghost" size="sm" asChild className="mb-4">
                   <Link to="/criar-jogo">
                     <ArrowLeft className="w-4 h-4 mr-1" />
@@ -276,7 +276,7 @@ const CriarJogo = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <Label htmlFor="minValue" className="font-display font-semibold">
                       Valor mínimo (R$)
@@ -319,7 +319,7 @@ const CriarJogo = () => {
                     />
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <Label htmlFor="drawDate" className="font-display font-semibold">
                         Data do sorteio

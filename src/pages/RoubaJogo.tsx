@@ -309,6 +309,36 @@ const RoubaJogo = () => {
     toast.success("Jogo reaberto — continue ou finalize quando quiser.");
   };
 
+  const handleResetRoubaSetup = async () => {
+    if (!isOwner || !game) {
+      toast.error("Apenas o organizador pode reiniciar o cadastro/configurações.");
+      return;
+    }
+    if (
+      !window.confirm(
+        "Reiniciar cadastro/configurações do Rouba?\n\nIsso volta o jogo para antes do início, limpa números sorteados, presentes cadastrados e histórico de roubos. O checklist de presente em mãos também será desmarcado para todos.",
+      )
+    ) {
+      return;
+    }
+
+    const { error } = await supabase
+      .from("game_participants")
+      .update({ rouba_gift_in_hands: false })
+      .eq("game_id", game.id);
+
+    if (error) {
+      toast.error("Não foi possível reiniciar o checklist no banco.");
+      return;
+    }
+
+    const reset = createInitialRuntimeState();
+    setRuntimeState(reset);
+    saveRuntimeState(game.id, reset);
+    toast.success("Cadastro/configurações do Rouba reiniciados. O jogo voltou para pré-início.");
+    navigate(`/evento/${slug}?config=1`, { replace: true });
+  };
+
   if (loading || !game) {
     return (
       <div className="min-h-screen bg-background">
@@ -637,8 +667,19 @@ const RoubaJogo = () => {
                   <Button type="button" variant="hero" size="lg" onClick={handleRestartRouba}>
                     Reabrir jogo (desfazer finalização)
                   </Button>
+                  <Button type="button" variant="destructive" size="lg" onClick={() => void handleResetRoubaSetup()}>
+                    Reiniciar cadastro/configurações
+                  </Button>
                 </div>
               )}
+            </div>
+          )}
+
+          {isOwner && !runtimeState.roubaFinished && (
+            <div className="mt-6 flex justify-center">
+              <Button type="button" variant="destructive" onClick={() => void handleResetRoubaSetup()}>
+                Reiniciar cadastro/configurações
+              </Button>
             </div>
           )}
         </motion.div>

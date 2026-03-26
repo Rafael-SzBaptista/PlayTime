@@ -14,12 +14,13 @@ import { loadRuntimeState, saveRuntimeState } from "@/lib/gameRuntime";
 const categories = [
   { id: "todos", label: "Todos", emoji: "🎁" },
   { id: "tecnologia", label: "Tecnologia", emoji: "💻" },
-  { id: "canecas", label: "Canecas", emoji: "☕" },
-  { id: "chocolates", label: "Chocolates", emoji: "🍫" },
-  { id: "livros", label: "Livros", emoji: "📚" },
-  { id: "jogos", label: "Jogos", emoji: "🎲" },
-  { id: "engracados", label: "Engraçados", emoji: "😂" },
-  { id: "decoracao", label: "Decoração", emoji: "✨" },
+  { id: "garrafas", label: "Garrafas", emoji: "🥤" },
+  { id: "tenis", label: "Tênis", emoji: "👟" },
+  { id: "chinelos", label: "Chinelos", emoji: "🩴" },
+  { id: "alimentos", label: "Alimentos", emoji: "🍫" },
+  { id: "roupas", label: "Roupas", emoji: "👕" },
+  { id: "ferramentas", label: "Ferramentas", emoji: "🔧" },
+  { id: "casa", label: "Casa", emoji: "🏠" },
 ];
 
 interface GiftItem {
@@ -55,6 +56,38 @@ export const getOptimizedImageSrc = (image?: string) => {
     return image.replace(/\.(png|jpe?g)$/i, ".webp");
   }
   return image;
+};
+
+const isMercadoLivreLink = (link?: string) => {
+  if (!link) return false;
+  const normalized = link.toLowerCase();
+  return normalized.includes("meli.la/") || normalized.includes("mercadolivre.com");
+};
+
+const categorizeGift = (gift: GiftItem): string => {
+  const text = `${gift.name} ${gift.category}`.toLowerCase();
+
+  if (/(garrafa|squeeze|t(é|e)rmica|copo t(é|e)rmico|stanley)/.test(text)) return "garrafas";
+  if (/(t(ê|e)nis|sneaker|corrida)/.test(text)) return "tenis";
+  if (/(chinelo|sand(á|a)lia|papete|slide|havaiana)/.test(text)) return "chinelos";
+  if (
+    /(ferramenta|maleta|caixa de ferramentas|caixa met(á|a)lica|catraca|soquete|furadeira|parafusadeira|esmerilhadeira|chave )/.test(
+      text,
+    )
+  ) {
+    return "ferramentas";
+  }
+  if (
+    /(tecnologia|smart|smartwatch|smartphone|tablet|celular|fone|headset|webcam|impressora|roteador|wi-fi|ssd|hd externo|pendrive|carregador|power bank|powerbank|cabo usb|monitor|teclado|mouse|bluetooth|rgb)/.test(
+      text,
+    )
+  ) {
+    return "tecnologia";
+  }
+  if (/(chocolate|bombom|trufa|alimento|caneca)/.test(text)) return "alimentos";
+  if (/(camisa|camiseta|blusa|cal(ç|c)a|bermuda|vestido|roupa|moletom|jaqueta|meia)/.test(text))
+    return "roupas";
+  return "casa";
 };
 
 export const allGifts: GiftItem[] = [
@@ -844,41 +877,444 @@ export const allGifts: GiftItem[] = [
   { name: "Luminária LED", price: 89.9, category: "decoracao", emoji: "💡" },
   { name: "Porta-Retrato Digital", price: 99.9, category: "tecnologia", emoji: "🖼️" },
 
-  // Links Mercado Livre (preço varia; consultar no link)
+  // Garrafas térmicas / squeezes (Mercado Livre — preços promocionais aproximados)
+  {
+    name: "Garrafa térmica 800ml inox squeeze academia (quente e frio)",
+    price: 36.54,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1ayWcwy",
+    image: "/produto-termo-01.png",
+  },
+  {
+    name: "Garrafa squeeze água academia esportiva com alça 660ml",
+    price: 24.99,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2jXeoh4",
+    image: "/produto-termo-02.png",
+  },
+  {
+    name: "Garrafa térmica 800ml inox fitness academia personalizada",
+    price: 51.33,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1QBWCjE",
+    image: "/produto-termo-03.png",
+  },
+  {
+    name: "Garrafa água térmica 600ml nome/time gravado a laser",
+    price: 58.48,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2NkV3pG",
+    image: "/produto-termo-04.png",
+  },
+  {
+    name: "Garrafa térmica 500ml antivazamento (azul)",
+    price: 27.49,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1MKtE44",
+    image: "/produto-termo-05.png",
+  },
+  {
+    name: "Garrafa térmica Verona pressão ampola vidro 1,8L Unitermi (preta)",
+    price: 65.99,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1JDCXCx",
+    image: "/produto-termo-06.png",
+  },
+  {
+    name: "Garrafa térmica 750ml Siena bico antigota Unitermi (preta)",
+    price: 32.97,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1LYEZ5d",
+    image: "/produto-termo-07.png",
+  },
+  {
+    name: "Garrafa térmica café 1L nórdica cabo madeira mesa posta (preta)",
+    price: 49.49,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/19AEFNw",
+    image: "/produto-termo-08.png",
+  },
+  {
+    name: "Garrafa térmica Termolar Lúmina bomba de pressão 1L",
+    price: 78.99,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/196oENm",
+    image: "/produto-termo-09.png",
+  },
+  {
+    name: "Garrafa térmica 1200ml vácuo água gelada e café (verde-musgo)",
+    price: 52.37,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1E1AzMu",
+    image: "/produto-termo-10.png",
+  },
+  {
+    name: "Garrafa térmica 500ml inox dupla camada antivazamento Swave (preto)",
+    price: 36.9,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2sML7CY",
+    image: "/produto-termo-11.png",
+  },
+  {
+    name: "Garrafa térmica 500ml smart cup termômetro digital (preto)",
+    price: 24.43,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/216cRpE",
+    image: "/produto-termo-12.png",
+  },
+  {
+    name: "Copo garrafa térmica 1,2L inox com tampa e canudo (rosa-claro)",
+    price: 49.95,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2KCae4h",
+    image: "/produto-termo-13.png",
+  },
+  {
+    name: "Garrafa térmica Super Thermo Thermolar 5L (preta)",
+    price: 45.9,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2Uz7V3C",
+    image: "/produto-termo-14.png",
+  },
+  {
+    name: "Garrafa térmica café bomba pressão 1L inox Lumina Termolar (prateada)",
+    price: 77.29,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2XijXdy",
+    image: "/produto-termo-15.png",
+  },
+  {
+    name: "Garrafa térmica inox 500ml camping viagem (metálico)",
+    price: 39.57,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/2WRHRDB",
+    image: "/produto-termo-16.png",
+  },
+  {
+    name: "Garrafa térmica 1L inox água gelada 24h / quente 12h (prateado)",
+    price: 41.8,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/17pHDJi",
+    image: "/produto-termo-17.png",
+  },
+  {
+    name: "Garrafa térmica Florença 650ml Unitermi (branco)",
+    price: 33.42,
+    category: "decoracao",
+    emoji: "🥤",
+    link: "https://meli.la/1HiZeU1",
+    image: "/produto-termo-18.png",
+  },
+
+  // Ferramentas e kits (Mercado Livre — preços promocionais aproximados)
+  {
+    name: "Kit ferramenta 46 peças Space Eye maleta portátil (vermelho)",
+    price: 29.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/126DHWQ",
+    image: "/produto-ferramenta-01.png",
+  },
+  {
+    name: "Furadeira parafusadeira 48V com 2 baterias e maleta (amarelo)",
+    price: 128.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2X89tDV",
+    image: "/produto-ferramenta-02.png",
+  },
+  {
+    name: "Jogo de ferramentas 129 peças com maleta Fasterr (preto)",
+    price: 93.95,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1HodrWi",
+    image: "/produto-ferramenta-03.png",
+  },
+  {
+    name: "Bolsa lona para ferramentas Fasterr FST058 fundo emborrachado",
+    price: 74.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1pz8iqC",
+    image: "/produto-ferramenta-04.png",
+  },
+  {
+    name: "Jogo chave combinada 12 peças 6–22 mm The Black Tools IF-12",
+    price: 59.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2PmkBSW",
+    image: "/produto-ferramenta-05.png",
+  },
+  {
+    name: "Chave de impacto / parafusadeira 48V Several Importados (azul)",
+    price: 256,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2JeRJfn",
+    image: "/produto-ferramenta-06.png",
+  },
+  {
+    name: "Kit ferramentas VDE isoladas 13 peças Gamma G19566AC",
+    price: 299.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1WLjXUz",
+    image: "/produto-ferramenta-07.png",
+  },
+  {
+    name: "Kit catraca e soquete 46 peças Indufer (maleta)",
+    price: 29.09,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1LYoJKT",
+    image: "/produto-ferramenta-08.png",
+  },
+  {
+    name: "Chave de impacto manual Snel SN32 com bits fenda/Philips",
+    price: 52.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2cAUUdz",
+    image: "/produto-ferramenta-09.png",
+  },
+  {
+    name: "Bolsa de ferramentas lona 14\" C'HE N.Y.C. (verde)",
+    price: 39.99,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1yF5nqV",
+    image: "/produto-ferramenta-10.png",
+  },
+  {
+    name: "Bolsa de ferramentas lona grossa multifuncional (verde-escuro)",
+    price: 34.99,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2zdj8iw",
+    image: "/produto-ferramenta-11.png",
+  },
+  {
+    name: "Esmerilhadeira angular 4½\" + kit soquetes 40 peças The Black Tools",
+    price: 169.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2mnX93Q",
+    image: "/produto-ferramenta-12.png",
+  },
+  {
+    name: "Kit 225 anéis de vedação O-ring borracha 18 tamanhos (estojo)",
+    price: 23.34,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/18XktT6",
+    image: "/produto-ferramenta-13.png",
+  },
+
+  // Maletas, ferramentas e iluminação (Mercado Livre — preços promocionais aproximados)
+  {
+    name: "Tramontina 43800005 — caixa sanfonada para ferramentas 5 gavetas (azul)",
+    price: 128.52,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1fhcttt",
+    image: "/produto-extra-01.png",
+  },
+  {
+    name: "Fercar 07 — caixa de ferramentas metal 5 gavetas 20×50×21 cm (azul)",
+    price: 140.9,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1SnKYVk",
+    image: "/produto-extra-02.png",
+  },
+  {
+    name: "São Bernardo CF-32 — caixa plástica 7 compartimentos (preto e amarelo)",
+    price: 23.18,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1EiFnm1",
+    image: "/produto-extra-03.png",
+  },
+  {
+    name: "Vonder OPV222 — maleta organizadora dupla face 32 compartimentos (preto)",
+    price: 76,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1p4RWkx",
+    image: "/produto-extra-04.png",
+  },
+  {
+    name: "Kit 6 maletas de ferramentas reforçadas pequena e grande (VYROX)",
+    price: 57.54,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1nGoUgt",
+    image: "/produto-extra-05.png",
+  },
+  {
+    name: "Rotterman RLL-09 — caixa de ferramentas metal 20×50×25 cm (preta)",
+    price: 159.71,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/1gYV8xS",
+    image: "/produto-extra-06.png",
+  },
+  {
+    name: "Metasul — caixa de ferramentas tática 18,3 pol. fecho metal (laranja)",
+    price: 47.99,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2mBXq5c",
+    image: "/produto-extra-07.png",
+  },
+  {
+    name: "Vonder — caixa metálica tipo baú para ferramentas 35 cm sem bandeja (preta)",
+    price: 59.99,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2Ejx5Lo",
+    image: "/produto-extra-08.png",
+  },
+  {
+    name: "Aiwa — jogo chave catraca e soquetes 40 peças 3/8\" com estojo",
+    price: 28.12,
+    category: "decoracao",
+    emoji: "🔧",
+    link: "https://meli.la/2RHLbGn",
+    image: "/produto-extra-09.png",
+  },
+  {
+    name: "Plafon LED 30×30 sobrepor bivolt 32 W branco frio 110/220 V",
+    price: 42.5,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/2X6kGnX",
+    image: "/produto-extra-10.png",
+  },
+  {
+    name: "Luminária barra LED 60 cm sensor movimento USB recarregável (branco)",
+    price: 33.9,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/1vkHQuT",
+    image: "/produto-extra-11.png",
+  },
+  {
+    name: "Arandela slim preta externa + lâmpada LED inclusa (frisos)",
+    price: 26.9,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/23cv1U7",
+    image: "/produto-extra-12.png",
+  },
+  {
+    name: "Luminária de mesa abajur articulada bivolt quarto/escritório",
+    price: 38.99,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/2RzDVL5",
+    image: "/produto-extra-13.png",
+  },
+  {
+    name: "Luminária LED lua 3D abajur decoração 12 cm luz noturna (quente)",
+    price: 19,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/2m1xJxQ",
+    image: "/produto-extra-14.png",
+  },
+  {
+    name: "Kit trilho 1 m + 4 spots LED 10 W preto/branco (6500K/4000K/3000K)",
+    price: 55.8,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/1AgP7CH",
+    image: "/produto-extra-15.png",
+  },
+  {
+    name: "Kit 4 arandelas solares LED parede jardim externa IP65 luz quente",
+    price: 51.4,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/1Z1jGKW",
+    image: "/produto-extra-16.png",
+  },
+  {
+    name: "Kit 2 luminárias de parede LED 3 tons recarregável magnética (preto)",
+    price: 57.33,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/1BQaKDc",
+    image: "/produto-extra-17.png",
+  },
+  {
+    name: "Luminária barra LED para monitor/notebook USB recarregável Endeca (preto)",
+    price: 78.99,
+    category: "decoracao",
+    emoji: "💡",
+    link: "https://meli.la/1MTbnXE",
+    image: "/produto-extra-18.png",
+  },
+
+  // Links Mercado Livre (preços conforme anúncio)
   {
     name: "Kit 2 Poltronas Decorativas Opala (suede) — sala/recepção",
-    price: null,
+    price: 381.83,
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2M8imrD",
+    image: "/produto-casa-01.png",
   },
   {
     name: "Sofá decorativo (courino) com almofadas — recepção/clínica (preto)",
-    price: null,
+    price: 799.99,
     category: "decoracao",
     emoji: "🛋️",
     link: "https://meli.la/1Q2Y4Nu",
+    image: "/produto-casa-02.png",
   },
   {
     name: "Cadeira de jantar Charles Eames Eiffel — madeira preta",
-    price: null,
+    price: 78.99,
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2YWsAXX",
+    image: "/produto-casa-03.png",
   },
   {
     name: "Cadeira de escritório diretor Tok Begônia — estofado preto",
-    price: null,
+    price: 138.25,
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/12xwHB7",
+    image: "/produto-casa-05.png",
   },
   {
     name: "Cadeira de escritório preta giratória 3310 com braços (mesh/náilon)",
-    price: null,
+    price: 184.9,
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2qHwjhv",
+    image: "/produto-casa-04.png",
   },
 ];
 
@@ -900,9 +1336,17 @@ const Presentes = () => {
   const gameSlug = searchParams.get("gameSlug")?.trim() ?? "";
   const hasGameContext = Boolean(gameSlug);
 
+  const normalizedGifts = useMemo(
+    () =>
+      allGifts
+        .filter((g) => isMercadoLivreLink(g.link))
+        .map((g) => ({ ...g, category: categorizeGift(g) })),
+    [],
+  );
+
   const filtered = useMemo(
     () =>
-      allGifts.filter((g) => {
+      normalizedGifts.filter((g) => {
         if (activeCategory !== "todos" && g.category !== activeCategory) return false;
         if (minPrice !== null || maxPrice !== null) {
           if (g.price === null) return false;
@@ -912,7 +1356,7 @@ const Presentes = () => {
         if (search && !g.name.toLowerCase().includes(search.toLowerCase())) return false;
         return true;
       }),
-    [activeCategory, minPrice, maxPrice, search],
+    [activeCategory, minPrice, maxPrice, search, normalizedGifts],
   );
 
   useEffect(() => {
@@ -1363,7 +1807,9 @@ const Presentes = () => {
                     }}
                   />
                 ) : (
-                  <div className="text-4xl mb-3">{gift.emoji}</div>
+                  <div className="mb-3 flex h-52 w-full items-center justify-center rounded-xl border border-border bg-white text-5xl">
+                    {gift.emoji}
+                  </div>
                 )}
                 <span className="text-xs font-medium text-primary bg-primary/10 rounded-full px-2 py-0.5">
                   {categories.find((c) => c.id === gift.category)?.label}
@@ -1440,14 +1886,15 @@ const Presentes = () => {
           </div>
 
           {filtered.length > 0 && (
-            <div className="mx-auto mt-8 flex max-w-5xl items-center justify-between gap-4">
+            <div className="mx-auto mt-8 flex max-w-5xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 Página {safePage} de {totalPages} ({filtered.length} itens)
               </p>
-              <div className="flex items-center gap-2">
+              <div className="flex w-full items-center gap-2 sm:w-auto">
                 <Button
                   variant="outline"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   disabled={safePage <= 1}
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 >
@@ -1456,6 +1903,7 @@ const Presentes = () => {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   disabled={safePage >= totalPages}
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 >

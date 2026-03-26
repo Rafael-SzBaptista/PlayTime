@@ -885,6 +885,11 @@ const Evento = () => {
   const canToggleRoubaReadyFor = (participantId: string) =>
     Boolean(isOwner || currentParticipant?.id === participantId);
 
+  const allRoubaChecklistDone =
+    isRouba &&
+    confirmedParticipants.length > 0 &&
+    confirmedParticipants.every((p) => Boolean(p.rouba_gift_in_hands));
+
   const persistRoubaReady = async (participantId: string, inHands: boolean) => {
     if (!game || !canToggleRoubaReadyFor(participantId)) return;
     const { error } = await supabase
@@ -910,6 +915,10 @@ const Evento = () => {
     if (!game) return;
     if (confirmedParticipants.length === 0) {
       toast.error("Cadastre ao menos um participante confirmado antes de iniciar");
+      return;
+    }
+    if (!allRoubaChecklistDone) {
+      toast.error("Só é possível iniciar o Rouba após todos marcarem o checklist de presente em mãos.");
       return;
     }
 
@@ -1081,7 +1090,7 @@ const Evento = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="bg-card rounded-2xl p-5 shadow-card border border-border text-center">
                     <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
                     <p className="text-xs text-muted-foreground mb-1">Sorteio em</p>
@@ -1129,7 +1138,7 @@ const Evento = () => {
                     className="mt-1"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <Label className="text-sm">Data do sorteio</Label>
                     <Input
@@ -1149,7 +1158,7 @@ const Evento = () => {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <Label className="text-sm">Valor mínimo (R$)</Label>
                     <Input
@@ -1219,7 +1228,7 @@ const Evento = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                <div className="mb-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                   <div>
                     <p className="text-muted-foreground">Valor mínimo</p>
                     <p className="font-semibold">
@@ -1664,7 +1673,7 @@ const Evento = () => {
               <Button
                 variant="hero"
                 size="lg"
-                className="flex-1"
+                className="w-full sm:flex-1"
                 onClick={handleRunDraw}
                 disabled={drawing || gameConfigLocked}
               >
@@ -1672,21 +1681,34 @@ const Evento = () => {
               </Button>
             )}
             {isOwner && (
-              <Button variant="festiveOutline" size="lg" className="flex-1" onClick={handleCopyLink}>
+              <Button variant="festiveOutline" size="lg" className="w-full sm:flex-1" onClick={handleCopyLink}>
                 📤 Compartilhar Link
               </Button>
             )}
             {isOwner && isRouba && !runtimeState.roubaStarted && (
-              <Button type="button" variant="hero" size="lg" className="flex-1" onClick={handleStartRouba}>
+              <Button
+                type="button"
+                variant="hero"
+                size="lg"
+                className="w-full sm:flex-1"
+                onClick={handleStartRouba}
+                disabled={!allRoubaChecklistDone}
+              >
                 Iniciar jogo
               </Button>
             )}
             {isOwner && isBingo && !runtimeState.bingoStarted && (
-              <Button type="button" variant="hero" size="lg" className="flex-1" onClick={handleStartBingo}>
+              <Button type="button" variant="hero" size="lg" className="w-full sm:flex-1" onClick={handleStartBingo}>
                 Iniciar bingo
               </Button>
             )}
           </div>
+
+          {isOwner && isRouba && !runtimeState.roubaStarted && !allRoubaChecklistDone && (
+            <p className="mt-3 text-sm text-muted-foreground">
+              Para iniciar o Rouba, todos os participantes confirmados precisam marcar o checklist de presente em mãos.
+            </p>
+          )}
 
           {game.game_type === "Bingo de Presentes" && runtimeState.bingoStarted && !runtimeState.bingoFinished && (
             <div className="mt-6 bg-primary/10 border border-primary/25 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
