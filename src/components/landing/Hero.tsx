@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden pb-12 pt-20">
+    <section className="relative flex min-h-screen items-center overflow-hidden pb-12 pt-0 -mt-4">
       <div className="pointer-events-none absolute inset-0 bg-background" />
 
       <div className="container relative z-10 mx-auto px-3 md:px-4">
