@@ -54,7 +54,9 @@ interface ParticipantContext {
 
 export const getOptimizedImageSrc = (image?: string) => {
   if (!image) return image;
-  if (/\.(png|jpe?g)$/i.test(image)) {
+  // Só tenta trocar para .webp quando for asset local.
+  // Para URLs externas, isso pode gerar 404 (e imagem "errada"/quebrada).
+  if (image.startsWith("/") && /\.(png|jpe?g)$/i.test(image)) {
     return image.replace(/\.(png|jpe?g)$/i, ".webp");
   }
   return image;
@@ -1928,65 +1930,71 @@ const Presentes = () => {
       <Navbar />
       <div className="container mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">🎁 Sugestões de Presentes</h1>
-            <p className="text-muted-foreground text-lg">
-              Encontre o presente ideal com links para compra
-            </p>
-          </div>
-
-          {/* Search */}
-          <div className="max-w-md mx-auto mb-8 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar presentes..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 h-12"
-            />
-          </div>
-
-          {/* Filtros principais */}
-          <div className="mx-auto mb-10 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-border bg-card p-3">
-              <label htmlFor="category-filter" className="mb-1 block text-xs font-medium text-muted-foreground">
-                Categoria
-              </label>
-              <select
-                id="category-filter"
-                value={activeCategory}
-                onChange={(e) => setActiveCategory(e.target.value)}
-                className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none transition-colors focus:border-primary"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
+          <div className="mb-8 px-1 lg:ml-[304px]">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">Sugestões de Presentes</h1>
+              <p className="text-muted-foreground text-lg">Encontre o presente ideal com links para compra</p>
             </div>
+          </div>
 
-            <div className="rounded-xl border border-border bg-card p-3">
-              <div className="mb-1 flex items-center justify-between gap-2">
-                <label className="block text-xs font-medium text-muted-foreground">Preço</label>
-                {(minPrice !== null || maxPrice !== null) && (
+          <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
+            <aside className="space-y-5 p-1">
+              <div>
+                <h2 className="mb-3 text-2xl font-semibold">Categorias</h2>
+                <div className="space-y-1.5">
+                  {categories.map((cat) => {
+                    const isActive = activeCategory === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setActiveCategory(cat.id)}
+                        className={`w-full text-left text-[1.05rem] leading-7 transition-colors ${
+                          isActive ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="mb-3 text-2xl font-semibold">Preço</h3>
+                <div className="space-y-1.5 text-[1.05rem]">
                   <button
                     type="button"
                     onClick={() => {
                       setMinPrice(null);
+                      setMaxPrice(60);
+                    }}
+                    className="block text-left text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Até R$ 60
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMinPrice(60);
+                      setMaxPrice(150);
+                    }}
+                    className="block text-left text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    R$ 60 a R$ 150
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMinPrice(150);
                       setMaxPrice(null);
                     }}
-                    className="text-xs font-medium text-primary hover:underline"
+                    className="block text-left text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    Limpar
+                    Mais de R$ 150
                   </button>
-                )}
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                    R$
-                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-2">
                   <Input
                     inputMode="decimal"
                     type="number"
@@ -1997,15 +2005,11 @@ const Presentes = () => {
                       const raw = e.target.value;
                       setMinPrice(raw === "" ? null : Number(raw));
                     }}
-                    placeholder="Mín"
-                    className="h-10 pl-9"
+                    placeholder="Mínimo"
+                    className="h-10 rounded-lg"
                     aria-label="Preço mínimo"
                   />
-                </div>
-                <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                    R$
-                  </span>
+                  <span className="text-muted-foreground">-</span>
                   <Input
                     inputMode="decimal"
                     type="number"
@@ -2016,44 +2020,65 @@ const Presentes = () => {
                       const raw = e.target.value;
                       setMaxPrice(raw === "" ? null : Number(raw));
                     }}
-                    placeholder="Máx"
-                    className="h-10 pl-9"
+                    placeholder="Máximo"
+                    className="h-10 rounded-lg"
                     aria-label="Preço máximo"
                   />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPage(1);
+                    }}
+                    className="h-10 w-10 shrink-0 rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80"
+                    aria-label="Aplicar filtro de preço"
+                  >
+                    ›
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
+            </aside>
 
-          {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto items-stretch">
+            <section className="min-w-0">
+              <div className="mb-6 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar presentes..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10 h-12"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch">
             {paginatedGifts.map((gift, i) => (
               <motion.div
                 key={gift.name}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="group flex h-full flex-col bg-card rounded-2xl p-5 shadow-card hover:shadow-elevated transition-all border border-border"
+                className="group flex h-full flex-col bg-card rounded-none p-5 shadow-card hover:shadow-elevated transition-all border border-border"
               >
                 {gift.image ? (
-                  <img
-                    src={getOptimizedImageSrc(gift.image)}
-                    alt={gift.name}
-                    className="mb-3 h-52 w-full rounded-xl border border-border object-contain bg-white"
-                    loading="lazy"
-                    decoding="async"
-                    width={640}
-                    height={640}
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (gift.image && target.src !== `${window.location.origin}${gift.image}`) {
-                        target.onerror = null;
-                        target.src = gift.image;
-                      }
-                    }}
-                  />
+                  <div className="mb-3 aspect-square w-full overflow-hidden">
+                    <img
+                      src={getOptimizedImageSrc(gift.image)}
+                      alt={gift.name}
+                      className="h-full w-full object-contain"
+                      loading="lazy"
+                      decoding="async"
+                      width={640}
+                      height={640}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (gift.image && target.src !== `${window.location.origin}${gift.image}`) {
+                          target.onerror = null;
+                          target.src = gift.image;
+                        }
+                      }}
+                    />
+                  </div>
                 ) : (
-                  <div className="mb-3 flex h-52 w-full items-center justify-center rounded-xl border border-border bg-white text-5xl">
+                  <div className="mb-3 flex h-52 w-full items-center justify-center text-5xl">
                     {gift.emoji}
                   </div>
                 )}
@@ -2129,35 +2154,44 @@ const Presentes = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
-
-          {filtered.length > 0 && (
-            <div className="mx-auto mt-8 flex max-w-5xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-muted-foreground">
-                Página {safePage} de {totalPages} ({filtered.length} itens)
-              </p>
-              <div className="flex w-full items-center gap-2 sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 sm:flex-none"
-                  disabled={safePage <= 1}
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                >
-                  Anterior
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 sm:flex-none"
-                  disabled={safePage >= totalPages}
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                >
-                  Próxima
-                </Button>
               </div>
-            </div>
-          )}
+
+              {filtered.length > 0 && (
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-[1.75rem] sm:gap-3">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      type="button"
+                      onClick={() => {
+                        setCurrentPage(pageNumber);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`h-10 min-w-10 rounded-md border px-3 text-base transition-colors ${
+                        pageNumber === safePage
+                          ? "border-primary text-primary font-semibold"
+                          : "border-transparent text-muted-foreground hover:text-foreground"
+                      }`}
+                      aria-current={pageNumber === safePage ? "page" : undefined}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    disabled={safePage >= totalPages}
+                    onClick={() => {
+                      setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center gap-2 px-2 text-base text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Seguinte
+                    <span aria-hidden>›</span>
+                  </button>
+                </div>
+              )}
+            </section>
+          </div>
 
           {filtered.length === 0 && (
             <div className="text-center py-20 text-muted-foreground">

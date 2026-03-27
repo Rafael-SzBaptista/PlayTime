@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { GameTypeIcon } from "@/components/game/GameTypeIcon";
-import { Gift, Crown, Users, Trash2, Pencil } from "lucide-react";
+import { Gift, Users, Trash2, Pencil } from "lucide-react";
 import { getRuntimeStorageKey } from "@/lib/gameRuntime";
 import {
   AUTO_DELETE_AFTER_DAYS,
@@ -211,7 +211,7 @@ const MeusJogos = () => {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold">Meus Jogos</h1>
-              <p className="text-muted-foreground">Olá, {displayName} 👋</p>
+              <p className="text-muted-foreground">Olá, {displayName}</p>
             </div>
           </div>
 
@@ -247,7 +247,6 @@ const MeusJogos = () => {
                 >
                   {game.isOwner && (
                     <span className="absolute right-5 top-5 inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs text-accent-foreground">
-                      <Crown className="w-3 h-3" />
                       Organizador
                     </span>
                   )}
@@ -255,16 +254,23 @@ const MeusJogos = () => {
                     to={`/evento/${game.slug}`}
                     className="flex w-full items-center gap-4 min-w-0 sm:flex-1"
                   >
-                    <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="sm" />
-                    <div className="min-w-0 pr-24">
+                    <GameTypeIcon
+                      gameType={game.game_type}
+                      emojiFallback={game.emoji}
+                      size="md"
+                      normalizeVisualSize
+                    />
+                    <div className="min-w-0 pr-24 sm:min-h-[52px]">
                       <h3 className="font-display font-semibold truncate">{game.name}</h3>
                       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                         <span className="min-w-0">{game.game_type}</span>
-                        {game.autoDeleteDateText && (
-                          <span className="rounded-full border border-border/70 px-2 py-0.5">
-                            Exclusão automática: {game.autoDeleteDateText}
-                          </span>
-                        )}
+                        <span
+                          className={`rounded-full border border-border/70 px-2 py-0.5 ${
+                            game.autoDeleteDateText ? "" : "invisible"
+                          }`}
+                        >
+                          Exclusão automática: {game.autoDeleteDateText ?? "--/--/----"}
+                        </span>
                       </div>
                     </div>
                   </Link>

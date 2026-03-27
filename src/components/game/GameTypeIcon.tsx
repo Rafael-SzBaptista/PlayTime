@@ -28,19 +28,40 @@ type GameTypeIconProps = {
   /** Usado quando não há arte para o tipo (ex.: emoji gravado no jogo). */
   emojiFallback?: string | null;
   size?: GameTypeIconSize;
+  /** Ajusta diferenças visuais entre artes para ficarem com o mesmo "peso". */
+  normalizeVisualSize?: boolean;
   className?: string;
 };
 
-export function GameTypeIcon({ gameType, emojiFallback = "🎁", size = "lg", className }: GameTypeIconProps) {
+function getNormalizedScaleClass(gameType: string | null | undefined): string {
+  const n = (gameType ?? "").trim().toLowerCase();
+  if (n.includes("rouba")) return "scale-[0.82]";
+  if (n.includes("amigo")) return "scale-[1.08]";
+  if (n.includes("bingo")) return "scale-[1.04]";
+  return "scale-100";
+}
+
+export function GameTypeIcon({
+  gameType,
+  emojiFallback = "🎁",
+  size = "lg",
+  normalizeVisualSize = false,
+  className,
+}: GameTypeIconProps) {
   const src = getGameTypeArtSrc(gameType);
   if (src) {
     return (
-      <img
-        src={src}
-        alt=""
-        draggable={false}
-        className={cn(SIZE_CLASS[size], "shrink-0 object-contain select-none", className)}
-      />
+      <span className={cn(SIZE_CLASS[size], "inline-flex shrink-0 items-center justify-center overflow-hidden", className)}>
+        <img
+          src={src}
+          alt=""
+          draggable={false}
+          className={cn(
+            "h-full w-full object-contain select-none transition-transform",
+            normalizeVisualSize && getNormalizedScaleClass(gameType),
+          )}
+        />
+      </span>
     );
   }
   return (

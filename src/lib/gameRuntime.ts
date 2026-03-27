@@ -1,5 +1,6 @@
 export interface RuntimeState {
   participantGiftChoices: Record<string, string>;
+  amigoAutoDrawDisabledAfterReset: boolean;
   bingoGifts: string[];
   bingoStarted: boolean;
   bingoNumbersDrawn: number[];
@@ -16,6 +17,7 @@ export interface RuntimeState {
 
 export const createInitialRuntimeState = (): RuntimeState => ({
   participantGiftChoices: {},
+  amigoAutoDrawDisabledAfterReset: false,
   bingoGifts: [],
   bingoStarted: false,
   bingoNumbersDrawn: [],

@@ -52,7 +52,6 @@ const Participar = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <div className="text-5xl mb-4">🎟️</div>
           <h1 className="text-3xl font-bold mb-2">Participar de um Jogo</h1>
           <p className="text-muted-foreground mb-8">
             Cole o link do evento para participar
@@ -65,16 +64,16 @@ const Participar = () => {
                 placeholder="Cole o link do evento"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                className="pl-10 h-14 text-base"
+                className="pl-10 h-14 text-base rounded-none"
                 onKeyDown={(e) => e.key === "Enter" && handleJoin()}
               />
             </div>
-            <Button variant="hero" size="xl" className="w-full" onClick={handleJoin}>
+            <Button variant="hero" size="xl" className="w-full rounded-none" onClick={handleJoin}>
               Entrar no Jogo
             </Button>
           </div>
 
-          <div className="mt-12 p-6 bg-muted/50 rounded-2xl">
+          <div className="mt-12 p-6 bg-muted/50 rounded-none border border-border">
             <h3 className="font-display font-semibold mb-2">Como participar?</h3>
             <ol className="text-sm text-muted-foreground space-y-2 text-left">
               <li>1. Peça o link do evento ao organizador</li>

@@ -179,13 +179,13 @@ const ResultadoSorteio = () => {
                   href={link}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex h-full flex-col rounded-2xl border border-border bg-card p-4 shadow-card transition-colors hover:bg-muted/20"
+                  className="group flex h-full flex-col rounded-none border border-border bg-card p-4 shadow-card transition-colors hover:bg-muted/20"
                 >
                   {image ? (
                     <img
                       src={getOptimizedImageSrc(image)}
                       alt={wish.gift_name}
-                      className="mb-3 h-44 w-full rounded-xl border border-border bg-white object-contain"
+                      className="mb-3 h-44 w-full rounded-none object-contain"
                       loading="lazy"
                       onError={(e) => {
                         const target = e.currentTarget;
@@ -196,7 +196,7 @@ const ResultadoSorteio = () => {
                       }}
                     />
                   ) : (
-                    <div className="mb-3 flex h-44 items-center justify-center rounded-xl border border-border bg-muted/40 text-5xl">
+                    <div className="mb-3 flex h-44 items-center justify-center rounded-none text-5xl">
                       {wish.gift_emoji ?? "🎁"}
                     </div>
                   )}

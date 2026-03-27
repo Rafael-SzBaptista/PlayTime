@@ -46,12 +46,11 @@ const Cadastro = () => {
       <div className="container mx-auto px-4 py-16 max-w-md">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">🎉</div>
             <h1 className="text-3xl font-bold mb-2">Criar Conta</h1>
             <p className="text-muted-foreground">Junte-se e organize seus jogos de presentes</p>
           </div>
 
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
+          <div className="bg-card rounded-none p-6 shadow-card border border-border">
             <form onSubmit={handleSignup} className="space-y-4">
               <div>
                 <Label htmlFor="name">Nome</Label>
@@ -62,7 +61,7 @@ const Cadastro = () => {
                     placeholder="Seu nome"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 rounded-none"
                     required
                   />
                 </div>
@@ -77,7 +76,7 @@ const Cadastro = () => {
                     placeholder="seu@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 rounded-none"
                     required
                   />
                 </div>
@@ -92,13 +91,19 @@ const Cadastro = () => {
                     placeholder="Mínimo 6 caracteres"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 rounded-none"
                     minLength={6}
                     required
                   />
                 </div>
               </div>
-              <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                variant="hero"
+                size="lg"
+                className="w-full rounded-none"
+                disabled={loading}
+              >
                 <UserPlus className="w-4 h-4" />
                 {loading ? "Criando conta..." : "Criar Conta"}
               </Button>

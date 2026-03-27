@@ -748,6 +748,11 @@ const Evento = () => {
         })
       );
 
+      // Se houve reset anterior, o próximo sorteio manual reativa o fluxo padrão.
+      if (!isAutomatic) {
+        setRuntimeState((prev) => ({ ...prev, amigoAutoDrawDisabledAfterReset: false }));
+      }
+
       toast.success(
         isAutomatic
           ? "Sorteio automático realizado com sucesso!"
@@ -793,12 +798,16 @@ const Evento = () => {
     }
 
     setParticipants((prev) => prev.map((p) => ({ ...p, drawn_participant_id: null })));
-    toast.success("Sorteio reiniciado. Você pode realizar um novo sorteio quando quiser.");
+    setRuntimeState((prev) => ({ ...prev, amigoAutoDrawDisabledAfterReset: true }));
+    toast.success(
+      "Sorteio reiniciado. O sorteio automático foi desativado para este jogo; o próximo sorteio deve ser manual."
+    );
   };
 
   useEffect(() => {
     if (!isOwner || !game || !supportsParticipantDraw || drawing || autoDrawing) return;
     if (gameConfigLocked) return;
+    if (isAmigoSecreto && runtimeState.amigoAutoDrawDisabledAfterReset) return;
     if (!game.draw_date) return;
 
     const today = new Date();
@@ -811,7 +820,17 @@ const Evento = () => {
     if (alreadyDrawn || confirmedParticipants.length < 2) return;
 
     void runDraw({ isAutomatic: true });
-  }, [isOwner, game, supportsParticipantDraw, drawing, autoDrawing, participants, gameConfigLocked]);
+  }, [
+    isOwner,
+    game,
+    supportsParticipantDraw,
+    drawing,
+    autoDrawing,
+    participants,
+    gameConfigLocked,
+    isAmigoSecreto,
+    runtimeState.amigoAutoDrawDisabledAfterReset,
+  ]);
 
   const canToggleRoubaReadyFor = (participantId: string) =>
     Boolean(isOwner || currentParticipant?.id === participantId);

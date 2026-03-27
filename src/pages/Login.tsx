@@ -38,12 +38,11 @@ const Login = () => {
       <div className="container mx-auto px-4 py-16 max-w-md">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">🎮</div>
             <h1 className="text-3xl font-bold mb-2">Entrar</h1>
             <p className="text-muted-foreground">Acesse seus jogos e participe de sorteios</p>
           </div>
 
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
+          <div className="bg-card p-6 shadow-card border border-border rounded-none overflow-hidden">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <Label htmlFor="email">Email</Label>
@@ -55,7 +54,7 @@ const Login = () => {
                     placeholder="seu@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 rounded-none"
                     required
                   />
                 </div>
@@ -78,12 +77,12 @@ const Login = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 pl-10"
+                    className="h-12 pl-10 rounded-none"
                     required
                   />
                 </div>
               </div>
-              <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
+              <Button type="submit" variant="hero" size="lg" className="w-full rounded-none" disabled={loading}>
                 <LogIn className="w-4 h-4" />
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
