@@ -101,7 +101,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/2wikGVf",
-    image: "/produto-lista-1.png",
+    image: "/produto-lista-1.webp",
   },
   {
     name: "Samsung Galaxy A07 128GB 4GB RAM",
@@ -109,7 +109,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/2xhSjhU",
-    image: "/produto-lista-2.png",
+    image: "/produto-lista-2.webp",
   },
   {
     name: "Galaxy Tab A11 64GB 4GB RAM",
@@ -117,7 +117,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/1z39ZLX",
-    image: "/produto-lista-3.png",
+    image: "/produto-lista-3.webp",
   },
   {
     name: "Tablet Lenovo Tab 10.1 Wi-Fi 64GB 4GB RAM",
@@ -125,7 +125,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/2Lb63gx",
-    image: "/produto-lista-4.png",
+    image: "/produto-lista-4.webp",
   },
   {
     name: "Relógio Smartwatch Digital Inteligente GotWire Mesh Preto",
@@ -133,7 +133,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/2HKWiPq",
-    image: "/produto-lista-5.png",
+    image: "/produto-lista-5.webp",
   },
   {
     name: "Relógio Smartwatch Inteligente Multifuncional Preto Mesh",
@@ -141,7 +141,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/2AAanPU",
-    image: "/produto-lista-6.png",
+    image: "/produto-lista-6.webp",
   },
   {
     name: "Smartwatch (link fornecido)",
@@ -149,7 +149,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/2o7LrRY",
-    image: "/produto-lista-7.png",
+    image: "/produto-lista-7.webp",
   },
   {
     name: "Smartwatch Digital Feminino Bluetooth 41mm Rosa",
@@ -157,7 +157,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/1tn7GEE",
-    image: "/produto-lista-8.png",
+    image: "/produto-lista-8.webp",
   },
   {
     name: "Smartphone Samsung Galaxy A36 5G 128GB, 6GB RAM, Câmera Tripla até 50MP",
@@ -165,7 +165,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/1k5JeY6",
-    image: "/produto-galaxy-a36.png",
+    image: "/produto-galaxy-a36.webp",
   },
   {
     name: "Celular Samsung Galaxy A07 256GB, 8GB RAM, Câmera 50MP, Tela 6.7\"",
@@ -173,7 +173,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/27WdT2H",
-    image: "/produto-galaxy-a07.png",
+    image: "/produto-galaxy-a07.webp",
     params: [
       "Cor: Preto",
       "Armazenamento: 256GB",
@@ -190,7 +190,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/1E6pdAV",
-    image: "/produto-novo-1.png",
+    image: "/produto-novo-1.webp",
   },
   {
     name: "Fone com fio compatível com iPhone (branco)",
@@ -198,7 +198,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2KnaE84",
-    image: "/produto-novo-2.png",
+    image: "/produto-novo-2.webp",
   },
   {
     name: "Fone P2 com microfone e controle (nylon reforçado)",
@@ -206,7 +206,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2msVcsQ",
-    image: "/produto-novo-3.png",
+    image: "/produto-novo-3.webp",
   },
   {
     name: "Fone intra-auricular com fio 3.5mm (preto)",
@@ -214,7 +214,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1ty7EX1",
-    image: "/produto-novo-4.png",
+    image: "/produto-novo-4.webp",
   },
   {
     name: "Fone intra-auricular com fio 1.2m (preto)",
@@ -222,7 +222,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/11SwAA6",
-    image: "/produto-novo-5.png",
+    image: "/produto-novo-5.webp",
   },
   {
     name: "Fone JBL C50HI intra-auricular com fio (preto)",
@@ -230,7 +230,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/24J2x9Z",
-    image: "/produto-novo-6.png",
+    image: "/produto-novo-6.webp",
   },
   {
     name: "Fone intra-auricular com fio 1.2m (variação)",
@@ -238,7 +238,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/11SwAA6",
-    image: "/produto-novo-7.png",
+    image: "/produto-novo-7.webp",
   },
   {
     name: "Fone bluetooth F9-5 com estojo e powerbank",
@@ -246,7 +246,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2hWJtmL",
-    image: "/produto-novo-8.png",
+    image: "/produto-novo-8.webp",
   },
   {
     name: "Fone bluetooth esportivo XT80/LP75 (preto)",
@@ -254,7 +254,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1fAtjH7",
-    image: "/produto-novo-9.png",
+    image: "/produto-novo-9.webp",
   },
   {
     name: "Fone bluetooth sem fio Pro 4 (branco)",
@@ -262,7 +262,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2pg6mSv",
-    image: "/produto-novo-10.png",
+    image: "/produto-novo-10.webp",
   },
   {
     name: "Fone bluetooth TWS Kaidi KD780 (preto)",
@@ -270,7 +270,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1B4Crz4",
-    image: "/produto-novo-11.png",
+    image: "/produto-novo-11.webp",
   },
   {
     name: "Fone bluetooth 5.0 par sem fio (preto)",
@@ -278,7 +278,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1doCQEQ",
-    image: "/produto-novo-12.png",
+    image: "/produto-novo-12.webp",
   },
   {
     name: "Headphone bluetooth Dapon H02d over-ear (azul)",
@@ -286,7 +286,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1rsSkjf",
-    image: "/produto-novo-13.png",
+    image: "/produto-novo-13.webp",
   },
   {
     name: "Fone over-ear sem fio Hi-Fi com microfone",
@@ -294,7 +294,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2sNtTNb",
-    image: "/produto-novo-14.png",
+    image: "/produto-novo-14.webp",
   },
   {
     name: "Fone Philco PFO02P Wave Flat (preto)",
@@ -302,7 +302,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2F7vWmV",
-    image: "/produto-novo-15.png",
+    image: "/produto-novo-15.webp",
   },
   {
     name: "Caixinha de Som Bluetooth portátil com USB/SD (preta)",
@@ -310,7 +310,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1qTM1io",
-    image: "/produto-caixa-1.png",
+    image: "/produto-caixa-1.webp",
   },
   {
     name: "Inova Caixa de Som Mini Bluetooth TWS (grave potente)",
@@ -318,7 +318,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1B5JvmW",
-    image: "/produto-caixa-2.png",
+    image: "/produto-caixa-2.webp",
   },
   {
     name: "Caixa de Som Speaker Philco Extreme 35W PBS35",
@@ -326,7 +326,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1BVU7cW",
-    image: "/produto-caixa-3.png",
+    image: "/produto-caixa-3.webp",
   },
   {
     name: "Caixa de Som Bluetooth boombox 2 alto-falantes 10W",
@@ -334,7 +334,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1WQpiRR",
-    image: "/produto-caixa-4.png",
+    image: "/produto-caixa-4.webp",
   },
   {
     name: "Caixa de Som Bluetooth TWS estéreo Hi-Fi",
@@ -342,7 +342,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1fj1XuY",
-    image: "/produto-caixa-5.png",
+    image: "/produto-caixa-5.webp",
   },
   {
     name: "Caixa de Som Bluetooth portátil JBL Go 4 (azul)",
@@ -350,7 +350,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔊",
     link: "https://meli.la/1vfezFg",
-    image: "/produto-caixa-6.png",
+    image: "/produto-caixa-6.webp",
   },
   {
     name: "Monitor Gamer Samsung 24\" FHD 120Hz (S3)",
@@ -358,7 +358,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖥️",
     link: "https://meli.la/1f8nbSd",
-    image: "/produto-setup-1.png",
+    image: "/produto-setup-1.webp",
   },
   {
     name: "Monitor LG UltraGear 24\" FHD 144Hz 1ms",
@@ -366,7 +366,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖥️",
     link: "https://meli.la/33GwYVx",
-    image: "/produto-setup-2.png",
+    image: "/produto-setup-2.webp",
   },
   {
     name: "Monitor Gamer LG 24MS500-B 24\" IPS Full HD 100Hz",
@@ -374,7 +374,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖥️",
     link: "https://meli.la/1d1RJ6f",
-    image: "/produto-setup-3.png",
+    image: "/produto-setup-3.webp",
   },
   {
     name: "Teclado para Acer A515/A315 NSK-RL0SW (preto)",
@@ -382,7 +382,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌨️",
     link: "https://meli.la/26H1w5C",
-    image: "/produto-setup-4.png",
+    image: "/produto-setup-4.webp",
   },
   {
     name: "Teclado USB com fio ABNT2 Pholex (preto)",
@@ -390,7 +390,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌨️",
     link: "https://meli.la/1i1G3gd",
-    image: "/produto-setup-5.png",
+    image: "/produto-setup-5.webp",
   },
   {
     name: "Teclado Logitech K120 com fio USB ABNT2",
@@ -398,7 +398,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌨️",
     link: "https://meli.la/2S4r9Eu",
-    image: "/produto-setup-6.png",
+    image: "/produto-setup-6.webp",
   },
   {
     name: "Teclado Gamer Semi Mecânico LED RGB ABNT2",
@@ -406,7 +406,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌨️",
     link: "https://meli.la/1osdcnS",
-    image: "/produto-setup-7.png",
+    image: "/produto-setup-7.webp",
   },
   {
     name: "Teclado Gamer Semi Mecânico Newdragon ND-2086 RGB",
@@ -414,7 +414,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌨️",
     link: "https://meli.la/1jyp2Tp",
-    image: "/produto-setup-8.png",
+    image: "/produto-setup-8.webp",
   },
   {
     name: "Mouse sem fio recarregável RGB ergonômico",
@@ -422,7 +422,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/25HwFCj",
-    image: "/produto-mouse-1.png",
+    image: "/produto-mouse-1.webp",
   },
   {
     name: "Mouse com fio ergonômico ambidestro USB (Piracomp)",
@@ -430,7 +430,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/1FMzSNF",
-    image: "/produto-mouse-2.png",
+    image: "/produto-mouse-2.webp",
   },
   {
     name: "Mouse Gamer Logitech G203 RGB Lightsync",
@@ -438,7 +438,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/2wmvdwK",
-    image: "/produto-mouse-3.png",
+    image: "/produto-mouse-3.webp",
   },
   {
     name: "Kit Mouse 3600 DPI RGB + Mousepad Armory Warrior",
@@ -446,7 +446,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/2mTBMyX",
-    image: "/produto-mouse-4.png",
+    image: "/produto-mouse-4.webp",
   },
   {
     name: "Mouse sem fio Logitech M170 preto",
@@ -454,7 +454,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/33J3v44",
-    image: "/produto-mouse-5.png",
+    image: "/produto-mouse-5.webp",
   },
   {
     name: "Mouse com fio HP 150 USB preto",
@@ -462,7 +462,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/2BP5Q2g",
-    image: "/produto-mouse-6.png",
+    image: "/produto-mouse-6.webp",
   },
   {
     name: "Mouse Gamer RGB Fortrek Crusader Black Edition",
@@ -470,7 +470,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/15dUV44",
-    image: "/produto-mouse-7.png",
+    image: "/produto-mouse-7.webp",
   },
   {
     name: "Mouse gamer com fio USB óptico LED RGB 2400 DPI",
@@ -478,7 +478,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖱️",
     link: "https://meli.la/1jJzFGF",
-    image: "/produto-mouse-8.png",
+    image: "/produto-mouse-8.webp",
   },
   {
     name: "Webcam Full HD 1080p GoodVision com microfone",
@@ -486,7 +486,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📷",
     link: "https://meli.la/1pCkW5H",
-    image: "/produto-cam-print-1.png",
+    image: "/produto-cam-print-1.webp",
   },
   {
     name: "Webcam HP 320 FHD (53X26AA) preta",
@@ -494,7 +494,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📷",
     link: "https://meli.la/15Ds5nW",
-    image: "/produto-cam-print-2.png",
+    image: "/produto-cam-print-2.webp",
   },
   {
     name: "Webcam Intelbras HD WCI 720p",
@@ -502,7 +502,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📷",
     link: "https://meli.la/24juaFw",
-    image: "/produto-cam-print-3.png",
+    image: "/produto-cam-print-3.webp",
   },
   {
     name: "Impressora Multifuncional HP Smart Tank 581",
@@ -510,7 +510,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖨️",
     link: "https://meli.la/22ZZmxu",
-    image: "/produto-cam-print-4.png",
+    image: "/produto-cam-print-4.webp",
   },
   {
     name: "Impressora Multifuncional HP DeskJet Ink Advantage 2874",
@@ -518,7 +518,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖨️",
     link: "https://meli.la/2mntTQY",
-    image: "/produto-cam-print-5.png",
+    image: "/produto-cam-print-5.webp",
   },
   {
     name: "Mini impressora de etiquetas Bluetooth portátil",
@@ -526,7 +526,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖨️",
     link: "https://meli.la/2Z6y8bv",
-    image: "/produto-cam-print-6.png",
+    image: "/produto-cam-print-6.webp",
   },
   {
     name: "Repetidor Amplificador Bahrein 1800Mbps Extensor Sinal Wi-Fi",
@@ -534,7 +534,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📶",
     link: "https://meli.la/132BV13",
-    image: "/produto-tech-extra-1.png",
+    image: "/produto-tech-extra-1.webp",
   },
   {
     name: "Repetidor de Sinal Wi-Fi Roteador Wireless Inv Tech",
@@ -542,7 +542,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📶",
     link: "https://meli.la/33Ec2tK",
-    image: "/produto-tech-extra-2.png",
+    image: "/produto-tech-extra-2.webp",
   },
   {
     name: "Roteador TP-Link AX12 Wi-Fi 6 Archer AX1500 Dual Band",
@@ -550,7 +550,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📶",
     link: "https://meli.la/1dUjEma",
-    image: "/produto-tech-extra-3.png",
+    image: "/produto-tech-extra-3.webp",
   },
   {
     name: "Extensor Wi-Fi 5 Twibi Force Plug Giga Intelbras",
@@ -558,7 +558,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📶",
     link: "https://meli.la/2rPXfvx",
-    image: "/produto-tech-extra-4.png",
+    image: "/produto-tech-extra-4.webp",
   },
   {
     name: "Roteador Mercusys MR30G AC1200 Gigabit Wireless Dual Band",
@@ -566,7 +566,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📶",
     link: "https://meli.la/29vy1U9",
-    image: "/produto-tech-extra-5.png",
+    image: "/produto-tech-extra-5.webp",
   },
   {
     name: "HD Externo Infokit 320GB USB 3.0",
@@ -574,7 +574,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/1Y8LJBn",
-    image: "/produto-tech-extra-6.png",
+    image: "/produto-tech-extra-6.webp",
   },
   {
     name: "HD Externo Exbom 500GB USB 3.1 Tipo-C Slim",
@@ -582,7 +582,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/2yqAVYw",
-    image: "/produto-tech-extra-7.png",
+    image: "/produto-tech-extra-7.webp",
   },
   {
     name: "SSD Interno 120GB 2.5 SATA3 Spreaker Gamer",
@@ -590,7 +590,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/1MZXRqK",
-    image: "/produto-tech-extra-8.png",
+    image: "/produto-tech-extra-8.webp",
   },
   {
     name: "Pendrive 16GB USB 2.0 Compacto Brasiliana Tech",
@@ -598,7 +598,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/2Yt1KYp",
-    image: "/produto-tech-extra-9.png",
+    image: "/produto-tech-extra-9.webp",
   },
   {
     name: "Pen Drive 32GB Mini USB 2.0 Chaveiro Metálico",
@@ -606,7 +606,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/2GgU3Vn",
-    image: "/produto-tech-extra-10.png",
+    image: "/produto-tech-extra-10.webp",
   },
   {
     name: "Unidade Flash USB Kingston 64GB 3.2 Exodia M",
@@ -614,7 +614,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💾",
     link: "https://meli.la/296URde",
-    image: "/produto-tech-extra-11.png",
+    image: "/produto-tech-extra-11.webp",
   },
   {
     name: "Carregador Turbo Duplo 40W USB Tipo C para iPhone",
@@ -622,7 +622,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/1vfd472",
-    image: "/produto-tech-extra-12.png",
+    image: "/produto-tech-extra-12.webp",
   },
   {
     name: "Power Bank 20.000mAh Maxnova com Display",
@@ -630,7 +630,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔋",
     link: "https://meli.la/16G3mif",
-    image: "/produto-tech-extra-13.png",
+    image: "/produto-tech-extra-13.webp",
   },
   {
     name: "Carregador Turbo Rápido 50W Tipo C Compatível Motorola",
@@ -638,7 +638,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/2HrHptY",
-    image: "/produto-tech-extra-14.png",
+    image: "/produto-tech-extra-14.webp",
   },
   {
     name: "Carregador Turbo Power Motorola 125W USB-C",
@@ -646,7 +646,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/2D1B5R3",
-    image: "/produto-tech-extra-15.png",
+    image: "/produto-tech-extra-15.webp",
   },
   {
     name: "Bateria Portátil Kapbom 10.000mAh",
@@ -654,7 +654,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔋",
     link: "https://meli.la/2PhQjMz",
-    image: "/produto-tech-extra-16.png",
+    image: "/produto-tech-extra-16.webp",
   },
   {
     name: "Carregador Turbo Compatível Samsung A10/A01/A02/A03/J7/J8/S7",
@@ -662,7 +662,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/18nyja5",
-    image: "/produto-tech-extra-17.png",
+    image: "/produto-tech-extra-17.webp",
   },
   {
     name: "Carregador Portátil Powerbank Turbo 20.000mAh com Cabos Embutidos",
@@ -670,7 +670,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔋",
     link: "https://meli.la/25u5LFN",
-    image: "/produto-tech-extra-18.png",
+    image: "/produto-tech-extra-18.webp",
   },
   {
     name: "Cabo Carregador Compatível com iPhone (Tipo C) Branco",
@@ -678,7 +678,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/2siSpEV",
-    image: "/produto-cabo-extra-1.png",
+    image: "/produto-cabo-extra-1.webp",
   },
   {
     name: "Cabo USB-C Duplo Compatível Samsung/iPhone (Preto)",
@@ -686,7 +686,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🔌",
     link: "https://meli.la/2KoH2cv",
-    image: "/produto-cabo-extra-2.png",
+    image: "/produto-cabo-extra-2.webp",
   },
   {
     name: "Kit 2 Cabos HDMI 3m 4K 3D Conector Dourado",
@@ -694,7 +694,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🖥️",
     link: "https://meli.la/1EboT3z",
-    image: "/produto-cabo-extra-3.png",
+    image: "/produto-cabo-extra-3.webp",
   },
   {
     name: "Cabo de Áudio Mono P10 para P10 5 Metros",
@@ -702,7 +702,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎸",
     link: "https://meli.la/2NFV3s4",
-    image: "/produto-cabo-extra-4.png",
+    image: "/produto-cabo-extra-4.webp",
   },
   {
     name: "Cabo Flexível 2,5mm Rolo 100 Metros 750v",
@@ -710,7 +710,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🧰",
     link: "https://meli.la/276UWMu",
-    image: "/produto-cabo-extra-5.png",
+    image: "/produto-cabo-extra-5.webp",
   },
   {
     name: "Headset Gamer Havit Gamenote H2026d RGB Preto/Prata",
@@ -718,7 +718,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2EpRB1N",
-    image: "/produto-headset-rgb-1.png",
+    image: "/produto-headset-rgb-1.webp",
   },
   {
     name: "Headset Gamer USB Led Evolut EG310 com Microfone",
@@ -726,7 +726,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2SauChU",
-    image: "/produto-headset-rgb-2.png",
+    image: "/produto-headset-rgb-2.webp",
   },
   {
     name: "Headset Gamer Havit H2232d RGB Camuflado Cinza",
@@ -734,7 +734,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1iag8mB",
-    image: "/produto-headset-rgb-3.png",
+    image: "/produto-headset-rgb-3.webp",
   },
   {
     name: "Fone de Ouvido Headset Gamer RGB Led (Shop Borges)",
@@ -742,7 +742,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1YLGPzA",
-    image: "/produto-headset-rgb-4.png",
+    image: "/produto-headset-rgb-4.webp",
   },
   {
     name: "Headset Gamer Havit H2002d com Mic Removível (Branco)",
@@ -750,7 +750,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/24UddAa",
-    image: "/produto-headset-rgb-5.png",
+    image: "/produto-headset-rgb-5.webp",
   },
   {
     name: "Headset Gamer Redragon Zeus Pro RGB Wireless 7.1",
@@ -758,7 +758,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/1hUWivv",
-    image: "/produto-headset-rgb-6.png",
+    image: "/produto-headset-rgb-6.webp",
   },
   {
     name: "Headset Gamer Redragon Pelias Preto H130",
@@ -766,7 +766,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🎧",
     link: "https://meli.la/2fsMWNR",
-    image: "/produto-headset-rgb-7.png",
+    image: "/produto-headset-rgb-7.webp",
   },
   {
     name: "Kit Iluminação Interior Carro RGB com Controle 12v",
@@ -774,7 +774,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "🚗",
     link: "https://meli.la/2HG7aFs",
-    image: "/produto-headset-rgb-8.png",
+    image: "/produto-headset-rgb-8.webp",
   },
   {
     name: "RGB Mini Portátil com Clipe Iluminador Led USB",
@@ -782,7 +782,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💡",
     link: "https://meli.la/1mdANYg",
-    image: "/produto-headset-rgb-9.png",
+    image: "/produto-headset-rgb-9.webp",
   },
   {
     name: "Kit 2 Lâmpadas Led Giratórias Coloridas RGB",
@@ -790,7 +790,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💡",
     link: "https://meli.la/2WR7dsW",
-    image: "/produto-headset-rgb-10.png",
+    image: "/produto-headset-rgb-10.webp",
   },
   {
     name: "Fita Led Decorativa RGB 2 Metros USB com Controle",
@@ -798,7 +798,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "💡",
     link: "https://meli.la/2U7cg4E",
-    image: "/produto-headset-rgb-11.png",
+    image: "/produto-headset-rgb-11.webp",
   },
   {
     name: "Relógio despertador retrô analógico duplo sino (prateado)",
@@ -806,7 +806,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "⏰",
     link: "https://meli.la/1TTeB6p",
-    image: "/produto-meli-catalog-1.png",
+    image: "/produto-meli-catalog-1.webp",
   },
   {
     name: "Smartwatch Heyplus C1 2,01\" Bluetooth chamadas saúde IP68 (preto)",
@@ -814,7 +814,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/1mZezhM",
-    image: "/produto-meli-catalog-2.png",
+    image: "/produto-meli-catalog-2.webp",
   },
   {
     name: "Relógio digital Skmei 1251 pulseira verde musgo",
@@ -822,7 +822,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/1awwwen",
-    image: "/produto-meli-catalog-3.png",
+    image: "/produto-meli-catalog-3.webp",
   },
   {
     name: "Relógio digital Skmei 1142 à prova d'água (preto)",
@@ -830,7 +830,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/32uEqRb",
-    image: "/produto-meli-catalog-4.png",
+    image: "/produto-meli-catalog-4.webp",
   },
   {
     name: "Despertador digital Micgeek mesa cabeceira (branco)",
@@ -838,7 +838,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "⏰",
     link: "https://meli.la/2g3NAHe",
-    image: "/produto-meli-catalog-5.png",
+    image: "/produto-meli-catalog-5.webp",
   },
   {
     name: "Relógio de pulso Wokai pulseira couro unissex",
@@ -846,7 +846,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "⌚",
     link: "https://meli.la/2F5jVXd",
-    image: "/produto-meli-catalog-6.png",
+    image: "/produto-meli-catalog-6.webp",
   },
   {
     name: "Capinha anti shock Samsung Galaxy A07 6,7\" + película",
@@ -854,7 +854,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/2Vt73gS",
-    image: "/produto-meli-catalog-7.png",
+    image: "/produto-meli-catalog-7.webp",
   },
   {
     name: "Película vidro temperado 3D anti choque Xiaomi Poco X7 5G",
@@ -862,7 +862,7 @@ export const allGifts: GiftItem[] = [
     category: "tecnologia",
     emoji: "📱",
     link: "https://meli.la/2se7BvN",
-    image: "/produto-meli-catalog-8.png",
+    image: "/produto-meli-catalog-8.webp",
   },
   { name: "Fone Bluetooth TWS", price: 49.9, category: "tecnologia", emoji: "🎧" },
   { name: "Carregador Portátil", price: 59.9, category: "tecnologia", emoji: "🔋" },
@@ -888,7 +888,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1ayWcwy",
-    image: "/produto-termo-01.png",
+    image: "/produto-termo-01.webp",
   },
   {
     name: "Garrafa squeeze água academia esportiva com alça 660ml",
@@ -896,7 +896,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2jXeoh4",
-    image: "/produto-termo-02.png",
+    image: "/produto-termo-02.webp",
   },
   {
     name: "Garrafa térmica 800ml inox fitness academia personalizada",
@@ -904,7 +904,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1QBWCjE",
-    image: "/produto-termo-03.png",
+    image: "/produto-termo-03.webp",
   },
   {
     name: "Garrafa água térmica 600ml nome/time gravado a laser",
@@ -912,7 +912,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2NkV3pG",
-    image: "/produto-termo-04.png",
+    image: "/produto-termo-04.webp",
   },
   {
     name: "Garrafa térmica 500ml antivazamento (azul)",
@@ -920,7 +920,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1MKtE44",
-    image: "/produto-termo-05.png",
+    image: "/produto-termo-05.webp",
   },
   {
     name: "Garrafa térmica Verona pressão ampola vidro 1,8L Unitermi (preta)",
@@ -928,7 +928,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1JDCXCx",
-    image: "/produto-termo-06.png",
+    image: "/produto-termo-06.webp",
   },
   {
     name: "Garrafa térmica 750ml Siena bico antigota Unitermi (preta)",
@@ -936,7 +936,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1LYEZ5d",
-    image: "/produto-termo-07.png",
+    image: "/produto-termo-07.webp",
   },
   {
     name: "Garrafa térmica café 1L nórdica cabo madeira mesa posta (preta)",
@@ -944,7 +944,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/19AEFNw",
-    image: "/produto-termo-08.png",
+    image: "/produto-termo-08.webp",
   },
   {
     name: "Garrafa térmica Termolar Lúmina bomba de pressão 1L",
@@ -952,7 +952,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/196oENm",
-    image: "/produto-termo-09.png",
+    image: "/produto-termo-09.webp",
   },
   {
     name: "Garrafa térmica 1200ml vácuo água gelada e café (verde-musgo)",
@@ -960,7 +960,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1E1AzMu",
-    image: "/produto-termo-10.png",
+    image: "/produto-termo-10.webp",
   },
   {
     name: "Garrafa térmica 500ml inox dupla camada antivazamento Swave (preto)",
@@ -968,7 +968,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2sML7CY",
-    image: "/produto-termo-11.png",
+    image: "/produto-termo-11.webp",
   },
   {
     name: "Garrafa térmica 500ml smart cup termômetro digital (preto)",
@@ -976,7 +976,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/216cRpE",
-    image: "/produto-termo-12.png",
+    image: "/produto-termo-12.webp",
   },
   {
     name: "Copo garrafa térmica 1,2L inox com tampa e canudo (rosa-claro)",
@@ -984,7 +984,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2KCae4h",
-    image: "/produto-termo-13.png",
+    image: "/produto-termo-13.webp",
   },
   {
     name: "Garrafa térmica Super Thermo Thermolar 5L (preta)",
@@ -992,7 +992,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2Uz7V3C",
-    image: "/produto-termo-14.png",
+    image: "/produto-termo-14.webp",
   },
   {
     name: "Garrafa térmica café bomba pressão 1L inox Lumina Termolar (prateada)",
@@ -1000,7 +1000,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2XijXdy",
-    image: "/produto-termo-15.png",
+    image: "/produto-termo-15.webp",
   },
   {
     name: "Garrafa térmica inox 500ml camping viagem (metálico)",
@@ -1008,7 +1008,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/2WRHRDB",
-    image: "/produto-termo-16.png",
+    image: "/produto-termo-16.webp",
   },
   {
     name: "Garrafa térmica 1L inox água gelada 24h / quente 12h (prateado)",
@@ -1016,7 +1016,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/17pHDJi",
-    image: "/produto-termo-17.png",
+    image: "/produto-termo-17.webp",
   },
   {
     name: "Garrafa térmica Florença 650ml Unitermi (branco)",
@@ -1024,7 +1024,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🥤",
     link: "https://meli.la/1HiZeU1",
-    image: "/produto-termo-18.png",
+    image: "/produto-termo-18.webp",
   },
 
   // Ferramentas e kits (Mercado Livre — preços promocionais aproximados)
@@ -1034,7 +1034,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/126DHWQ",
-    image: "/produto-ferramenta-01.png",
+    image: "/produto-ferramenta-01.webp",
   },
   {
     name: "Furadeira parafusadeira 48V com 2 baterias e maleta (amarelo)",
@@ -1042,7 +1042,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2X89tDV",
-    image: "/produto-ferramenta-02.png",
+    image: "/produto-ferramenta-02.webp",
   },
   {
     name: "Jogo de ferramentas 129 peças com maleta Fasterr (preto)",
@@ -1050,7 +1050,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1HodrWi",
-    image: "/produto-ferramenta-03.png",
+    image: "/produto-ferramenta-03.webp",
   },
   {
     name: "Bolsa lona para ferramentas Fasterr FST058 fundo emborrachado",
@@ -1058,7 +1058,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1pz8iqC",
-    image: "/produto-ferramenta-04.png",
+    image: "/produto-ferramenta-04.webp",
   },
   {
     name: "Jogo chave combinada 12 peças 6–22 mm The Black Tools IF-12",
@@ -1066,7 +1066,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2PmkBSW",
-    image: "/produto-ferramenta-05.png",
+    image: "/produto-ferramenta-05.webp",
   },
   {
     name: "Chave de impacto / parafusadeira 48V Several Importados (azul)",
@@ -1074,7 +1074,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2JeRJfn",
-    image: "/produto-ferramenta-06.png",
+    image: "/produto-ferramenta-06.webp",
   },
   {
     name: "Kit ferramentas VDE isoladas 13 peças Gamma G19566AC",
@@ -1082,7 +1082,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1WLjXUz",
-    image: "/produto-ferramenta-07.png",
+    image: "/produto-ferramenta-07.webp",
   },
   {
     name: "Kit catraca e soquete 46 peças Indufer (maleta)",
@@ -1090,7 +1090,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1LYoJKT",
-    image: "/produto-ferramenta-08.png",
+    image: "/produto-ferramenta-08.webp",
   },
   {
     name: "Chave de impacto manual Snel SN32 com bits fenda/Philips",
@@ -1098,7 +1098,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2cAUUdz",
-    image: "/produto-ferramenta-09.png",
+    image: "/produto-ferramenta-09.webp",
   },
   {
     name: "Bolsa de ferramentas lona 14\" C'HE N.Y.C. (verde)",
@@ -1106,7 +1106,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1yF5nqV",
-    image: "/produto-ferramenta-10.png",
+    image: "/produto-ferramenta-10.webp",
   },
   {
     name: "Bolsa de ferramentas lona grossa multifuncional (verde-escuro)",
@@ -1114,7 +1114,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2zdj8iw",
-    image: "/produto-ferramenta-11.png",
+    image: "/produto-ferramenta-11.webp",
   },
   {
     name: "Esmerilhadeira angular 4½\" + kit soquetes 40 peças The Black Tools",
@@ -1122,7 +1122,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2mnX93Q",
-    image: "/produto-ferramenta-12.png",
+    image: "/produto-ferramenta-12.webp",
   },
   {
     name: "Kit 225 anéis de vedação O-ring borracha 18 tamanhos (estojo)",
@@ -1130,7 +1130,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/18XktT6",
-    image: "/produto-ferramenta-13.png",
+    image: "/produto-ferramenta-13.webp",
   },
 
   // Maletas, ferramentas e iluminação (Mercado Livre — preços promocionais aproximados)
@@ -1140,7 +1140,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1fhcttt",
-    image: "/produto-extra-01.png",
+    image: "/produto-extra-01.webp",
   },
   {
     name: "Fercar 07 — caixa de ferramentas metal 5 gavetas 20×50×21 cm (azul)",
@@ -1148,7 +1148,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1SnKYVk",
-    image: "/produto-extra-02.png",
+    image: "/produto-extra-02.webp",
   },
   {
     name: "São Bernardo CF-32 — caixa plástica 7 compartimentos (preto e amarelo)",
@@ -1156,7 +1156,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1EiFnm1",
-    image: "/produto-extra-03.png",
+    image: "/produto-extra-03.webp",
   },
   {
     name: "Vonder OPV222 — maleta organizadora dupla face 32 compartimentos (preto)",
@@ -1164,7 +1164,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1p4RWkx",
-    image: "/produto-extra-04.png",
+    image: "/produto-extra-04.webp",
   },
   {
     name: "Kit 6 maletas de ferramentas reforçadas pequena e grande (VYROX)",
@@ -1172,7 +1172,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1nGoUgt",
-    image: "/produto-extra-05.png",
+    image: "/produto-extra-05.webp",
   },
   {
     name: "Rotterman RLL-09 — caixa de ferramentas metal 20×50×25 cm (preta)",
@@ -1180,7 +1180,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/1gYV8xS",
-    image: "/produto-extra-06.png",
+    image: "/produto-extra-06.webp",
   },
   {
     name: "Metasul — caixa de ferramentas tática 18,3 pol. fecho metal (laranja)",
@@ -1188,7 +1188,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2mBXq5c",
-    image: "/produto-extra-07.png",
+    image: "/produto-extra-07.webp",
   },
   {
     name: "Vonder — caixa metálica tipo baú para ferramentas 35 cm sem bandeja (preta)",
@@ -1196,7 +1196,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2Ejx5Lo",
-    image: "/produto-extra-08.png",
+    image: "/produto-extra-08.webp",
   },
   {
     name: "Aiwa — jogo chave catraca e soquetes 40 peças 3/8\" com estojo",
@@ -1204,7 +1204,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🔧",
     link: "https://meli.la/2RHLbGn",
-    image: "/produto-extra-09.png",
+    image: "/produto-extra-09.webp",
   },
   {
     name: "Plafon LED 30×30 sobrepor bivolt 32 W branco frio 110/220 V",
@@ -1212,7 +1212,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/2X6kGnX",
-    image: "/produto-extra-10.png",
+    image: "/produto-extra-10.webp",
   },
   {
     name: "Luminária barra LED 60 cm sensor movimento USB recarregável (branco)",
@@ -1220,7 +1220,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/1vkHQuT",
-    image: "/produto-extra-11.png",
+    image: "/produto-extra-11.webp",
   },
   {
     name: "Arandela slim preta externa + lâmpada LED inclusa (frisos)",
@@ -1228,7 +1228,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/23cv1U7",
-    image: "/produto-extra-12.png",
+    image: "/produto-extra-12.webp",
   },
   {
     name: "Luminária de mesa abajur articulada bivolt quarto/escritório",
@@ -1236,7 +1236,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/2RzDVL5",
-    image: "/produto-extra-13.png",
+    image: "/produto-extra-13.webp",
   },
   {
     name: "Luminária LED lua 3D abajur decoração 12 cm luz noturna (quente)",
@@ -1244,7 +1244,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/2m1xJxQ",
-    image: "/produto-extra-14.png",
+    image: "/produto-extra-14.webp",
   },
   {
     name: "Kit trilho 1 m + 4 spots LED 10 W preto/branco (6500K/4000K/3000K)",
@@ -1252,7 +1252,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/1AgP7CH",
-    image: "/produto-extra-15.png",
+    image: "/produto-extra-15.webp",
   },
   {
     name: "Kit 4 arandelas solares LED parede jardim externa IP65 luz quente",
@@ -1260,7 +1260,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/1Z1jGKW",
-    image: "/produto-extra-16.png",
+    image: "/produto-extra-16.webp",
   },
   {
     name: "Kit 2 luminárias de parede LED 3 tons recarregável magnética (preto)",
@@ -1268,7 +1268,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/1BQaKDc",
-    image: "/produto-extra-17.png",
+    image: "/produto-extra-17.webp",
   },
   {
     name: "Luminária barra LED para monitor/notebook USB recarregável Endeca (preto)",
@@ -1276,7 +1276,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "💡",
     link: "https://meli.la/1MTbnXE",
-    image: "/produto-extra-18.png",
+    image: "/produto-extra-18.webp",
   },
 
   // Links Mercado Livre (preços conforme anúncio)
@@ -1286,7 +1286,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2M8imrD",
-    image: "/produto-casa-01.png",
+    image: "/produto-casa-01.webp",
   },
   {
     name: "Sofá decorativo (courino) com almofadas — recepção/clínica (preto)",
@@ -1294,7 +1294,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🛋️",
     link: "https://meli.la/1Q2Y4Nu",
-    image: "/produto-casa-02.png",
+    image: "/produto-casa-02.webp",
   },
   {
     name: "Cadeira de jantar Charles Eames Eiffel — madeira preta",
@@ -1302,7 +1302,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2YWsAXX",
-    image: "/produto-casa-03.png",
+    image: "/produto-casa-03.webp",
   },
   {
     name: "Cadeira de escritório diretor Tok Begônia — estofado preto",
@@ -1310,7 +1310,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/12xwHB7",
-    image: "/produto-casa-05.png",
+    image: "/produto-casa-05.webp",
   },
   {
     name: "Cadeira de escritório preta giratória 3310 com braços (mesh/náilon)",
@@ -1318,7 +1318,7 @@ export const allGifts: GiftItem[] = [
     category: "decoracao",
     emoji: "🪑",
     link: "https://meli.la/2qHwjhv",
-    image: "/produto-casa-04.png",
+    image: "/produto-casa-04.webp",
   },
   {
     name: "Cortina Blackout em tecido 3,00x2,80 corta luz (cinza)",
@@ -1326,7 +1326,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🪟",
     link: "https://meli.la/2RCHKha",
-    image: "/produto-casa-01.png",
+    image: "/Cortina Blacout Em Tecido.webp",
   },
   {
     name: "Cortina Blackout tecido grosso 2,80x2,30 (porta/sala/quarto)",
@@ -1334,7 +1334,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🪟",
     link: "https://meli.la/1fcVXbP",
-    image: "/produto-casa-02.png",
+    image: "/Cortina Blackout Tecido Grosso.webp",
   },
   {
     name: "Cortina Blackout corta luz blecaute 2,80 x 2,30 (creme)",
@@ -1342,7 +1342,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🪟",
     link: "https://meli.la/17Jjafu",
-    image: "/produto-casa-03.png",
+    image: "/Cortina Blackout Corta Luz Blecaute.webp",
   },
   {
     name: "Tapete sala/quarto 2,00x0,60 shaggy peludo rose mesclado",
@@ -1350,7 +1350,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/224HZD2",
-    image: "/produto-casa-04.png",
+    image: "/Tapete Sala Quarto Shaggy.webp",
   },
   {
     name: "Tapete 2,00x1,50 peludo felpudo sala e quarto (bege mesclado)",
@@ -1358,7 +1358,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/31UT3vE",
-    image: "/produto-casa-05.png",
+    image: "/Tapete Peludo Felpudo.webp",
   },
   {
     name: "Jogo tapetes cozinha antiderrapante geométrico Sato 3 peças (cairo preto)",
@@ -1366,7 +1366,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/1Y49gAz",
-    image: "/produto-casa-01.png",
+    image: "/Jogo Tapetes Cozinha Antiderapante.webp",
   },
   {
     name: "Casa Laura Enxovais tapete felpudo 2,00x1,50 peludo macio shaggy (bege-claro)",
@@ -1374,7 +1374,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/1vhf1bj",
-    image: "/produto-casa-02.png",
+    image: "/Casa Laura Enxovais Tapete.webp",
   },
   {
     name: "Tapetes cozinha antiderrapante geométrico 3 peças (havana cinza)",
@@ -1382,7 +1382,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/2i95jCL",
-    image: "/produto-casa-03.png",
+    image: "/Tapte Coziha Antiderrapante.webp",
   },
   {
     name: "Tapete passadeira 2,00x0,60 quarto pé de cama luxo conforto",
@@ -1390,7 +1390,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🧶",
     link: "https://meli.la/1Hxfx1Z",
-    image: "/produto-casa-04.png",
+    image: "/Tapete Passadeira 2,00x0,60.webp",
   },
   {
     name: "Espelho Adnet redondo decorativo 30cm para banheiro/quarto/sala",
@@ -1398,7 +1398,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🪞",
     link: "https://meli.la/12kyhmo",
-    image: "/produto-casa-05.png",
+    image: "/Espelho Adnet Redondo.webp",
   },
   {
     name: "Espelho Rocco retangular 90x40 cm parede luxo com suporte",
@@ -1406,7 +1406,7 @@ export const allGifts: GiftItem[] = [
     category: "casa",
     emoji: "🪞",
     link: "https://meli.la/2ZCgsSW",
-    image: "/produto-casa-01.png",
+    image: "/Espelho Roco.webp",
   },
   {
     name: "Tênis masculino leve esportivo confortável promoção",
@@ -1414,7 +1414,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👟",
     link: "https://meli.la/1HFrk5s",
-    image: "/produto-sug-tenis-1.png",
+    image: "/produto-sug-tenis-1.webp",
   },
   {
     name: "Tênis social (sapato ortopédico) ultra confortável e leve + cinto",
@@ -1422,7 +1422,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👞",
     link: "https://meli.la/1kSn6r5",
-    image: "/produto-sug-tenis-2.png",
+    image: "/produto-sug-tenis-2.webp",
   },
   {
     name: "Tênis masculino sapatênis Polo Feet casual promoção",
@@ -1430,7 +1430,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👟",
     link: "https://meli.la/1h1X5MG",
-    image: "/produto-sug-tenis-3.png",
+    image: "/produto-sug-tenis-3.webp",
   },
   {
     name: "Tênis loafer masculino mocassim casual comfort luxo",
@@ -1438,7 +1438,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👞",
     link: "https://meli.la/16dfotC",
-    image: "/produto-sug-tenis-4.png",
+    image: "/produto-sug-tenis-4.webp",
   },
   {
     name: "Tênis branco academia caminhada esportivo confortável",
@@ -1446,7 +1446,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👟",
     link: "https://meli.la/1WgDodY",
-    image: "/produto-sug-tenis-5.png",
+    image: "/produto-sug-tenis-5.webp",
   },
   {
     name: "Sapato loafer masculino mocassim couro casual comfort luxo",
@@ -1454,7 +1454,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👞",
     link: "https://meli.la/2jEFT3o",
-    image: "/produto-sug-ch-tenis-1.png",
+    image: "/produto-sug-ch-tenis-1.webp",
   },
   {
     name: "Tênis masculino casual Saymon Queen couro original branco",
@@ -1462,7 +1462,7 @@ export const allGifts: GiftItem[] = [
     category: "tenis",
     emoji: "👟",
     link: "https://meli.la/1SthM9D",
-    image: "/produto-sug-ch-tenis-2.png",
+    image: "/produto-sug-ch-tenis-2.webp",
   },
   {
     name: "Babuche Yvate sandália ortopédica faixa branca EVA original",
@@ -1470,7 +1470,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/21zGwmU",
-    image: "/produto-sug-ch-tenis-3.png",
+    image: "/produto-sug-ch-tenis-3.webp",
   },
   {
     name: "Chinelo Havaianas masculino Power 2.0 anatômica massageadora",
@@ -1478,7 +1478,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/1j2VDWY",
-    image: "/produto-sug-ch-tenis-4.png",
+    image: "/produto-sug-ch-tenis-4.webp",
   },
   {
     name: "Chinelo Havaianas Top liso branco unissex",
@@ -1486,7 +1486,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2mKJmkH",
-    image: "/produto-sug-ch-tenis-5.png",
+    image: "/produto-sug-ch-tenis-5.webp",
   },
   {
     name: "Chinelo feminino Havaianas Slim preto liso",
@@ -1494,7 +1494,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/1dXUaGT",
-    image: "/produto-sug-ch-tenis-6.png",
+    image: "/produto-sug-ch-tenis-6.webp",
   },
   {
     name: "Chinelo masculino Havaianas Dual tiras largas macio",
@@ -1502,7 +1502,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2eX5QHU",
-    image: "/produto-sug-ch-tenis-7.png",
+    image: "/produto-sug-ch-tenis-7.webp",
   },
   {
     name: "Chinelo Havaianas Top legítimas original unissex",
@@ -1510,7 +1510,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2vm7BHn",
-    image: "/produto-sug-ch-tenis-8.png",
+    image: "/produto-sug-ch-tenis-8.webp",
   },
   {
     name: "Chinelo Havaianas Top The Simpsons unissex",
@@ -1518,7 +1518,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/343k6Wb",
-    image: "/produto-sug-ch-tenis-9.png",
+    image: "/produto-sug-ch-tenis-9.webp",
   },
   {
     name: "Chinelo Havaianas Slim Pets gato/cachorro original",
@@ -1526,7 +1526,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2k9LDu7",
-    image: "/produto-sug-ch-tenis-10.png",
+    image: "/produto-sug-ch-tenis-10.webp",
   },
   {
     name: "Chinelo Rider Drip Slide masculino monobloco",
@@ -1534,7 +1534,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/11cZ6dB",
-    image: "/produto-sug-ch-tenis-11.png",
+    image: "/produto-sug-ch-tenis-11.webp",
   },
   {
     name: "Chinelo Babuche Boaonda Easy macio leve feminino",
@@ -1542,7 +1542,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2SEQH1K",
-    image: "/produto-sug-ch-tenis-12.png",
+    image: "/produto-sug-ch-tenis-12.webp",
   },
   {
     name: "Chinelo feminino Havaianas Slim sandália feminina",
@@ -1550,7 +1550,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/2cBG9Qm",
-    image: "/produto-sug-ch-tenis-13.png",
+    image: "/produto-sug-ch-tenis-13.webp",
   },
   {
     name: "Chinelo feminino Havaianas Slim Organic Floral original",
@@ -1558,7 +1558,7 @@ export const allGifts: GiftItem[] = [
     category: "chinelos",
     emoji: "🩴",
     link: "https://meli.la/17HVreQ",
-    image: "/produto-sug-ch-tenis-14.png",
+    image: "/produto-sug-ch-tenis-14.webp",
   },
 ];
 
