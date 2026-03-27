@@ -997,8 +997,8 @@ const Evento = () => {
               {game.game_type}
             </span>
             {isOwner && (
-              <span className="ml-2 inline-flex items-center gap-1 bg-accent/20 text-accent-foreground rounded-full px-3 py-1 text-sm font-medium">
-                👑 Organizador
+              <span className="ml-2 inline-flex items-center gap-1 bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium">
+                Organizador
               </span>
             )}
           </div>

@@ -191,7 +191,11 @@ const CriarJogo = () => {
             <>
               <div className="text-center mb-10">
                 <h1 className="text-3xl md:text-4xl font-bold mb-2">Criar novo jogo</h1>
-                <p className="text-muted-foreground">Escolha um modo para configurar e publicar seu evento</p>
+                <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">100% gratuito</span>
+                  <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">Fácil</span>
+                  <span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary">Rápido</span>
+                </div>
               </div>
               <div className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 items-center gap-10 xl:grid-cols-3 xl:gap-8">
                 {gameTypes.map((type, i) => {

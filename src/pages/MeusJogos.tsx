@@ -246,7 +246,7 @@ const MeusJogos = () => {
                   className="relative bg-card rounded-2xl p-5 shadow-card border border-border flex flex-col gap-3 hover:shadow-elevated transition-shadow sm:flex-row sm:items-center sm:justify-between"
                 >
                   {game.isOwner && (
-                    <span className="absolute right-5 top-5 inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs text-accent-foreground">
+                    <span className="absolute right-5 top-5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
                       Organizador
                     </span>
                   )}
@@ -262,10 +262,10 @@ const MeusJogos = () => {
                     />
                     <div className="min-w-0 pr-24 sm:min-h-[52px]">
                       <h3 className="font-display font-semibold truncate">{game.name}</h3>
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                        <span className="min-w-0">{game.game_type}</span>
+                      <div className="mt-0.5 space-y-1 text-xs text-muted-foreground">
+                        <span className="block min-w-0">{game.game_type}</span>
                         <span
-                          className={`rounded-full border border-border/70 px-2 py-0.5 ${
+                          className={`inline-flex rounded-full border border-border/70 px-2 py-0.5 ${
                             game.autoDeleteDateText ? "" : "invisible"
                           }`}
                         >

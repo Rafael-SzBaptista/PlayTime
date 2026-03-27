@@ -4,6 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
+  const featureTags = [
+    "Sorteio automático",
+    "Link compartilhável",
+    "Gratuito",
+    "Gerenciamento",
+    "Controle",
+    "Sugestão de Presentes",
+  ];
+
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden pb-12 pt-0 -mt-4">
       <div className="pointer-events-none absolute inset-0 bg-background" />
@@ -28,7 +37,7 @@ const Hero = () => {
             transition={{ duration: 0.55, delay: 0.16 }}
             className="mb-10 mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
           >
-            Crie jogos, convide amigos, faça sorteios automáticos e descubra sugestões de presentes — tudo em um só lugar.
+            Crie jogos, convide amigos, faça sorteios automáticos e descubra sugestões de presentes — tudo 100% gratuito e em um só lugar.
           </motion.p>
 
           <motion.div
@@ -88,31 +97,13 @@ const Hero = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2 px-4 pb-2 text-sm text-muted-foreground"
       >
-        <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-center justify-items-center gap-x-4 gap-y-2 px-2 sm:grid-cols-3 xl:grid-cols-6">
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Sorteio automático
-          </span>
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Link compartilhável
-          </span>
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Gratuito
-          </span>
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Gerenciamento
-          </span>
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Controle
-          </span>
-          <span className="inline-flex w-full items-center justify-center gap-2 text-center whitespace-nowrap">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            Sugestão de Presentes
-          </span>
+        <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-center gap-x-4 gap-y-2 px-2 sm:grid-cols-3 xl:grid-cols-6">
+          {featureTags.map((tag) => (
+            <span key={tag} className="inline-flex w-full items-center justify-center gap-2 whitespace-nowrap text-center">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+              {tag}
+            </span>
+          ))}
         </div>
       </motion.div>
     </section>
