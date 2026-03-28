@@ -2049,6 +2049,15 @@ const Presentes = () => {
                 />
               </div>
 
+              {filtered.length === 0 ? (
+                <div className="flex min-h-[min(60vh,560px)] flex-col items-center justify-center gap-3 px-4 py-12 text-center text-muted-foreground">
+                  <div className="text-5xl" aria-hidden>
+                    😅
+                  </div>
+                  <p className="max-w-sm text-base">Nenhum presente encontrado com esses filtros</p>
+                </div>
+              ) : (
+                <>
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 items-stretch">
             {paginatedGifts.map((gift, i) => (
               <motion.div
@@ -2156,7 +2165,6 @@ const Presentes = () => {
             ))}
               </div>
 
-              {filtered.length > 0 && (
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-[1.75rem] sm:gap-3">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
                     <button
@@ -2189,16 +2197,10 @@ const Presentes = () => {
                     <span aria-hidden>›</span>
                   </button>
                 </div>
+                </>
               )}
             </section>
           </div>
-
-          {filtered.length === 0 && (
-            <div className="text-center py-20 text-muted-foreground">
-              <div className="text-4xl mb-3">😅</div>
-              <p>Nenhum presente encontrado com esses filtros</p>
-            </div>
-          )}
         </motion.div>
       </div>
       <Footer />
