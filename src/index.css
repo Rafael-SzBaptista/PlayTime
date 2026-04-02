@@ -154,4 +154,25 @@
     background-color: hsl(var(--background));
     background-image: none;
   }
+  /* Página do evento — vermelho ao fundo + cards vidro brancos, arestas retas */
+  .evento-page {
+    background: hsl(var(--background));
+  }
+  .dark .evento-page {
+    background: hsl(var(--background));
+  }
+  .evento-card {
+    @apply rounded-none border border-border/70 bg-white/95 text-foreground backdrop-blur-md;
+    box-shadow: 0 1px 0 hsl(0 0% 100% / 0.8) inset, 0 12px 28px -20px hsl(356 28% 24% / 0.28);
+  }
+  .dark .evento-card {
+    @apply border-white/25 bg-[hsl(352_18%_16%/0.94)] text-foreground;
+    box-shadow: 0 0 0 1px hsl(0 0% 100% / 0.06) inset, 0 18px 48px -24px hsl(0 0% 0% / 0.5);
+  }
+  .evento-alert {
+    @apply rounded-none border border-border/70 bg-card/95 px-4 py-3 text-sm text-foreground backdrop-blur-sm;
+  }
+  .evento-sidebar-link {
+    @apply rounded-none border border-border/70 bg-card px-3 py-2.5 text-center text-xs font-semibold uppercase tracking-wide text-foreground transition-colors hover:bg-muted;
+  }
 }

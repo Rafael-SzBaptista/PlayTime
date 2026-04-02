@@ -26,6 +26,7 @@ import {
   formatDatePtBr,
   getAutoDeleteDate,
 } from "@/lib/gameRetention";
+import { cn } from "@/lib/utils";
 
 interface GameData {
   id: string;
@@ -190,6 +191,21 @@ const Evento = () => {
   const allowConfigView = searchParams.get("config") === "1";
   const autoDeleteDate = useMemo(() => (game ? getAutoDeleteDate(game) : null), [game]);
   const autoDeleteDateText = autoDeleteDate ? formatDatePtBr(autoDeleteDate) : null;
+
+  const presentesLink = useMemo(() => {
+    if (!slug) return "/presentes";
+    return isRouba && !runtimeState.roubaStarted
+      ? `/presentes?gameSlug=${encodeURIComponent(slug)}&rouba=1`
+      : `/presentes?gameSlug=${encodeURIComponent(slug)}`;
+  }, [slug, isRouba, runtimeState.roubaStarted]);
+
+  const gamePageHref = useMemo(() => {
+    if (!slug) return null;
+    if (isBingo) return `/evento/${slug}/bingo`;
+    if (isRouba) return `/evento/${slug}/rouba`;
+    if (isAmigoSecreto) return `/evento/${slug}/resultado`;
+    return null;
+  }, [slug, isBingo, isRouba, isAmigoSecreto]);
 
   const gameConfigLocked = useMemo(() => {
     if (!game) return false;
@@ -959,7 +975,7 @@ const Evento = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen evento-page">
         <Navbar />
         <div className="container mx-auto px-4 py-20 text-center">
           <p className="text-muted-foreground">Carregando evento...</p>
@@ -970,7 +986,7 @@ const Evento = () => {
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen evento-page">
         <Navbar />
         <div className="container mx-auto px-4 py-20 text-center">
           <div className="text-5xl mb-4">😕</div>
@@ -983,99 +999,135 @@ const Evento = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen evento-page">
       <Navbar />
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+      <div className="container mx-auto max-w-7xl px-4 pb-14 pt-24 sm:px-6 sm:pt-28 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          {/* Header */}
-          <div className="text-center mb-10">
-            <div className="mb-4 flex justify-center">
-              <GameTypeIcon gameType={game.game_type} emojiFallback={game.emoji} size="xl" />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">{game.name}</h1>
-            <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium">
-              {game.game_type}
-            </span>
-            {isOwner && (
-              <span className="ml-2 inline-flex items-center gap-1 bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium">
-                Organizador
-              </span>
-            )}
-          </div>
-
-          {!user && (
-            <div className="mb-6 rounded-2xl border border-border bg-muted/40 px-4 py-4 text-center">
-              <p className="text-sm font-medium text-foreground">
-                Para participar deste jogo, é necessário ter uma conta.
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Crie uma conta (ou entre) e você volta para este evento automaticamente.
-              </p>
-              <div className="mt-4 flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center">
-                <Button asChild variant="hero" size="sm" className="sm:w-auto">
-                  <Link to={`/cadastro?next=${encodeURIComponent(`/evento/${slug}`)}`}>Criar conta</Link>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="sm:w-auto">
-                  <Link to={`/login?next=${encodeURIComponent(`/evento/${slug}`)}`}>Já tenho conta</Link>
-                </Button>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-start lg:gap-10">
+            <aside className="flex flex-col gap-6">
+              <div className="flex gap-4">
+                <div className="evento-card flex h-[76px] w-[76px] shrink-0 items-center justify-center overflow-hidden border-white/40 bg-white/10 p-0">
+                  <GameTypeIcon
+                    gameType={game.game_type}
+                    emojiFallback={game.emoji}
+                    size="sm"
+                    className="!h-[72px] !w-[72px] scale-95"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="font-display text-xl font-bold leading-tight text-primary md:text-2xl">
+                    {game.name}
+                  </h1>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <span className="rounded-none border border-primary/45 bg-primary/12 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                      {game.game_type}
+                    </span>
+                    {isOwner && (
+                      <span className="rounded-none border border-amber-500/55 bg-amber-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+                        Organizador
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
 
-          {gameConfigLocked && (
-            <div className="mb-6 rounded-2xl border border-border bg-muted/40 px-4 py-3 text-center text-sm text-muted-foreground">
-              Este jogo já começou (sorteio realizado ou jogo iniciado). Participantes, nomes, presentes e demais
-              configurações estão bloqueados — apenas visualização.
-            </div>
-          )}
-
-          {autoDeleteDateText && (
-            <div className="mb-6 rounded-2xl border border-amber-300/40 bg-amber-100/30 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
-              <p className="flex items-center gap-2 font-medium">
-                <AlertTriangle className="h-4 w-4" />
-                Este evento será excluído automaticamente em {autoDeleteDateText}.
-              </p>
-              <p className="mt-1 text-xs text-amber-800/90 dark:text-amber-200/80">
-                A limpeza remove o jogo de Meus Jogos para organizador e participantes, além dos dados no Supabase
-                ({AUTO_DELETE_AFTER_DAYS} dias após a data do evento).
-              </p>
-            </div>
-          )}
-
-          <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 lg:items-start">
-            <div className="min-w-0 space-y-6">
               {usesEventStartLabel ? (
-                <div className="bg-card rounded-2xl p-5 shadow-card border border-border text-center">
-                  <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
-                  <p className="text-xs text-muted-foreground mb-1">Início em</p>
-                  <p className="font-display font-bold text-2xl text-primary">
+                <div className="evento-card flex min-h-[168px] flex-col items-center justify-center px-4 py-6 text-center">
+                  <Clock className="mb-2 h-6 w-6 text-primary" />
+                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    Início em
+                  </p>
+                  <p className="font-display text-2xl font-bold tabular-nums text-primary md:text-3xl">
                     {getCountdown(game.draw_date)}
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="bg-card rounded-2xl p-5 shadow-card border border-border text-center">
-                    <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground mb-1">Sorteio em</p>
-                    <p className="font-display font-bold text-2xl text-primary">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <div className="evento-card flex min-h-[130px] flex-col items-center justify-center px-3 py-4 text-center">
+                    <Clock className="mb-2 h-5 w-5 text-primary" />
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      Sorteio em
+                    </p>
+                    <p className="font-display text-xl font-bold tabular-nums text-primary md:text-2xl">
                       {getCountdown(game.draw_date)}
                     </p>
                   </div>
-                  <div className="bg-card rounded-2xl p-5 shadow-card border border-border text-center">
-                    <Gift className="w-5 h-5 text-secondary mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground mb-1">Troca em</p>
-                    <p className="font-display font-bold text-2xl text-secondary">
+                  <div className="evento-card flex min-h-[130px] flex-col items-center justify-center px-3 py-4 text-center">
+                    <Gift className="mb-2 h-5 w-5 text-secondary" />
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      Troca em
+                    </p>
+                    <p className="font-display text-xl font-bold tabular-nums text-secondary md:text-2xl">
                       {getCountdown(game.exchange_date)}
                     </p>
                   </div>
                 </div>
               )}
-            </div>
 
-            <div className="min-w-0">
-              {/* Info / Edit */}
-              <div className="bg-card rounded-2xl p-6 shadow-card border border-border h-full">
-            <div className="flex items-center justify-between mb-4">
+              <nav className="flex flex-col gap-2">
+                <button type="button" onClick={handleCopyLink} className="evento-sidebar-link w-full">
+                  Compartilhar link
+                </button>
+                <Link to={presentesLink} className="evento-sidebar-link block w-full">
+                  Sugestões
+                </Link>
+                {gamePageHref && (
+                  <Link to={gamePageHref} className="evento-sidebar-link block w-full">
+                    Página do jogo
+                  </Link>
+                )}
+              </nav>
+            </aside>
+
+            <main className="min-w-0 space-y-6">
+              {!user && (
+                <div className="evento-card px-4 py-5 text-center">
+                  <p className="text-sm font-medium text-foreground">
+                    Para participar deste jogo, é necessário ter uma conta.
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Crie uma conta (ou entre) e você volta para este evento automaticamente.
+                  </p>
+                  <div className="mt-4 flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center">
+                    <Button asChild variant="hero" size="sm" className="sm:w-auto">
+                      <Link to={`/cadastro?next=${encodeURIComponent(`/evento/${slug}`)}`}>Criar conta</Link>
+                    </Button>
+                    <Button asChild variant="outline" size="sm" className="sm:w-auto">
+                      <Link to={`/login?next=${encodeURIComponent(`/evento/${slug}`)}`}>Já tenho conta</Link>
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <div
+                className={cn(
+                  "grid gap-4",
+                  gameConfigLocked && autoDeleteDateText ? "md:grid-cols-2" : "grid-cols-1",
+                )}
+              >
+                {gameConfigLocked && (
+                  <div className="evento-alert border-border/70 bg-muted/35 text-muted-foreground">
+                    Este jogo já começou (sorteio realizado ou jogo iniciado). Participantes, nomes, presentes e demais
+                    configurações estão bloqueados — apenas visualização.
+                  </div>
+                )}
+
+                {autoDeleteDateText && (
+                  <div className="evento-alert border-amber-300/45 bg-amber-100/35 text-amber-950 dark:border-amber-500/30 dark:bg-amber-500/12 dark:text-amber-100">
+                    <p className="flex items-center gap-2 font-medium">
+                      <AlertTriangle className="h-4 w-4 shrink-0" />
+                      Exclusão automática em {autoDeleteDateText}
+                    </p>
+                    <p className="mt-1.5 text-xs opacity-90">
+                      Remove o jogo de Meus Jogos e os dados no Supabase ({AUTO_DELETE_AFTER_DAYS} dias após a data do
+                      evento).
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="evento-card flex h-full flex-col p-6 sm:p-8">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-display font-semibold text-lg flex items-center gap-2">
                 <Star className="w-5 h-5 text-accent" /> Detalhes
               </h2>
@@ -1142,7 +1194,7 @@ const Evento = () => {
                   </div>
                 </div>
                 {game.game_type === "Bingo de Presentes" && (
-                  <div className="space-y-3 rounded-xl border border-border bg-muted/30 p-3">
+                  <div className="space-y-3 rounded-none bg-muted/25 p-4 ring-1 ring-border/50">
                     <Label className="text-sm">Quem define os presentes do bingo</Label>
                     <select
                       value={editForm.bingo_gift_mode}
@@ -1152,7 +1204,7 @@ const Evento = () => {
                           bingo_gift_mode: e.target.value as "admin_only" | "participants",
                         }))
                       }
-                      className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus:border-primary"
+                      className="h-10 w-full rounded-none border border-input bg-background px-3 text-sm outline-none focus:border-primary"
                     >
                       <option value="admin_only">Somente o organizador</option>
                       <option value="participants">Cada jogador escolhe na página Sugestões</option>
@@ -1190,50 +1242,50 @@ const Evento = () => {
                 </Button>
               </div>
             ) : (
-              <>
-                <div className="mb-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
-                  <div>
-                    <p className="text-muted-foreground">Valor mínimo</p>
-                    <p className="font-semibold">
+              <div className="flex flex-1 flex-col gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                  <div className="rounded-none bg-primary/[0.06] px-4 py-3 ring-1 ring-primary/10">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Valor mínimo</p>
+                    <p className="mt-1 font-display text-lg font-semibold tabular-nums">
                       {game.min_value ? `R$ ${game.min_value},00` : "—"}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-muted-foreground">Valor máximo</p>
-                    <p className="font-semibold">
+                  <div className="rounded-none bg-primary/[0.06] px-4 py-3 ring-1 ring-primary/10">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Valor máximo</p>
+                    <p className="mt-1 font-display text-lg font-semibold tabular-nums">
                       {game.max_value ? `R$ ${game.max_value},00` : "—"}
                     </p>
                   </div>
                 </div>
                 {game.game_type === "Bingo de Presentes" && (
-                  <div className="mb-4 rounded-xl border border-border bg-muted/30 p-3 text-sm">
-                    <p className="text-muted-foreground">Presentes no bingo</p>
-                    <p className="font-medium">
+                  <div className="border-t border-border/60 pt-5">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      Quem escolhe os presentes
+                    </p>
+                    <p className="mt-2 text-sm font-medium leading-snug">
                       {game.bingo_gift_mode === "participants"
                         ? "Cada jogador escolhe na página Sugestões"
                         : "Somente o organizador adiciona os presentes"}
                     </p>
                     {game.bingo_gift_mode === "participants" && (
-                      <p className="mt-1 text-muted-foreground">
+                      <p className="mt-2 text-sm text-muted-foreground">
                         Mínimo por jogador (com conta): {game.bingo_min_gifts_per_participant}
                       </p>
                     )}
                   </div>
                 )}
                 {game.rules && (
-                  <div>
-                    <p className="text-muted-foreground text-sm mb-1">Regras</p>
-                    <p className="text-sm bg-muted rounded-xl p-3">{game.rules}</p>
+                  <div className="border-t border-border/60 pt-5">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Regras</p>
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{game.rules}</p>
                   </div>
                 )}
-              </>
+              </div>
             )}
-          </div>
-            </div>
           </div>
 
           {game.game_type === "Rouba Presente" && runtimeState.roubaStarted && !runtimeState.roubaFinished && (
-            <div className="bg-primary/10 border border-primary/25 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="evento-card mb-6 flex flex-col gap-3 border-primary/20 bg-primary/[0.08] p-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm">
                 O Rouba Presente está em andamento. Use a página do jogo para sortear números e registrar os roubos.
               </p>
@@ -1244,7 +1296,7 @@ const Evento = () => {
           )}
 
           {game.game_type === "Rouba Presente" && runtimeState.roubaFinished && (
-            <div className="bg-muted/50 border border-border rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="evento-card mb-6 flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">Jogo finalizado. Veja as estatísticas na página do Rouba.</p>
               <Button variant="outline" size="sm" asChild>
                 <Link to={`/evento/${slug}/rouba`}>Ver estatísticas</Link>
@@ -1254,7 +1306,7 @@ const Evento = () => {
 
           {isRouba && !runtimeState.roubaStarted && (
             <div className="mb-6 space-y-6">
-              <div className="rounded-xl border border-primary/25 bg-primary/5 p-4 shadow-card">
+              <div className="evento-card border-primary/15 bg-primary/[0.06] p-5">
                 <p className="text-sm font-medium text-foreground">Sugestões de presentes</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Veja ideias e links de compra. No Rouba não há “adicionar ao perfil” na lista — use só como inspiração.
@@ -1265,7 +1317,7 @@ const Evento = () => {
               </div>
 
               {user && (isOwner || isCurrentUserParticipant) && confirmedParticipants.length > 0 && (
-                <div className="rounded-xl border border-border bg-card p-4 shadow-card space-y-3">
+                <div className="evento-card space-y-3 p-5">
                   <h3 className="font-display font-semibold text-sm">Checklist — presente em mãos</h3>
                   <p className="text-xs text-muted-foreground">
                     Todos os participantes do jogo veem quem já marcou; ninguém vê o que os outros vão levar, só o status
@@ -1311,7 +1363,7 @@ const Evento = () => {
           )}
 
           {game.game_type === "Bingo de Presentes" && runtimeState.bingoFinished && (
-            <div className="bg-muted/50 border border-border rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="evento-card mb-6 flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">Bingo finalizado. Veja tabelas e gráficos na página de estatísticas.</p>
               <Button variant="outline" size="sm" asChild>
                 <Link to={`/evento/${slug}/bingo`}>Ver estatísticas do bingo</Link>
@@ -1320,17 +1372,24 @@ const Evento = () => {
           )}
 
           {/* Participants */}
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border mb-6">
-            <h2 className="font-display font-semibold text-lg mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-primary" /> Participantes ({participants.length})
+          <div className="evento-card mb-6 p-6 sm:p-8">
+            <h2 className="font-display mb-6 text-center text-lg font-semibold sm:text-left">
+              <span className="inline-flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                <Users className="h-5 w-5 shrink-0 text-primary" />
+                Participantes e seus presentes
+                <span className="font-normal text-muted-foreground">({participants.length})</span>
+              </span>
             </h2>
-            <div className="mb-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
               {participants.map((p) => (
                 <div
                   key={p.id}
-                  className={`rounded-xl p-3 ${
-                    participantIsMe(p) ? "bg-primary/10" : "bg-muted/50"
-                  }`}
+                  className={cn(
+                    "rounded-none p-4 ring-1 transition-colors",
+                    participantIsMe(p)
+                      ? "bg-primary/[0.09] ring-primary/15"
+                      : "bg-background/40 ring-border/40",
+                  )}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -1344,7 +1403,7 @@ const Evento = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-xs px-2 py-0.5 rounded-full ${
+                        className={`text-xs px-2 py-0.5 rounded-none ${
                           p.status === "confirmed"
                             ? "bg-secondary/10 text-secondary"
                             : "bg-muted text-muted-foreground"
@@ -1368,7 +1427,7 @@ const Evento = () => {
                     </div>
                   </div>
                   {(isAmigoSecreto || isBingoParticipantsMode) && (
-                    <div className="mt-3 rounded-xl border border-border/60 bg-background/70 p-3 text-xs">
+                    <div className="mt-4 rounded-none bg-muted/30 p-3 text-xs ring-1 ring-border/35">
                       <p className="mb-2 text-muted-foreground">
                         {isBingoParticipantsMode ? "Presentes escolhidos (bingo)" : "Preferências de presentes"}
                       </p>
@@ -1382,7 +1441,7 @@ const Evento = () => {
                               href={getWishlistItemLink(wish)}
                               target="_blank"
                               rel="noreferrer"
-                              className="flex items-center justify-between gap-3 rounded-lg bg-muted/40 px-2 py-1.5 transition-colors hover:bg-muted"
+                              className="flex items-center justify-between gap-3 rounded-none bg-muted/40 px-2 py-1.5 transition-colors hover:bg-muted"
                             >
                               <span className="inline-flex items-center gap-2">
                                 <span>{wish.gift_emoji ?? "🎁"}</span>
@@ -1443,7 +1502,7 @@ const Evento = () => {
           </div>
 
           {isBingo && isOwner && !runtimeState.bingoStarted && game.bingo_gift_mode === "admin_only" && (
-            <div className="bg-card rounded-2xl p-4 shadow-card border border-border mb-6">
+            <div className="evento-card mb-6 p-5 sm:p-6">
               <p className="text-sm font-medium mb-2">Presentes do bingo (somente este evento)</p>
               {runtimeState.bingoGifts.length > 0 ? (
                 <ul className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
@@ -1452,7 +1511,7 @@ const Evento = () => {
                     return (
                       <li
                         key={giftName}
-                        className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2.5"
+                        className="flex items-center justify-between gap-3 rounded-none bg-muted/25 px-3 py-2.5 ring-1 ring-border/35"
                       >
                         <p className="min-w-0 flex-1 font-medium text-foreground">{giftName}</p>
                         <a
@@ -1483,14 +1542,14 @@ const Evento = () => {
           )}
 
           {isAmigoSecreto && currentParticipant && (
-            <div className="bg-card rounded-2xl p-6 shadow-card border border-border mb-6">
+            <div className="evento-card mb-6 p-6 sm:p-8">
               <h2 className="font-display font-semibold text-lg mb-2">Sua prateleira de desejos</h2>
               <p className="text-xs text-muted-foreground mb-4">
                 {gameConfigLocked
                   ? "O sorteio já foi realizado — sua lista de preferências não pode mais ser alterada (somente consulta nas sugestões)."
                   : "Escolha seus produtos na aba de sugestões e adicione ao seu perfil deste jogo."}
               </p>
-              <div className="mb-4 rounded-xl bg-muted/40 px-3 py-2 text-sm">
+              <div className="mb-4 rounded-none bg-muted/40 px-3 py-2 text-sm">
                 Selecionados: <span className="font-semibold">{currentParticipantWishlist.length}</span>/3 mínimo
               </div>
               <div className="mb-4">
@@ -1512,7 +1571,7 @@ const Evento = () => {
                       href={getWishlistItemLink(wish)}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-between rounded-xl bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
+                      className="flex items-center justify-between rounded-none bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
                     >
                       <span className="inline-flex items-center gap-2">
                         <span>{wish.gift_emoji ?? "🎁"}</span>
@@ -1532,14 +1591,14 @@ const Evento = () => {
           )}
 
           {isBingoParticipantsMode && currentParticipant && (
-            <div className="bg-card rounded-2xl p-6 shadow-card border border-border mb-6">
+            <div className="evento-card mb-6 p-6 sm:p-8">
               <h2 className="font-display font-semibold text-lg mb-2">Seus presentes para o bingo</h2>
               <p className="text-xs text-muted-foreground mb-4">
                 {gameConfigLocked
                   ? "O bingo já começou — sua lista não pode mais ser alterada (somente consulta nas sugestões)."
                   : "Na página de sugestões, adicione os produtos que você pretende comprar para este bingo."}
               </p>
-              <div className="mb-4 rounded-xl bg-muted/40 px-3 py-2 text-sm">
+              <div className="mb-4 rounded-none bg-muted/40 px-3 py-2 text-sm">
                 Selecionados: <span className="font-semibold">{currentParticipantWishlist.length}</span>
                 {game.bingo_min_gifts_per_participant > 0 && (
                   <span className="text-muted-foreground">
@@ -1567,7 +1626,7 @@ const Evento = () => {
                       href={getWishlistItemLink(wish)}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-between rounded-xl bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
+                      className="flex items-center justify-between rounded-none bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
                     >
                       <span className="inline-flex items-center gap-2">
                         <span>{wish.gift_emoji ?? "🎁"}</span>
@@ -1587,7 +1646,7 @@ const Evento = () => {
           )}
 
           {isAmigoSecreto && isOwner && confirmedParticipants.length > 1 && (
-            <div className="bg-card rounded-2xl p-6 shadow-card border border-border mb-6">
+            <div className="evento-card mb-6 p-6 sm:p-8">
               <h2 className="font-display font-semibold text-lg mb-2">Restrições de sorteio</h2>
               <p className="text-xs text-muted-foreground mb-4">
                 {gameConfigLocked
@@ -1596,14 +1655,14 @@ const Evento = () => {
               </p>
               <div className="space-y-3">
                 {confirmedParticipants.map((giver) => (
-                  <div key={giver.id} className="rounded-xl bg-muted/40 p-3">
+                  <div key={giver.id} className="rounded-none bg-muted/25 p-4 ring-1 ring-border/35">
                     <p className="text-sm font-medium mb-2">{giver.name} não pode tirar:</p>
                     <div className="flex flex-wrap gap-2">
                       {confirmedParticipants
                         .filter((receiver) => receiver.id !== giver.id)
                         .map((receiver) => {
                           const blocked = excludedByGiverId.get(giver.id)?.has(receiver.id) ?? false;
-                          const chipClass = `rounded-full px-3 py-1 text-xs ${
+                          const chipClass = `rounded-none px-3 py-1 text-xs ${
                             blocked
                               ? "bg-primary text-primary-foreground"
                               : "bg-background border border-border text-muted-foreground"
@@ -1643,11 +1702,6 @@ const Evento = () => {
                 🎯 {drawing ? "Realizando..." : "Realizar Sorteio"}
               </Button>
             )}
-            {isOwner && (
-              <Button variant="festiveOutline" size="lg" className="w-full sm:flex-1" onClick={handleCopyLink}>
-                📤 Compartilhar Link
-              </Button>
-            )}
             {isOwner && isRouba && !runtimeState.roubaStarted && (
               <Button
                 type="button"
@@ -1674,7 +1728,7 @@ const Evento = () => {
           )}
 
           {game.game_type === "Bingo de Presentes" && runtimeState.bingoStarted && !runtimeState.bingoFinished && (
-            <div className="mt-6 bg-primary/10 border border-primary/25 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="evento-card mb-6 mt-6 flex flex-col gap-3 border-primary/20 bg-primary/[0.08] p-5 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm">
                 O bingo está em andamento. Use a página do jogo para girar a roleta e registrar os bingos.
               </p>
@@ -1685,13 +1739,13 @@ const Evento = () => {
           )}
 
           {isOwner && supportsParticipantDraw && drawResults.length > 0 && (
-            <div className="bg-card rounded-2xl p-6 shadow-card border border-border mt-6">
+            <div className="evento-card mt-6 p-6 sm:p-8">
               <h2 className="font-display font-semibold text-lg mb-4">Resultado do Sorteio</h2>
               <div className="space-y-2">
                 {drawResults.map((result, index) => (
                   <div
                     key={`${result.giverName}-${result.receiverName}-${index}`}
-                    className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 p-3 rounded-xl bg-muted/50 text-sm"
+                    className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-none bg-muted/50 p-3 text-sm"
                   >
                     <span className="font-medium text-right">{result.giverName}</span>
                     <ArrowRight className="w-4 h-4 text-muted-foreground" />
@@ -1715,7 +1769,7 @@ const Evento = () => {
           )}
 
           {isAmigoSecreto && currentParticipant && currentDrawTarget && (
-            <div className="bg-card rounded-2xl p-6 shadow-card border border-border mt-6">
+            <div className="evento-card mt-6 p-6 sm:p-8">
               <p className="text-xl font-semibold mb-2">Você tirou: {currentDrawTarget.name}</p>
               <p className="mb-3 text-sm text-muted-foreground">
                 Abra a página com sugestões de presente e links para compra (igual para todos os participantes).
@@ -1729,6 +1783,8 @@ const Evento = () => {
             </div>
           )}
 
+        </main>
+          </div>
         </motion.div>
       </div>
       <Footer />

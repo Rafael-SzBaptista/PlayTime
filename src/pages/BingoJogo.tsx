@@ -61,6 +61,15 @@ const CHART_COLORS = [
   "hsl(199 89% 48%)",
 ];
 
+function shuffleArray<T>(arr: T[]) {
+  const cloned = [...arr];
+  for (let i = cloned.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+  }
+  return cloned;
+}
+
 const BingoJogo = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -74,8 +83,12 @@ const BingoJogo = () => {
   const [wheelRotation, setWheelRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [lastDrawn, setLastDrawn] = useState<number | null>(null);
+  const [previewNumber, setPreviewNumber] = useState<number | null>(null);
+  const [chamberBalls, setChamberBalls] = useState<number[]>([]);
   const [winnerParticipantId, setWinnerParticipantId] = useState("");
   const [winnerGift, setWinnerGift] = useState("");
+  const spinTimeoutRef = useRef<number | null>(null);
+  const previewIntervalRef = useRef<number | null>(null);
 
   const confirmedParticipants = participants.filter((p) => p.status === "confirmed");
   const isOwner = Boolean(user && game && user.id === game.owner_id);
@@ -193,6 +206,13 @@ const BingoJogo = () => {
     saveRuntimeState(game.id, runtimeState);
   }, [runtimeState, game, loading]);
 
+  useEffect(() => {
+    return () => {
+      if (spinTimeoutRef.current) window.clearTimeout(spinTimeoutRef.current);
+      if (previewIntervalRef.current) window.clearInterval(previewIntervalRef.current);
+    };
+  }, []);
+
   const handleSpinWheel = () => {
     if (!game || spinning || runtimeState.bingoFinished) return;
     if (runtimeState.bingoAvailableNumbers.length === 0) {
@@ -203,13 +223,26 @@ const BingoJogo = () => {
     const available = [...runtimeState.bingoAvailableNumbers];
     const pickIndex = Math.floor(Math.random() * available.length);
     const number = available[pickIndex];
+    const randomBalls = shuffleArray(available.filter((n) => n !== number)).slice(0, 13);
+    const nextBalls = shuffleArray([number, ...randomBalls]);
 
     setSpinning(true);
     setLastDrawn(null);
+    setPreviewNumber(number);
+    setChamberBalls(nextBalls);
     const extraTurns = 6;
     setWheelRotation((r) => r + extraTurns * 360 + Math.random() * 360);
 
-    window.setTimeout(() => {
+    if (previewIntervalRef.current) window.clearInterval(previewIntervalRef.current);
+    previewIntervalRef.current = window.setInterval(() => {
+      const liveAvailable = runtimeState.bingoAvailableNumbers;
+      if (liveAvailable.length === 0) return;
+      const randomIndex = Math.floor(Math.random() * liveAvailable.length);
+      setPreviewNumber(liveAvailable[randomIndex]);
+    }, 90);
+
+    if (spinTimeoutRef.current) window.clearTimeout(spinTimeoutRef.current);
+    spinTimeoutRef.current = window.setTimeout(() => {
       setRuntimeState((prev) => {
         const nextAvailable = prev.bingoAvailableNumbers.filter((n) => n !== number);
         return {
@@ -219,6 +252,7 @@ const BingoJogo = () => {
         };
       });
       setLastDrawn(number);
+      setPreviewNumber(null);
       setSpinning(false);
       toast.success(`Número sorteado: ${number}`);
     }, 3000);
@@ -275,7 +309,9 @@ const BingoJogo = () => {
       startedAt: new Date().toISOString(),
     }));
     setLastDrawn(null);
+    setPreviewNumber(null);
     setWheelRotation(0);
+    setChamberBalls([]);
     toast.success("Jogo reiniciado — você pode sortear novamente.");
   };
 
@@ -296,7 +332,9 @@ const BingoJogo = () => {
     setRuntimeState(reset);
     saveRuntimeState(game.id, reset);
     setLastDrawn(null);
+    setPreviewNumber(null);
     setWheelRotation(0);
+    setChamberBalls([]);
     setWinnerParticipantId("");
     setWinnerGift("");
     toast.success("Cadastro/configurações do Bingo reiniciados. O jogo voltou para pré-início.");
@@ -342,7 +380,7 @@ const BingoJogo = () => {
               <div className="space-y-4">
                 <h2 className="font-display font-semibold text-lg">Roleta do Bingo</h2>
                 <p className="text-xs text-muted-foreground">
-                  A roleta gira por 3 segundos; em seguida o número sorteado é revelado.
+                  A roleta gira por 3 segundos com bolinhas no tambor; em seguida o número sorteado é revelado.
                 </p>
                 <div className="relative mx-auto w-full max-w-[min(100%,360px)] aspect-square">
                   <div
@@ -360,13 +398,44 @@ const BingoJogo = () => {
                     <div className="w-0 h-0 border-l-[14px] border-r-[14px] border-t-[22px] border-l-transparent border-r-transparent border-t-primary drop-shadow" />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-background/95 rounded-full w-[38%] h-[38%] flex flex-col items-center justify-center border-2 border-border shadow-card">
+                    <div className="relative bg-background/95 rounded-full w-[44%] h-[44%] flex items-center justify-center border-2 border-border shadow-card overflow-hidden">
+                      <motion.div
+                        className="absolute inset-[8%] rounded-full border border-primary/20"
+                        animate={{ rotate: spinning ? 1080 : 0 }}
+                        transition={{
+                          duration: 3,
+                          ease: [0.2, 0.8, 0.2, 1],
+                        }}
+                      >
+                        {chamberBalls.map((ball, index) => {
+                          const angle = (index / chamberBalls.length) * Math.PI * 2;
+                          const radius = 41;
+                          const x = 50 + Math.cos(angle) * radius;
+                          const y = 50 + Math.sin(angle) * radius;
+                          const isDrawn = !spinning && ball === lastDrawn;
+                          return (
+                            <div
+                              key={`${ball}-${index}`}
+                              className={`absolute -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full border text-[11px] font-bold tabular-nums flex items-center justify-center ${
+                                isDrawn
+                                  ? "bg-primary text-primary-foreground border-primary"
+                                  : "bg-card/95 border-primary/30 text-primary"
+                              }`}
+                              style={{ left: `${x}%`, top: `${y}%` }}
+                            >
+                              {ball}
+                            </div>
+                          );
+                        })}
+                      </motion.div>
+                      <div className="relative z-10 bg-background/95 rounded-full w-[60%] h-[60%] flex flex-col items-center justify-center border border-border/70 shadow-sm">
                       <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                         Número
                       </span>
                       <span className="text-4xl font-bold text-primary tabular-nums">
-                        {lastDrawn ?? "—"}
+                        {spinning ? (previewNumber ?? "—") : (lastDrawn ?? "—")}
                       </span>
+                      </div>
                     </div>
                   </div>
                 </div>
