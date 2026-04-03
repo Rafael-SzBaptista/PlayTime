@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { ExternalLink, Search } from "lucide-react";
@@ -1624,6 +1625,198 @@ export const allGifts: GiftItem[] = [
     link: "https://meli.la/2TMWeEP",
     image: "/produto-sug-moda-08.webp",
   },
+  {
+    name: "Vestido de alcinha com bolso",
+    price: 45.36,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/1QBUoun",
+    image: "/produto-sug-vestido-01.webp",
+  },
+  {
+    name: "Vestido regata feminino casual",
+    price: 45.0,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/2AHuFjk",
+    image: "/produto-sug-vestido-02.webp",
+  },
+  {
+    name: "Vestido longo alças finas estampa folhas moda verão",
+    price: 66.41,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/2oMM9Cx",
+    image: "/produto-sug-vestido-03.webp",
+  },
+  {
+    name: "Vestido longo manguinhas luxo verde musgo",
+    price: 57.68,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/1NRneDA",
+    image: "/produto-sug-vestido-04.webp",
+  },
+  {
+    name: "Vestido curto bodycon decote V festa preto",
+    price: 44.95,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/3419hht",
+    image: "/produto-sug-vestido-05.webp",
+  },
+  {
+    name: "Vestido longo blogueira malha regata com bolso",
+    price: 37.83,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/2zEMQFf",
+    image: "/produto-sug-vestido-06.webp",
+  },
+  {
+    name: "Vestido transpassado modelo envelope",
+    price: 58.07,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/1wcCsWE",
+    image: "/produto-sug-vestido-07.webp",
+  },
+  {
+    name: "Vestido midi com fenda lateral moda verão",
+    price: 65.77,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/2BAzoCZ",
+    image: "/produto-sug-vestido-08.webp",
+  },
+  {
+    name: "Vestido midi ciganinha lastex moda evangélica",
+    price: 57.2,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/1ta5aGs",
+    image: "/produto-sug-vestido-09.webp",
+  },
+  {
+    name: "Vestido elegante festa com fenda fashion",
+    price: 62.62,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/24w67jm",
+    image: "/produto-sug-vestido-10.webp",
+  },
+  {
+    name: "Vestido multiuso várias formas casamento madrinha",
+    price: 42.29,
+    category: "roupas",
+    emoji: "👗",
+    link: "https://meli.la/2jSwv79",
+    image: "/produto-sug-vestido-11.webp",
+  },
+  {
+    name: "Kit 3 bermudas dry fit seda gelada esportivas",
+    price: 110.71,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1kpN3FA",
+    image: "/produto-sug-shorts-01.webp",
+  },
+  {
+    name: "Kit 3 shorts futebol bermuda treino academia",
+    price: 74.0,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2ukbJxp",
+    image: "/produto-sug-shorts-02.webp",
+  },
+  {
+    name: "Shorts feminino cintura alta com bolsos academia corrida",
+    price: 56.29,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2V5t39W",
+    image: "/produto-sug-shorts-03.webp",
+  },
+  {
+    name: "Kit 4 shorts praia tactel verão academia",
+    price: 75.94,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2ENRktK",
+    image: "/produto-sug-shorts-04.webp",
+  },
+  {
+    name: "Bermuda 2 em 1 short duplo com bolsos academia",
+    price: 36.0,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2yTKRSk",
+    image: "/produto-sug-shorts-05.webp",
+  },
+  {
+    name: "Short calção esportivo elite masculino plus size",
+    price: 38.99,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/11QNwro",
+    image: "/produto-sug-shorts-06.webp",
+  },
+  {
+    name: "Short academia feminino poliamida Selene",
+    price: 48.99,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2fDXbMG",
+    image: "/produto-sug-shorts-07.webp",
+  },
+  {
+    name: "Short jeans feminino cargo cintura alta",
+    price: 45.25,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1bRBqLp",
+    image: "/produto-sug-shorts-08.webp",
+  },
+  {
+    name: "Shorts academia feminino modelador com bolso UV50",
+    price: 23.5,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1LzMHj9",
+    image: "/produto-sug-shorts-09.webp",
+  },
+  {
+    name: "Kit 2 bermudas moletom masculino algodão",
+    price: 121.74,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/2HVpj8h",
+    image: "/produto-sug-shorts-10.webp",
+  },
+  {
+    name: "Kit 4 bermuda short tactel elastano academia",
+    price: 76.47,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1VrGTHm",
+    image: "/produto-sug-shorts-11.webp",
+  },
+  {
+    name: "Conjunto fitness Virginia top e shorts cintura alta",
+    price: 32.98,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1w16RgY",
+    image: "/produto-sug-shorts-12.webp",
+  },
+  {
+    name: "Bermuda mauricinho tactel praia verão masculina",
+    price: 28.82,
+    category: "roupas",
+    emoji: "🩳",
+    link: "https://meli.la/1hjZMdy",
+    image: "/produto-sug-shorts-13.webp",
+  },
 ];
 
 const Presentes = () => {
@@ -1640,6 +1833,8 @@ const Presentes = () => {
   const [bingoGiftNames, setBingoGiftNames] = useState<Set<string>>(new Set());
   const [savingGiftName, setSavingGiftName] = useState<string | null>(null);
   const [loadingContext, setLoadingContext] = useState(false);
+  const [manualProfileGiftDraft, setManualProfileGiftDraft] = useState("");
+  const [manualProfileSaving, setManualProfileSaving] = useState(false);
 
   const gameSlug = searchParams.get("gameSlug")?.trim() ?? "";
   const hasGameContext = Boolean(gameSlug);
@@ -1989,6 +2184,83 @@ const Presentes = () => {
     toast.success(alreadySelected ? "Produto removido do bingo." : "Produto adicionado ao bingo.");
   };
 
+  const handleAddManualProfileGift = async () => {
+    if (!user || !gameContext || !participantContext) {
+      toast.error("Entre no jogo para adicionar desejos.");
+      return;
+    }
+    if (!canManageGameProfile) return;
+    if (gameContext.configLocked) {
+      toast.error("O jogo já começou. Sua lista não pode ser alterada.");
+      return;
+    }
+
+    const trimmed = manualProfileGiftDraft.trim().replace(/\s+/g, " ");
+    if (trimmed.length < 2) {
+      toast.error("Escreva uma descrição com pelo menos 2 caracteres.");
+      return;
+    }
+    if (trimmed.length > 280) {
+      toast.error("Use no máximo 280 caracteres.");
+      return;
+    }
+    const dupName = [...wishlistByName.keys()].find((n) => n.toLowerCase() === trimmed.toLowerCase());
+    if (dupName) {
+      toast.error("Esse item já está na sua lista.");
+      return;
+    }
+
+    setManualProfileSaving(true);
+    const baseInsertPayload = {
+      game_id: gameContext.id,
+      participant_id: participantContext.id,
+      user_id: user.id,
+      gift_name: trimmed,
+      gift_category: "outros",
+      gift_emoji: "✏️",
+      gift_price: null as number | null,
+    };
+
+    let data: { id: string; gift_name: string } | null = null;
+    let error: { message?: string } | null = null;
+
+    const withLinkResult = await (supabase as any)
+      .from("participant_wishlist_entries")
+      .insert({ ...baseInsertPayload, gift_link: null })
+      .select("id, gift_name")
+      .single();
+
+    data = withLinkResult.data as { id: string; gift_name: string } | null;
+    error = withLinkResult.error as { message?: string } | null;
+
+    if (error?.message?.toLowerCase().includes("gift_link")) {
+      const fallbackResult = await (supabase as any)
+        .from("participant_wishlist_entries")
+        .insert(baseInsertPayload)
+        .select("id, gift_name")
+        .single();
+      data = fallbackResult.data as { id: string; gift_name: string } | null;
+      error = fallbackResult.error as { message?: string } | null;
+    }
+
+    setManualProfileSaving(false);
+
+    if (error || !data) {
+      toast.error(
+        error?.message?.includes("participant_wishlist_unique") ? "Esse item já está na sua lista." : "Não foi possível adicionar o presente."
+      );
+      return;
+    }
+
+    setWishlistByName((prev) => {
+      const next = new Map(prev);
+      next.set(data!.gift_name, data!.id);
+      return next;
+    });
+    setManualProfileGiftDraft("");
+    toast.success("Presente adicionado ao seu perfil do jogo.");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -2112,6 +2384,46 @@ const Presentes = () => {
                   className="pl-10 h-12"
                 />
               </div>
+
+              {canManageGameProfile && (
+                <div className="mb-6 rounded-none border border-dashed border-primary/35 bg-primary/[0.06] p-4 sm:p-5">
+                  <p className="text-sm font-medium text-foreground">Não achou na lista?</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Escreva o presente que deseja — entra no mesmo perfil do jogo que os itens do catálogo.
+                  </p>
+                  <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-end">
+                    <div className="min-w-0 flex-1">
+                      <Label htmlFor="manual-profile-gift" className="sr-only">
+                        Descrição do presente
+                      </Label>
+                      <Input
+                        id="manual-profile-gift"
+                        value={manualProfileGiftDraft}
+                        onChange={(e) => setManualProfileGiftDraft(e.target.value)}
+                        placeholder="Ex.: kit de facas com tábua de bambu"
+                        maxLength={280}
+                        className="h-10"
+                        disabled={manualProfileSaving}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            void handleAddManualProfileGift();
+                          }
+                        }}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="hero"
+                      size="sm"
+                      disabled={manualProfileSaving}
+                      onClick={() => void handleAddManualProfileGift()}
+                    >
+                      Adicionar ao perfil
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {filtered.length === 0 ? (
                 <div className="flex min-h-[min(60vh,560px)] flex-col items-center justify-center gap-3 px-4 py-12 text-center text-muted-foreground">

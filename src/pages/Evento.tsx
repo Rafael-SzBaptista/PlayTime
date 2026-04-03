@@ -27,6 +27,7 @@ import {
   getAutoDeleteDate,
 } from "@/lib/gameRetention";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface GameData {
   id: string;
@@ -105,6 +106,11 @@ const Evento = () => {
   const [runtimeState, setRuntimeState] = useState<RuntimeState>(createInitialRuntimeState());
   const [wishlistEntries, setWishlistEntries] = useState<WishlistEntry[]>([]);
   const [drawExclusions, setDrawExclusions] = useState<DrawExclusion[]>([]);
+  const [manualBingoGiftDraft, setManualBingoGiftDraft] = useState("");
+  const [manualWishlistDraft, setManualWishlistDraft] = useState("");
+  const [wishlistSaving, setWishlistSaving] = useState(false);
+  const [roubaGiftDraft, setRoubaGiftDraft] = useState("");
+  const [roubaGiftSaving, setRoubaGiftSaving] = useState(false);
   const [editForm, setEditForm] = useState({
     name: "",
     draw_date: "",
@@ -353,6 +359,30 @@ const Evento = () => {
     if (!game || loading) return;
     saveRuntimeState(game.id, runtimeState);
   }, [runtimeState, game, loading]);
+
+  useEffect(() => {
+    if (!game || game.game_type !== "Rouba Presente" || !currentParticipant?.id || !user) {
+      setRoubaGiftDraft("");
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      const { data, error } = await supabase
+        .from("rouba_participant_gift")
+        .select("gift_choice")
+        .eq("participant_id", currentParticipant.id)
+        .maybeSingle();
+      if (cancelled) return;
+      if (error) {
+        console.warn("rouba_participant_gift:", error);
+        return;
+      }
+      setRoubaGiftDraft((data as { gift_choice?: string | null } | null)?.gift_choice ?? "");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [game?.id, game?.game_type, currentParticipant?.id, user?.id]);
 
   useEffect(() => {
     if (
@@ -973,6 +1003,177 @@ const Evento = () => {
     });
   };
 
+  const handleAddManualBingoGift = () => {
+    if (!game) return;
+    const trimmed = manualBingoGiftDraft.trim().replace(/\s+/g, " ");
+    if (trimmed.length < 2) {
+      toast.error("Escreva uma descrição com pelo menos 2 caracteres.");
+      return;
+    }
+    if (trimmed.length > 280) {
+      toast.error("Use no máximo 280 caracteres.");
+      return;
+    }
+    const dup = runtimeState.bingoGifts.some(
+      (g) => g.trim().toLowerCase() === trimmed.toLowerCase()
+    );
+    if (dup) {
+      toast.error("Esse presente já está no pool.");
+      return;
+    }
+    const next: RuntimeState = {
+      ...runtimeState,
+      bingoGifts: [...runtimeState.bingoGifts, trimmed],
+    };
+    saveRuntimeState(game.id, next);
+    setRuntimeState(next);
+    setManualBingoGiftDraft("");
+    toast.success("Presente adicionado ao pool.");
+  };
+
+  const handleRemoveBingoGiftFromPool = (giftName: string) => {
+    if (!game) return;
+    const next: RuntimeState = {
+      ...runtimeState,
+      bingoGifts: runtimeState.bingoGifts.filter((g) => g !== giftName),
+    };
+    saveRuntimeState(game.id, next);
+    setRuntimeState(next);
+    toast.success("Presente removido do pool.");
+  };
+
+  const handleAddManualWishlistEntry = async () => {
+    if (!game || !user || !currentParticipant) {
+      toast.error("Entre no jogo para adicionar desejos.");
+      return;
+    }
+    if (!(isAmigoSecreto || isBingoParticipantsMode)) return;
+    if (gameConfigLocked) {
+      toast.error("O jogo já começou. Sua lista não pode ser alterada.");
+      return;
+    }
+    const trimmed = manualWishlistDraft.trim().replace(/\s+/g, " ");
+    if (trimmed.length < 2) {
+      toast.error("Escreva uma descrição com pelo menos 2 caracteres.");
+      return;
+    }
+    if (trimmed.length > 280) {
+      toast.error("Use no máximo 280 caracteres.");
+      return;
+    }
+    if (
+      currentParticipantWishlist.some(
+        (w) => w.gift_name.trim().toLowerCase() === trimmed.toLowerCase()
+      )
+    ) {
+      toast.error("Esse item já está na sua lista.");
+      return;
+    }
+
+    setWishlistSaving(true);
+    const baseInsertPayload = {
+      game_id: game.id,
+      participant_id: currentParticipant.id,
+      user_id: user.id,
+      gift_name: trimmed,
+      gift_category: "outros",
+      gift_emoji: "✏️",
+      gift_price: null as number | null,
+    };
+
+    let row: WishlistEntry | null = null;
+    let err: { message?: string } | null = null;
+
+    const withLink = await (supabase as any)
+      .from("participant_wishlist_entries")
+      .insert({ ...baseInsertPayload, gift_link: null })
+      .select("id, participant_id, gift_name, gift_category, gift_emoji, gift_price, gift_link")
+      .single();
+
+    row = withLink.data as WishlistEntry | null;
+    err = withLink.error as { message?: string } | null;
+
+    if (err?.message?.toLowerCase().includes("gift_link")) {
+      const fb = await (supabase as any)
+        .from("participant_wishlist_entries")
+        .insert(baseInsertPayload)
+        .select("id, participant_id, gift_name, gift_category, gift_emoji, gift_price, gift_link")
+        .single();
+      row = fb.data as WishlistEntry | null;
+      err = fb.error as { message?: string } | null;
+    }
+
+    setWishlistSaving(false);
+
+    if (err || !row) {
+      toast.error(err?.message?.includes("participant_wishlist_unique") ? "Esse item já está na sua lista." : "Não foi possível adicionar o presente.");
+      return;
+    }
+
+    setWishlistEntries((prev) => [...prev, row as WishlistEntry]);
+    setManualWishlistDraft("");
+    toast.success("Presente adicionado à sua lista.");
+  };
+
+  const handleRemoveWishlistEntry = async (entryId: string) => {
+    if (!game || gameConfigLocked) return;
+    setWishlistSaving(true);
+    const { error } = await (supabase as any)
+      .from("participant_wishlist_entries")
+      .delete()
+      .eq("id", entryId);
+    setWishlistSaving(false);
+    if (error) {
+      toast.error("Não foi possível remover o item.");
+      return;
+    }
+    setWishlistEntries((prev) => prev.filter((e) => e.id !== entryId));
+    toast.success("Item removido.");
+  };
+
+  const handleSaveRoubaGiftChoice = async (textOverride?: string) => {
+    if (!game || !user || !currentParticipant) {
+      toast.error("Entre no jogo para registrar seu presente.");
+      return;
+    }
+    if (!isRouba || runtimeState.roubaStarted) {
+      toast.error("Não é possível alterar agora.");
+      return;
+    }
+    const raw = textOverride !== undefined ? textOverride : roubaGiftDraft;
+    const trimmed = raw.trim().replace(/\s+/g, " ");
+    if (trimmed.length > 0 && trimmed.length < 2) {
+      toast.error("Use pelo menos 2 caracteres ou deixe em branco para limpar.");
+      return;
+    }
+    if (trimmed.length > 500) {
+      toast.error("Use no máximo 500 caracteres.");
+      return;
+    }
+
+    setRoubaGiftSaving(true);
+    const payload = {
+      participant_id: currentParticipant.id,
+      game_id: game.id,
+      gift_choice: trimmed.length > 0 ? trimmed : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await (supabase as any)
+      .from("rouba_participant_gift")
+      .upsert(payload, { onConflict: "participant_id" });
+
+    setRoubaGiftSaving(false);
+
+    if (error) {
+      toast.error("Não foi possível salvar. Tente de novo.");
+      return;
+    }
+
+    setRoubaGiftDraft(trimmed);
+    toast.success(trimmed.length > 0 ? "Ideia de presente salva." : "Anotação removida.");
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen evento-page">
@@ -1307,13 +1508,77 @@ const Evento = () => {
           {isRouba && !runtimeState.roubaStarted && (
             <div className="mb-6 space-y-6">
               <div className="evento-card border-primary/15 bg-primary/[0.06] p-5">
-                <p className="text-sm font-medium text-foreground">Sugestões de presentes</p>
+                <p className="text-sm font-medium text-foreground">Presentes — sugestões ou sua ideia</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Veja ideias e links de compra. No Rouba não há “adicionar ao perfil” na lista — use só como inspiração.
+                  Navegue nas sugestões ou descreva o que pretende levar (a descrição fica só entre você e o organizador).
                 </p>
-                <Button asChild variant="festiveOutline" size="sm" className="mt-3">
-                  <Link to={`/presentes?gameSlug=${slug}&rouba=1`}>Abrir sugestões de presentes</Link>
-                </Button>
+                <Tabs defaultValue="suggestions" className="mt-4 w-full">
+                  <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 rounded-md p-1 sm:inline-flex sm:w-auto">
+                    <TabsTrigger value="suggestions" className="text-xs sm:text-sm">
+                      Sugestões
+                    </TabsTrigger>
+                    <TabsTrigger value="manual" className="text-xs sm:text-sm">
+                      Escrever presente
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="suggestions" className="mt-0 space-y-3">
+                    <p className="text-xs text-muted-foreground">
+                      Use a prateleira só como inspiração e referência de preços.
+                    </p>
+                    <Button asChild variant="festiveOutline" size="sm">
+                      <Link to={`/presentes?gameSlug=${slug}&rouba=1`}>Abrir sugestões de presentes</Link>
+                    </Button>
+                  </TabsContent>
+                  <TabsContent value="manual" className="mt-0 space-y-3">
+                    {!user || !currentParticipant ? (
+                      <p className="text-sm text-muted-foreground">
+                        Entre na sua conta e confirme sua participação no jogo para salvar qual presente pretende levar.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="text-sm text-muted-foreground">
+                          Descreva o que você pretende comprar ou levar. Só você e o organizador veem este texto.
+                        </p>
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                          <div className="min-w-0 flex-1">
+                            <Label htmlFor="rouba-gift-draft" className="sr-only">
+                              Descrição do presente
+                            </Label>
+                            <Input
+                              id="rouba-gift-draft"
+                              value={roubaGiftDraft}
+                              onChange={(e) => setRoubaGiftDraft(e.target.value)}
+                              placeholder="Ex.: garrafa de vinho + tabua de frios"
+                              maxLength={500}
+                              className="h-10"
+                              disabled={roubaGiftSaving}
+                            />
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              variant="hero"
+                              size="sm"
+                              disabled={roubaGiftSaving}
+                              onClick={() => void handleSaveRoubaGiftChoice()}
+                            >
+                              Salvar
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              disabled={roubaGiftSaving || roubaGiftDraft.trim().length === 0}
+                              onClick={() => void handleSaveRoubaGiftChoice("")}
+                            >
+                              Limpar
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </div>
 
               {user && (isOwner || isCurrentUserParticipant) && confirmedParticipants.length > 0 && (
@@ -1503,9 +1768,63 @@ const Evento = () => {
 
           {isBingo && isOwner && !runtimeState.bingoStarted && game.bingo_gift_mode === "admin_only" && (
             <div className="evento-card mb-6 p-5 sm:p-6">
-              <p className="text-sm font-medium mb-2">Presentes do bingo (somente este evento)</p>
-              {runtimeState.bingoGifts.length > 0 ? (
-                <ul className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+              <p className="text-sm font-medium mb-3">Presentes do bingo (somente este evento)</p>
+              <Tabs defaultValue="suggestions" className="w-full">
+                <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 rounded-md p-1 sm:inline-flex sm:w-auto">
+                  <TabsTrigger value="suggestions" className="text-xs sm:text-sm">
+                    Sugestões
+                  </TabsTrigger>
+                  <TabsTrigger value="manual" className="text-xs sm:text-sm">
+                    Escrever presente
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="suggestions" className="mt-0 space-y-4">
+                  {runtimeState.bingoGifts.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Nenhum presente no pool ainda. Escolha na página de sugestões — o link inclui este jogo para que a
+                      escolha fique salva só aqui.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Continue adicionando na prateleira ou use a aba Escrever presente se não encontrar o que procura.
+                    </p>
+                  )}
+                  <Button asChild variant="hero" size="sm">
+                    <Link to={`/presentes?gameSlug=${slug}`}>Ir para Sugestão de Produtos</Link>
+                  </Button>
+                </TabsContent>
+                <TabsContent value="manual" className="mt-0 space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Não achou nas sugestões? Descreva o presente que deseja incluir no pool deste evento.
+                  </p>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                    <div className="min-w-0 flex-1">
+                      <Label htmlFor="manual-bingo-gift" className="sr-only">
+                        Descrição do presente
+                      </Label>
+                      <Input
+                        id="manual-bingo-gift"
+                        value={manualBingoGiftDraft}
+                        onChange={(e) => setManualBingoGiftDraft(e.target.value)}
+                        placeholder="Ex.: jogo de panelas antiaderente"
+                        maxLength={280}
+                        className="h-10"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleAddManualBingoGift();
+                          }
+                        }}
+                      />
+                    </div>
+                    <Button type="button" variant="hero" size="sm" onClick={handleAddManualBingoGift}>
+                      Adicionar ao pool
+                    </Button>
+                  </div>
+                </TabsContent>
+              </Tabs>
+              {runtimeState.bingoGifts.length > 0 && (
+                <ul className="mt-5 grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
                   {runtimeState.bingoGifts.map((giftName) => {
                     const href = getBingoPoolGiftLink(giftName);
                     return (
@@ -1514,30 +1833,32 @@ const Evento = () => {
                         className="flex items-center justify-between gap-3 rounded-none bg-muted/25 px-3 py-2.5 ring-1 ring-border/35"
                       >
                         <p className="min-w-0 flex-1 font-medium text-foreground">{giftName}</p>
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={`Abrir link do produto: ${giftName}`}
-                          className="shrink-0 text-primary transition-opacity hover:opacity-80"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
+                        <div className="flex shrink-0 items-center gap-1">
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Abrir link do produto: ${giftName}`}
+                            className="text-primary transition-opacity hover:opacity-80"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            onClick={() => handleRemoveBingoGiftFromPool(giftName)}
+                            aria-label={`Remover do pool: ${giftName}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </li>
                     );
                   })}
                 </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Nenhum presente no pool ainda. Escolha na página de sugestões — o link inclui este jogo para que a
-                  escolha fique salva só aqui.
-                </p>
               )}
-              <div className="mt-4">
-                <Button asChild variant="hero" size="sm">
-                  <Link to={`/presentes?gameSlug=${slug}`}>Ir para Sugestão de Produtos</Link>
-                </Button>
-              </div>
             </div>
           )}
 
@@ -1547,43 +1868,112 @@ const Evento = () => {
               <p className="text-xs text-muted-foreground mb-4">
                 {gameConfigLocked
                   ? "O sorteio já foi realizado — sua lista de preferências não pode mais ser alterada (somente consulta nas sugestões)."
-                  : "Escolha seus produtos na aba de sugestões e adicione ao seu perfil deste jogo."}
+                  : "Escolha na página de sugestões ou escreva um presente aqui — tudo fica no seu perfil deste jogo."}
               </p>
               <div className="mb-4 rounded-none bg-muted/40 px-3 py-2 text-sm">
                 Selecionados: <span className="font-semibold">{currentParticipantWishlist.length}</span>/3 mínimo
               </div>
-              <div className="mb-4">
-                <Button asChild variant="hero" size="sm">
-                  <Link to={`/presentes?gameSlug=${slug}`}>
-                    {gameConfigLocked ? "Ver sugestões (consulta)" : "Ir para Sugestões de Produtos"}
-                  </Link>
-                </Button>
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Tabs defaultValue="suggestions" className="w-full">
+                <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 rounded-md p-1 sm:inline-flex sm:w-auto">
+                  <TabsTrigger value="suggestions" className="text-xs sm:text-sm" disabled={gameConfigLocked}>
+                    Sugestões
+                  </TabsTrigger>
+                  <TabsTrigger value="manual" className="text-xs sm:text-sm" disabled={gameConfigLocked}>
+                    Escrever presente
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="suggestions" className="mt-0 space-y-4">
+                  <Button asChild variant="hero" size="sm">
+                    <Link to={`/presentes?gameSlug=${slug}`}>
+                      {gameConfigLocked ? "Ver sugestões (consulta)" : "Ir para Sugestões de Produtos"}
+                    </Link>
+                  </Button>
+                </TabsContent>
+                <TabsContent value="manual" className="mt-0 space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    {gameConfigLocked
+                      ? "A lista não pode mais ser alterada."
+                      : "Não achou nas sugestões? Descreva o que deseja receber."}
+                  </p>
+                  {!gameConfigLocked && (
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                      <div className="min-w-0 flex-1">
+                        <Label htmlFor="manual-wish-amigo" className="sr-only">
+                          Descrição do presente
+                        </Label>
+                        <Input
+                          id="manual-wish-amigo"
+                          value={manualWishlistDraft}
+                          onChange={(e) => setManualWishlistDraft(e.target.value)}
+                          placeholder="Ex.: livro de receitas veganas"
+                          maxLength={280}
+                          className="h-10"
+                          disabled={wishlistSaving}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              void handleAddManualWishlistEntry();
+                            }
+                          }}
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="hero"
+                        size="sm"
+                        disabled={wishlistSaving}
+                        onClick={() => void handleAddManualWishlistEntry()}
+                      >
+                        Adicionar à lista
+                      </Button>
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {currentParticipantWishlist.length === 0 ? (
                   <p className="text-sm text-muted-foreground sm:col-span-2">
                     Você ainda não adicionou nenhum item ao seu perfil.
                   </p>
                 ) : (
                   currentParticipantWishlist.map((wish) => (
-                    <a
+                    <div
                       key={wish.id}
-                      href={getWishlistItemLink(wish)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-between rounded-none bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
+                      className="flex items-center gap-2 rounded-none bg-muted/40 px-3 py-2 text-sm ring-1 ring-border/20"
                     >
-                      <span className="inline-flex items-center gap-2">
-                        <span>{wish.gift_emoji ?? "🎁"}</span>
-                        {wish.gift_name}
-                      </span>
-                      <span className="inline-flex items-center gap-2 text-muted-foreground">
-                        {typeof wish.gift_price === "number"
-                          ? `R$ ${wish.gift_price.toFixed(2).replace(".", ",")}`
-                          : "Ver produto"}
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </span>
-                    </a>
+                      <a
+                        href={getWishlistItemLink(wish)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex min-w-0 flex-1 items-center justify-between gap-2 transition-colors hover:text-primary"
+                      >
+                        <span className="inline-flex min-w-0 items-center gap-2">
+                          <span className="shrink-0">{wish.gift_emoji ?? "🎁"}</span>
+                          <span className="truncate">{wish.gift_name}</span>
+                        </span>
+                        <span className="inline-flex shrink-0 items-center gap-2 text-muted-foreground">
+                          {typeof wish.gift_price === "number"
+                            ? `R$ ${wish.gift_price.toFixed(2).replace(".", ",")}`
+                            : wish.gift_link
+                              ? "Ver produto"
+                              : "Buscar"}
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </span>
+                      </a>
+                      {!gameConfigLocked && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
+                          disabled={wishlistSaving}
+                          onClick={() => void handleRemoveWishlistEntry(wish.id)}
+                          aria-label={`Remover ${wish.gift_name}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   ))
                 )}
               </div>
@@ -1596,7 +1986,7 @@ const Evento = () => {
               <p className="text-xs text-muted-foreground mb-4">
                 {gameConfigLocked
                   ? "O bingo já começou — sua lista não pode mais ser alterada (somente consulta nas sugestões)."
-                  : "Na página de sugestões, adicione os produtos que você pretende comprar para este bingo."}
+                  : "Na página de sugestões ou aqui embaixo, escolha o que você pretende comprar para este bingo."}
               </p>
               <div className="mb-4 rounded-none bg-muted/40 px-3 py-2 text-sm">
                 Selecionados: <span className="font-semibold">{currentParticipantWishlist.length}</span>
@@ -1607,38 +1997,107 @@ const Evento = () => {
                   </span>
                 )}
               </div>
-              <div className="mb-4">
-                <Button asChild variant="hero" size="sm">
-                  <Link to={`/presentes?gameSlug=${slug}`}>
-                    {gameConfigLocked ? "Ver sugestões (consulta)" : "Ir para Sugestões de Produtos"}
-                  </Link>
-                </Button>
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Tabs defaultValue="suggestions" className="w-full">
+                <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 rounded-md p-1 sm:inline-flex sm:w-auto">
+                  <TabsTrigger value="suggestions" className="text-xs sm:text-sm" disabled={gameConfigLocked}>
+                    Sugestões
+                  </TabsTrigger>
+                  <TabsTrigger value="manual" className="text-xs sm:text-sm" disabled={gameConfigLocked}>
+                    Escrever presente
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="suggestions" className="mt-0 space-y-4">
+                  <Button asChild variant="hero" size="sm">
+                    <Link to={`/presentes?gameSlug=${slug}`}>
+                      {gameConfigLocked ? "Ver sugestões (consulta)" : "Ir para Sugestões de Produtos"}
+                    </Link>
+                  </Button>
+                </TabsContent>
+                <TabsContent value="manual" className="mt-0 space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    {gameConfigLocked
+                      ? "A lista não pode mais ser alterada."
+                      : "Não achou nas sugestões? Descreva o presente que pretende levar ao bingo."}
+                  </p>
+                  {!gameConfigLocked && (
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                      <div className="min-w-0 flex-1">
+                        <Label htmlFor="manual-wish-bingo" className="sr-only">
+                          Descrição do presente
+                        </Label>
+                        <Input
+                          id="manual-wish-bingo"
+                          value={manualWishlistDraft}
+                          onChange={(e) => setManualWishlistDraft(e.target.value)}
+                          placeholder="Ex.: kit de churrasco com maleta"
+                          maxLength={280}
+                          className="h-10"
+                          disabled={wishlistSaving}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              void handleAddManualWishlistEntry();
+                            }
+                          }}
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="hero"
+                        size="sm"
+                        disabled={wishlistSaving}
+                        onClick={() => void handleAddManualWishlistEntry()}
+                      >
+                        Adicionar à lista
+                      </Button>
+                    </div>
+                  )}
+                </TabsContent>
+              </Tabs>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {currentParticipantWishlist.length === 0 ? (
                   <p className="text-sm text-muted-foreground sm:col-span-2">
                     Você ainda não adicionou nenhum presente.
                   </p>
                 ) : (
                   currentParticipantWishlist.map((wish) => (
-                    <a
+                    <div
                       key={wish.id}
-                      href={getWishlistItemLink(wish)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-between rounded-none bg-muted/40 px-3 py-2 text-sm transition-colors hover:bg-muted"
+                      className="flex items-center gap-2 rounded-none bg-muted/40 px-3 py-2 text-sm ring-1 ring-border/20"
                     >
-                      <span className="inline-flex items-center gap-2">
-                        <span>{wish.gift_emoji ?? "🎁"}</span>
-                        {wish.gift_name}
-                      </span>
-                      <span className="inline-flex items-center gap-2 text-muted-foreground">
-                        {typeof wish.gift_price === "number"
-                          ? `R$ ${wish.gift_price.toFixed(2).replace(".", ",")}`
-                          : "Ver produto"}
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </span>
-                    </a>
+                      <a
+                        href={getWishlistItemLink(wish)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex min-w-0 flex-1 items-center justify-between gap-2 transition-colors hover:text-primary"
+                      >
+                        <span className="inline-flex min-w-0 items-center gap-2">
+                          <span className="shrink-0">{wish.gift_emoji ?? "🎁"}</span>
+                          <span className="truncate">{wish.gift_name}</span>
+                        </span>
+                        <span className="inline-flex shrink-0 items-center gap-2 text-muted-foreground">
+                          {typeof wish.gift_price === "number"
+                            ? `R$ ${wish.gift_price.toFixed(2).replace(".", ",")}`
+                            : wish.gift_link
+                              ? "Ver produto"
+                              : "Buscar"}
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </span>
+                      </a>
+                      {!gameConfigLocked && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
+                          disabled={wishlistSaving}
+                          onClick={() => void handleRemoveWishlistEntry(wish.id)}
+                          aria-label={`Remover ${wish.gift_name}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   ))
                 )}
               </div>

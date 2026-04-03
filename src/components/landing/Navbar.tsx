@@ -19,20 +19,12 @@ const Navbar = () => {
 
   return (
     <>
-      <Link
-        to="/"
-        className="fixed left-3 top-3 z-50 inline-flex items-center justify-center transition-transform duration-300 hover:scale-105 md:left-4"
-      >
-        <img
-          src="/logo-playtime.png"
-          alt="Logo PlayTime"
-          className="h-auto w-28 object-contain drop-shadow-[0_8px_20px_hsl(var(--foreground)/0.25)] sm:w-32 md:w-40"
-        />
-      </Link>
-
       <nav className="fixed right-3 top-3 z-50 md:right-4 md:top-4">
         <div className="hidden h-12 items-center gap-2 rounded-2xl border border-border/70 bg-background/90 px-2 shadow-card backdrop-blur-xl md:flex">
           <div className="hidden items-center gap-0.5 md:flex">
+            <Link to="/" className={navLink}>
+              Home
+            </Link>
             <Link to="/presentes" className={navLink}>
               Sugestões
             </Link>
@@ -111,6 +103,9 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 rounded-xl border-border/70">
+              <DropdownMenuItem asChild>
+                <Link to="/">Home</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/presentes">Sugestões</Link>
               </DropdownMenuItem>

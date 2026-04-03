@@ -7,8 +7,7 @@ const Footer = () => {
       <div className="container relative mx-auto px-4">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[1.4fr_1fr] md:items-start">
           <div>
-            <div className="mb-2 flex items-center gap-2">
-              <img src="/logo-playtime.png" alt="Logo PlayTime" className="h-8 w-auto object-contain" />
+            <div className="mb-2">
               <span className="font-display text-lg font-bold">PlayTime</span>
             </div>
             <p className="text-sm text-muted-foreground">
