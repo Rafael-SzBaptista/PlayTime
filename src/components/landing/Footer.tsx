@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[1.4fr_1fr] md:items-start">
           <div>
             <div className="mb-2">
-              <span className="font-display text-lg font-bold">Amigo Secreto - PlayTime</span>
+              <span className="font-display text-lg font-bold">Amigo Secreto Online</span>
             </div>
             <p className="text-sm text-muted-foreground">
               A forma mais divertida de organizar trocas de presentes — com cara de app moderno, não de planilha.

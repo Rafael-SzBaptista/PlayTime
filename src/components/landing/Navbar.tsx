@@ -25,12 +25,12 @@ const Navbar = () => {
           <Link
             to="/"
             className="inline-block w-fit shrink-0 outline-offset-4 transition-opacity hover:opacity-90"
-            aria-label="PlayTime — início"
+            aria-label="Amigo Secreto Online — início"
           >
             <img
               src="/logo-playtime.png"
-              alt="PlayTime"
-              className="-ml-6 h-20 w-auto max-w-[min(100vw-6rem,19rem)] object-contain object-left md:-ml-7 md:h-28"
+              alt="Amigo Secreto Online"
+              className="-ml-6 h-[4.5rem] w-auto max-w-[min(100vw-6rem,18rem)] object-contain object-left md:-ml-7 md:h-[6.5rem]"
               decoding="async"
             />
           </Link>
