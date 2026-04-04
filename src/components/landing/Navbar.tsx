@@ -19,7 +19,24 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed right-3 top-3 z-50 md:right-4 md:top-4">
+      <div className="container relative z-10 mx-auto px-3 pt-3 md:px-4 md:pt-4">
+        {/* Mesmo recuo horizontal da coluna do título "Bingo" no Hero (max-w-2xl lg:-ml-6) */}
+        <div className="max-w-2xl lg:-ml-6">
+          <Link
+            to="/"
+            className="inline-block w-fit shrink-0 outline-offset-4 transition-opacity hover:opacity-90"
+            aria-label="PlayTime — início"
+          >
+            <img
+              src="/logo-playtime.png"
+              alt="PlayTime"
+              className="-ml-6 h-20 w-auto max-w-[min(100vw-6rem,19rem)] object-contain object-left md:-ml-7 md:h-28"
+              decoding="async"
+            />
+          </Link>
+        </div>
+      </div>
+      <nav className="fixed right-3 top-3 z-50 md:right-4 md:top-4" aria-label="Menu principal">
         <div className="hidden h-12 items-center gap-2 rounded-2xl border border-border/70 bg-background/90 px-2 shadow-card backdrop-blur-xl md:flex">
           <div className="hidden items-center gap-0.5 md:flex">
             <Link to="/" className={navLink}>
@@ -147,7 +164,6 @@ const Navbar = () => {
           </DropdownMenu>
         </div>
       </nav>
-      <div aria-hidden className="h-16 md:h-0" />
     </>
   );
 };

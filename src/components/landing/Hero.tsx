@@ -14,12 +14,14 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden pb-12 pt-0 -mt-4">
+    <section className="relative flex min-h-0 flex-1 flex-col overflow-hidden pt-0 -mt-4">
       <div className="pointer-events-none absolute inset-0 bg-background" />
 
-      <div className="container relative z-10 mx-auto px-3 md:px-4">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
-          <div className="max-w-2xl self-center text-left lg:-ml-6">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col pt-1 md:pt-2">
+        <div className="flex min-h-0 flex-1 flex-col justify-center gap-3 md:gap-4">
+          <div className="container mx-auto px-3 md:px-4">
+          <div className="grid items-start gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="max-w-2xl text-left lg:-ml-6">
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -35,7 +37,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16 }}
-            className="mb-10 mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
+            className="mb-5 mt-4 max-w-2xl text-lg text-muted-foreground md:mb-6 md:mt-5 md:text-xl"
           >
             Crie jogos, convide amigos, faça sorteios automáticos e descubra sugestões de presentes — tudo 100% gratuito e em um só lugar.
           </motion.p>
@@ -70,7 +72,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 24, y: 8 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 0.7, delay: 0.28 }}
-            className="relative hidden min-h-[360px] items-center justify-center lg:flex"
+            className="relative hidden min-h-[280px] items-start justify-center pt-1 lg:flex xl:min-h-[320px]"
           >
             <div className="flex items-start gap-1 xl:gap-3">
               <motion.img
@@ -89,23 +91,32 @@ const Hero = () => {
               />
             </div>
           </motion.div>
+          </div>
+          </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="relative z-20 w-full max-w-6xl shrink-0 self-center border-b border-border/60 px-4 pb-3 pt-1 text-sm text-muted-foreground"
+        >
+          <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-start gap-x-4 gap-y-2 px-2 sm:grid-cols-3 sm:items-center xl:grid-cols-6">
+            {featureTags.map((tag) => (
+              <span
+                key={tag}
+                className="flex w-full min-w-0 items-start gap-2 text-left text-sm sm:items-center sm:justify-center sm:text-center xl:whitespace-nowrap"
+              >
+                <span
+                  className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-primary sm:mt-0"
+                  aria-hidden
+                />
+                <span className="min-w-0 leading-snug">{tag}</span>
+              </span>
+            ))}
+          </div>
+        </motion.div>
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="absolute bottom-0 left-1/2 z-20 w-full max-w-6xl -translate-x-1/2 px-4 pb-2 text-sm text-muted-foreground"
-      >
-        <div className="mx-auto grid w-full max-w-5xl grid-cols-2 items-center gap-x-4 gap-y-2 px-2 sm:grid-cols-3 xl:grid-cols-6">
-          {featureTags.map((tag) => (
-            <span key={tag} className="inline-flex w-full items-center justify-center gap-2 whitespace-nowrap text-center">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-              {tag}
-            </span>
-          ))}
-        </div>
-      </motion.div>
     </section>
   );
 };
