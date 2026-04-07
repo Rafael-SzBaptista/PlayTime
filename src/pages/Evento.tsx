@@ -1202,7 +1202,7 @@ const Evento = () => {
   return (
     <div className="min-h-screen evento-page">
       <Navbar />
-      <div className="container mx-auto max-w-7xl px-4 pb-14 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+      <div className="container mx-auto max-w-7xl px-4 pb-14 pt-16 sm:px-6 sm:pt-20 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-start lg:gap-10">
             <aside className="flex flex-col gap-6">
@@ -1317,11 +1317,7 @@ const Evento = () => {
                   <div className="evento-alert border-amber-300/45 bg-amber-100/35 text-amber-950 dark:border-amber-500/30 dark:bg-amber-500/12 dark:text-amber-100">
                     <p className="flex items-center gap-2 font-medium">
                       <AlertTriangle className="h-4 w-4 shrink-0" />
-                      Exclusão automática em {autoDeleteDateText}
-                    </p>
-                    <p className="mt-1.5 text-xs opacity-90">
-                      Remove o jogo de Meus Jogos e os dados no Supabase ({AUTO_DELETE_AFTER_DAYS} dias após a data do
-                      evento).
+                      Exclusão Automática em {autoDeleteDateText}
                     </p>
                   </div>
                 )}
@@ -1508,92 +1504,39 @@ const Evento = () => {
           {isRouba && !runtimeState.roubaStarted && (
             <div className="mb-6 space-y-6">
               <div className="evento-card border-primary/15 bg-primary/[0.06] p-5">
-                <p className="text-sm font-medium text-foreground">Presentes — sugestões ou sua ideia</p>
+                <p className="text-sm font-medium text-foreground">Presentes — sugestões</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Navegue nas sugestões ou descreva o que pretende levar (a descrição fica só entre você e o organizador).
+                  No Rouba Presentes, as sugestões servem para dar ideias de possíveis presentes.
                 </p>
-                <Tabs defaultValue="suggestions" className="mt-4 w-full">
-                  <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 rounded-md p-1 sm:inline-flex sm:w-auto">
-                    <TabsTrigger value="suggestions" className="text-xs sm:text-sm">
-                      Sugestões
-                    </TabsTrigger>
-                    <TabsTrigger value="manual" className="text-xs sm:text-sm">
-                      Escrever presente
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="suggestions" className="mt-0 space-y-3">
-                    <p className="text-xs text-muted-foreground">
-                      Use a prateleira só como inspiração e referência de preços.
-                    </p>
-                    <Button asChild variant="festiveOutline" size="sm">
-                      <Link to={`/presentes?gameSlug=${slug}&rouba=1`}>Abrir sugestões de presentes</Link>
-                    </Button>
-                  </TabsContent>
-                  <TabsContent value="manual" className="mt-0 space-y-3">
-                    {!user || !currentParticipant ? (
-                      <p className="text-sm text-muted-foreground">
-                        Entre na sua conta e confirme sua participação no jogo para salvar qual presente pretende levar.
-                      </p>
-                    ) : (
-                      <>
-                        <p className="text-sm text-muted-foreground">
-                          Descreva o que você pretende comprar ou levar. Só você e o organizador veem este texto.
-                        </p>
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                          <div className="min-w-0 flex-1">
-                            <Label htmlFor="rouba-gift-draft" className="sr-only">
-                              Descrição do presente
-                            </Label>
-                            <Input
-                              id="rouba-gift-draft"
-                              value={roubaGiftDraft}
-                              onChange={(e) => setRoubaGiftDraft(e.target.value)}
-                              placeholder="Ex.: garrafa de vinho + tabua de frios"
-                              maxLength={500}
-                              className="h-10"
-                              disabled={roubaGiftSaving}
-                            />
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            <Button
-                              type="button"
-                              variant="hero"
-                              size="sm"
-                              disabled={roubaGiftSaving}
-                              onClick={() => void handleSaveRoubaGiftChoice()}
-                            >
-                              Salvar
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              disabled={roubaGiftSaving || roubaGiftDraft.trim().length === 0}
-                              onClick={() => void handleSaveRoubaGiftChoice("")}
-                            >
-                              Limpar
-                            </Button>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </TabsContent>
-                </Tabs>
+                <div className="mt-4 space-y-3">
+                  <p className="text-xs text-muted-foreground">Use a prateleira como inspiração e referência de preços.</p>
+                  <Button asChild variant="festiveOutline" size="sm">
+                    <Link to={`/presentes?gameSlug=${slug}&rouba=1`}>Abrir sugestões de presentes</Link>
+                  </Button>
+                </div>
               </div>
 
               {user && (isOwner || isCurrentUserParticipant) && confirmedParticipants.length > 0 && (
                 <div className="evento-card space-y-3 p-5">
                   <h3 className="font-display font-semibold text-sm">Checklist — presente em mãos</h3>
                   <p className="text-xs text-muted-foreground">
-                    Todos os participantes do jogo veem quem já marcou; ninguém vê o que os outros vão levar, só o status
-                    deste check.
+                    Todos os participantes veem o status deste check; cada pessoa marca o próprio nome e o organizador
+                    pode marcar qualquer participante.
                   </p>
                   <ul className="space-y-2">
                     {confirmedParticipants.map((p) => {
                       const checked = p.rouba_gift_in_hands ?? false;
                       const canToggle = canToggleRoubaReadyFor(p.id);
                       return (
-                        <li key={p.id} className="flex items-center gap-3">
+                        <li
+                          key={p.id}
+                          className={cn(
+                            "flex items-center gap-3 rounded-md px-2 py-1.5 transition-all duration-300",
+                            checked
+                              ? "scale-[1.01] bg-primary/10 ring-1 ring-primary/30 shadow-sm"
+                              : "bg-background/20",
+                          )}
+                        >
                           <Checkbox
                             id={`rouba-ready-${p.id}`}
                             checked={checked}
@@ -1605,9 +1548,18 @@ const Evento = () => {
                           />
                           <label
                             htmlFor={`rouba-ready-${p.id}`}
-                            className={`text-sm ${canToggle ? "cursor-pointer" : "cursor-default"}`}
+                            className={cn(
+                              "text-sm transition-colors",
+                              canToggle ? "cursor-pointer" : "cursor-default",
+                              checked ? "font-medium text-primary" : "text-foreground",
+                            )}
                           >
                             {participantIsMe(p) ? "Você" : p.name}
+                            {checked && (
+                              <span className="ml-2 rounded-full bg-primary/15 px-2 py-0.5 text-[11px] font-medium text-primary">
+                                Pronto
+                              </span>
+                            )}
                             {!canToggle && (
                               <span className="ml-2 text-xs text-muted-foreground">(só o organizador ou a própria pessoa marca)</span>
                             )}

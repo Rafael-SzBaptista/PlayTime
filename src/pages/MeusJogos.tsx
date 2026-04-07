@@ -205,7 +205,7 @@ const MeusJogos = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-12 max-w-3xl">
+      <div className="container mx-auto max-w-3xl px-4 pb-12 pt-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
