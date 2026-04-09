@@ -59,7 +59,9 @@ const PlatformHighlights = () => {
           <Carousel
             opts={{
               align: "start",
-              loop: false,
+              loop: true,
+              duration: 35,
+              dragFree: false,
             }}
             className="px-1 sm:px-10"
           >
