@@ -71,13 +71,13 @@ const PlatformHighlights = () => {
                   key={item.title}
                   className="basis-full pl-0 md:basis-1/2 lg:basis-1/3"
                 >
-                  <article className="h-full border-b border-border/60 px-5 py-6 md:border-b-0 md:border-r">
+                  <article className="flex h-full flex-col border-b border-border/60 px-5 py-6 md:border-b-0 md:border-r">
                     <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                       <item.icon className="h-5 w-5" />
                     </div>
                     <h3 className="font-display text-[1.75rem] font-semibold leading-tight">{item.title}</h3>
                     <p className="mt-4 text-base leading-relaxed text-muted-foreground">{item.desc}</p>
-                    <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                    <div className="mt-auto pt-5 inline-flex items-center gap-2 text-sm font-medium text-primary">
                       <CheckCircle2 className="h-4 w-4" />
                       Recurso ativo na plataforma
                     </div>

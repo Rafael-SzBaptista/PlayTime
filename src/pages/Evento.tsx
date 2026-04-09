@@ -1644,7 +1644,7 @@ const Evento = () => {
                     </div>
                   </div>
                   {(isAmigoSecreto || isBingoParticipantsMode) && (
-                    <div className="mt-4 rounded-none bg-muted/30 p-3 text-xs ring-1 ring-border/35">
+                    <div className="mt-4 border-t border-border/35 pt-3 text-xs">
                       <p className="mb-2 text-muted-foreground">
                         {isBingoParticipantsMode ? "Presentes escolhidos (bingo)" : "Preferências de presentes"}
                       </p>
