@@ -18,6 +18,7 @@ import RedefinirSenha from "./pages/RedefinirSenha";
 import MeusJogos from "./pages/MeusJogos";
 import BingoJogo from "./pages/BingoJogo";
 import RoubaJogo from "./pages/RoubaJogo";
+import PorqueNos from "./pages/PorqueNos";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/recuperar-senha" element={<RecuperarSenha />} />
             <Route path="/redefinir-senha" element={<RedefinirSenha />} />
             <Route path="/meus-jogos" element={<MeusJogos />} />
+            <Route path="/porque-nos" element={<PorqueNos />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

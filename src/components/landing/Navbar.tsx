@@ -45,6 +45,9 @@ const Navbar = () => {
             <Link to="/presentes" className={navLink}>
               Sugestões
             </Link>
+            <Link to="/porque-nos" className={navLink}>
+              Por que Nós?
+            </Link>
             <Link to="/participar" className={navLink}>
               Participar
             </Link>
@@ -125,6 +128,9 @@ const Navbar = () => {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/presentes">Sugestões</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/porque-nos">Por que Nós?</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/participar">Participar</Link>
