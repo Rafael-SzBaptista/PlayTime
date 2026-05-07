@@ -2264,7 +2264,7 @@ const Presentes = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 pb-12 pt-0">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="mb-8 px-1 lg:ml-[304px]">
             <div>
@@ -2274,7 +2274,7 @@ const Presentes = () => {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-            <aside className="space-y-5 p-1">
+            <aside className="space-y-5 p-1 lg:-mt-10">
               <div>
                 <h2 className="mb-3 text-2xl font-semibold">Categorias</h2>
                 <div className="space-y-1.5">
